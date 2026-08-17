@@ -288,8 +288,31 @@ def main() -> None:
     client = TestClient(app)
 
     body = client.post("/api/execute", json={"prompt": "Salt and Ash documentary"}).json()
-    assert {"status", "error", "response", "steps"} <= set(body)
+    # The contract requires EXACTLY these four top-level fields.
+    assert set(body) == {"status", "error", "response", "steps"}, set(body)
     assert body["status"] == "ok" and body["error"] is None and body["response"]
+    assert isinstance(body["steps"], list) and body["steps"]
+
+    # Diagnostics are opt-in and must not leak into the default contract.
+    with_meta = client.post(
+        "/api/execute", json={"prompt": "Salt and Ash documentary", "include_meta": True}
+    ).json()
+    assert set(with_meta) == {"status", "error", "response", "steps", "meta"}, set(with_meta)
+
+    # A failure must still return the trace collected up to that point.
+    def explode(self, system, user, **kwargs):  # noqa: ANN001
+        if system.startswith("You are MatchScorer"):
+            raise RuntimeError("simulated provider outage")
+        return fake_complete_json(self, system, user, **kwargs)
+
+    LLMClient.complete_json = explode  # type: ignore[method-assign]
+    failed = client.post("/api/execute", json={"prompt": "Salt and Ash documentary"}).json()
+    LLMClient.complete_json = fake_complete_json  # type: ignore[method-assign]
+    assert set(failed) == {"status", "error", "response", "steps"}, set(failed)
+    assert failed["status"] == "error" and failed["response"] is None
+    assert "simulated provider outage" in failed["error"], failed["error"]
+    assert failed["steps"], "a partial trace must survive a mid-run failure"
+    assert [s["module"] for s in failed["steps"]][:2] == ["Planner", "FilmAnalyzer"]
 
     empty = client.post("/api/execute", json={"prompt": "  "}).json()
     assert empty["status"] == "error" and empty["response"] is None and empty["steps"] == []

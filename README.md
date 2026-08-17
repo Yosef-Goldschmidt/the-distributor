@@ -56,7 +56,11 @@ phrase, deadline urgency is derived from the calendar in code, and
 | Strategic value | 15 |
 | Deadline urgency (computed in code) | 10 |
 
-Premiere risk is applied as a penalty (`high` −15, `medium` −7), not as a score component.
+Premiere risk is applied as a penalty (`high` −15, `medium` −7), not as a score component,
+and a world-premiere requirement counts as an opportunity rather than a risk while the film
+still has its premiere available. Festivals whose programming identity was inferred rather
+than established (`identity_confidence: "low"`) have their lineup-similarity rating capped,
+so inferred detail is never scored as if it were a verified track record.
 Buckets are then assigned deterministically: **Submit First**, **Prioritize Next**,
 **Leverage**, **Hold / Avoid**.
 
@@ -70,10 +74,16 @@ Buckets are then assigned deterministically: **Submit First**, **Prioritize Next
 | `GET /api/team_info` | Student details |
 | `GET /api/agent_info` | Description, purpose, prompt template, prompt examples with full responses and steps |
 | `GET /api/model_architecture` | Architecture diagram (`image/png`) |
-| `POST /api/execute` | `{"prompt": "..."}` → `{"status", "error", "response", "steps"}` |
+| `POST /api/execute` | `{"prompt": "..."}` → exactly `{"status", "error", "response", "steps"}` |
 | `GET /api/health` | Which integrations are configured (diagnostics) |
 
-`steps` is the ordered list of module invocations, each `{module, prompt, response}`.
+`steps` is the ordered list of module invocations, each `{module, prompt, response}`. It
+covers every LLM call plus the retrieval and scoring steps, so the whole execution is
+auditable. A run that fails part-way still returns the trace collected up to that point.
+
+The response carries exactly those four fields. Passing `"include_meta": true` adds a
+fifth `meta` object with token usage, elapsed time, the premiere target and the full
+ranking; the bundled GUI uses it, and nothing else depends on it.
 
 ---
 

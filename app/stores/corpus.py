@@ -125,4 +125,5 @@ def compact_for_prompt(festival: dict[str, Any]) -> dict[str, Any]:
         "notable_past_selections": (festival.get("notable_past_selections") or [])[:4],
         "submission_fee": festival.get("submission_fee"),
         "notes": festival.get("notes"),
+        "identity_confidence": festival.get("identity_confidence"),
     }

@@ -34,6 +34,9 @@ app.add_middleware(
 
 class ExecuteRequest(BaseModel):
     prompt: str = Field(default="")
+    # Optional diagnostics for the GUI. Omitted by default so the response keeps
+    # exactly the four top-level fields required by the API contract.
+    include_meta: bool = Field(default=False)
 
 
 def _load_json(name: str, default: Any) -> Any:
@@ -126,7 +129,7 @@ def agent_info() -> JSONResponse:
                 "GET /api/team_info": "Student details.",
                 "GET /api/agent_info": "This document.",
                 "GET /api/model_architecture": "Architecture diagram (PNG).",
-                "POST /api/execute": "Run the agent; returns response + full step trace.",
+                "POST /api/execute": "Run the agent. Returns exactly status, error, response and steps; add \"include_meta\": true for token usage, timing and the full ranking.",
             },
         }
     )
@@ -147,6 +150,13 @@ def model_architecture():
 # ------------------------------------------------------------- /api/execute
 @app.post("/api/execute")
 def execute(request: ExecuteRequest) -> JSONResponse:
+    """Main entry point.
+
+    The response carries exactly the four contract fields — status, error,
+    response, steps — unless the caller opts into diagnostics with
+    include_meta, which the bundled GUI does.
+    """
+
     prompt = (request.prompt or "").strip()
     if not prompt:
         return JSONResponse(
@@ -160,13 +170,18 @@ def execute(request: ExecuteRequest) -> JSONResponse:
 
     try:
         result = graph.run(prompt)
+    except graph.AgentRunError as exc:
+        # Return whatever the agent managed to trace before failing.
+        return JSONResponse(
+            {"status": "error", "error": str(exc), "response": None, "steps": exc.steps}
+        )
     except Exception as exc:  # noqa: BLE001 - the contract requires a readable error
         return JSONResponse(
             {
                 "status": "error",
                 "error": f"{type(exc).__name__}: {exc}",
                 "response": None,
-                "steps": getattr(exc, "steps", []),
+                "steps": [],
             }
         )
 
@@ -178,15 +193,15 @@ def execute(request: ExecuteRequest) -> JSONResponse:
         }
     )
 
-    return JSONResponse(
-        {
-            "status": "ok",
-            "error": None,
-            "response": result["response"],
-            "steps": result["steps"],
-            "meta": result["meta"],
-        }
-    )
+    body: dict[str, Any] = {
+        "status": "ok",
+        "error": None,
+        "response": result["response"],
+        "steps": result["steps"],
+    }
+    if request.include_meta:
+        body["meta"] = result["meta"]
+    return JSONResponse(body)
 
 
 # -------------------------------------------------------------- diagnostics

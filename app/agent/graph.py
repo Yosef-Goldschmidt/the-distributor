@@ -21,6 +21,14 @@ BUCKET_LABELS = {
 BUCKET_ORDER = ["submit_first", "prioritize_next", "leverage", "hold_avoid"]
 
 
+class AgentRunError(RuntimeError):
+    """A run that failed part-way, carrying the trace collected so far."""
+
+    def __init__(self, message: str, steps: list[dict[str, Any]]) -> None:
+        super().__init__(message)
+        self.steps = steps
+
+
 def run(user_prompt: str) -> dict[str, Any]:
     """Execute one full strategy run and return response, steps and metadata."""
 
@@ -32,6 +40,18 @@ def run(user_prompt: str) -> dict[str, Any]:
     started = time.monotonic()
     llm = LLMClient()
     trace = Trace()
+
+    try:
+        return _run(user_prompt, llm, trace, started)
+    except AgentRunError:
+        raise
+    except Exception as exc:  # noqa: BLE001 - preserve the partial trace for the caller
+        raise AgentRunError(f"{type(exc).__name__}: {exc}", trace.steps) from exc
+
+
+def _run(
+    user_prompt: str, llm: LLMClient, trace: Trace, started: float
+) -> dict[str, Any]:
 
     plan = modules.planner(llm, trace, user_prompt)
     task_modules = [task["module"] for task in plan["tasks"]]
