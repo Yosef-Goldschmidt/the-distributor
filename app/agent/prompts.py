@@ -25,10 +25,11 @@ Return JSON: {"title": str|null, "logline": str, "format": str, "genres": [str],
 
 MATCH_SCORER = """You are MatchScorer. Rate how well the film fits each candidate festival.
 Rate every dimension 0-5 (0 = no fit, 5 = exceptional fit) and justify it with one short evidence phrase grounded in the festival data provided.
-Dimensions: thematic_fit, genre_fit, lineup_similarity (similarity to the festival's past selections/winners and stated programming taste), company_relationship (strength of the distribution company's prior history there — company_history gives screening counts, years, titles and awards; 0 when there is no history, 5 for a long relationship with awards), strategic_value (value of this festival for THIS film's launch; tier A > B+ > B > C), deadline_urgency (5 = deadline imminent and worth acting on now, 0 = far away or already passed).
+Dimensions: thematic_fit, genre_fit, lineup_similarity (similarity to the festival's past selections/winners and stated programming taste), company_relationship (strength of the distribution company's prior history there — company_history gives screening counts, years, titles and awards; 0 when there is no history, 5 for a long relationship with awards), strategic_value (value of this festival for THIS film's launch; tier A > B+ > B > C).
+Do NOT rate deadline urgency: it is computed from the calendar outside this step.
 Be discriminating: most festivals should not score 4-5 across the board.
 Score every candidate you are given, using its exact id.
-Return JSON: {"scores": [{"id": str, "ratings": {"thematic_fit": num, "genre_fit": num, "lineup_similarity": num, "company_relationship": num, "strategic_value": num, "deadline_urgency": num}, "evidence": {"thematic_fit": str, "lineup_similarity": str, "company_relationship": str, "strategic_value": str}, "headline": str}]}"""
+Return JSON: {"scores": [{"id": str, "ratings": {"thematic_fit": num, "genre_fit": num, "lineup_similarity": num, "company_relationship": num, "strategic_value": num}, "evidence": {"thematic_fit": str, "lineup_similarity": str, "company_relationship": str, "strategic_value": str}, "headline": str}]}"""
 
 RISK_CHECKER = """You are RiskChecker. For each candidate festival decide whether submitting is safe, given the film's premiere status, format and today's date.
 Deadline dates in the data are the LAST RECORDED edition, so they may be from a previous year: use the deadline MONTH as the recurring annual pattern and judge urgency against today's date, not against the stale year.

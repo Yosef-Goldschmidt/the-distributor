@@ -13,6 +13,7 @@ import json
 import os
 import sys
 import tempfile
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -126,11 +127,11 @@ def fake_complete_json(self, system, user, **kwargs):  # noqa: ANN001
         CALLS.append("MatchScorer")
         ratings = {
             "idfa": {"thematic_fit": 5, "genre_fit": 5, "lineup_similarity": 4,
-                     "company_relationship": 0, "strategic_value": 5, "deadline_urgency": 4},
+                     "company_relationship": 0, "strategic_value": 5},
             "docaviv": {"thematic_fit": 5, "genre_fit": 5, "lineup_similarity": 5,
-                        "company_relationship": 5, "strategic_value": 4, "deadline_urgency": 3},
+                        "company_relationship": 5, "strategic_value": 4},
             "sitges": {"thematic_fit": 0, "genre_fit": 0, "lineup_similarity": 0,
-                       "company_relationship": 0, "strategic_value": 1, "deadline_urgency": 1},
+                       "company_relationship": 0, "strategic_value": 1},
         }
         return {
             "scores": [
@@ -193,35 +194,47 @@ def main() -> None:
 
     result = graph.run("Salt and Ash, an Israeli environmental documentary.")
 
-    modules = [step["module"] for step in result["steps"]]
-    expected = [
-        "Planner", "FilmAnalyzer", "FestivalSearch", "CompanyMemory",
-        "MatchScorer", "RiskChecker", "MatchScorer", "RoadmapBuilder",
-        "Executor", "Replanner",
-    ]
-    assert modules == expected, f"unexpected trace order: {modules}"
+    modules_trace = [step["module"] for step in result["steps"]]
+    # MatchScorer and RiskChecker run concurrently, so their order is not fixed.
+    assert modules_trace[:3] == ["Planner", "FilmAnalyzer", "FestivalSearch"], modules_trace
+    assert modules_trace[3] == "CompanyMemory", modules_trace
+    assert set(modules_trace[4:6]) == {"MatchScorer", "RiskChecker"}, modules_trace
+    assert modules_trace[6:] == ["MatchScorer", "RoadmapBuilder", "Executor", "Replanner"], modules_trace
     assert all({"module", "prompt", "response"} <= set(step) for step in result["steps"])
+    modules_seen = set(modules_trace)
 
     ranked = {record["id"]: record for record in result["meta"]["ranked_festivals"]}
 
+    today = datetime.now(timezone.utc).date()
     idfa = ranked["idfa"]
+    urgency, _ = scoring.deadline_urgency("August", today)
     expected_idfa = round(
         (5 / 5) * scoring.WEIGHTS["thematic_fit"]
         + (5 / 5) * scoring.WEIGHTS["genre_fit"]
         + (4 / 5) * scoring.WEIGHTS["lineup_similarity"]
         + 0
         + (5 / 5) * scoring.WEIGHTS["strategic_value"]
-        + (4 / 5) * scoring.WEIGHTS["deadline_urgency"]
+        + (urgency / 5) * scoring.WEIGHTS["deadline_urgency"]
     )
     assert idfa["score"] == expected_idfa, f"IDFA score {idfa['score']} != {expected_idfa}"
     assert idfa["bucket"] == "submit_first", idfa["bucket"]
+    assert idfa["ratings"]["deadline_urgency"] == urgency, idfa["ratings"]
+    assert idfa["evidence"].get("deadline_urgency"), "urgency evidence missing"
 
     docaviv = ranked["docaviv"]
     assert docaviv["premiere_penalty"] == 7, docaviv["premiere_penalty"]
-    assert docaviv["bucket"] == "leverage", docaviv["bucket"]
+    assert docaviv["bucket"] in {"submit_first", "leverage"}, docaviv["bucket"]
 
     sitges = ranked["sitges"]
     assert sitges["bucket"] == "hold_avoid", sitges["bucket"]
+
+    # Deadline urgency must be calendar-derived, never taken from the model.
+    august_urgency, _ = scoring.deadline_urgency("August", date(2026, 8, 17))
+    assert august_urgency == 5.0
+    assert scoring.deadline_urgency("September", date(2026, 8, 17))[0] == 5.0
+    assert scoring.deadline_urgency("December", date(2026, 8, 17))[0] == 3.0
+    assert scoring.deadline_urgency(None, date(2026, 8, 17))[0] == 2.0
+    assert "deadline_urgency" not in scoring.LLM_DIMENSIONS
 
     assert "# Festival Strategy — Salt and Ash" in result["response"]
     assert "Submit First" in result["response"] and "Hold / Avoid" in result["response"]
@@ -231,7 +244,7 @@ def main() -> None:
     assert len(CALLS) == 6, f"expected 6 LLM calls, got {len(CALLS)}: {CALLS}"
 
     print("pipeline OK")
-    print(f"  trace modules : {' -> '.join(modules)}")
+    print(f"  trace modules : {' -> '.join(modules_trace)}")
     print(f"  llm calls     : {len(CALLS)}")
     print(
         "  scores        : "
@@ -258,7 +271,7 @@ def main() -> None:
     info = client.get("/api/agent_info").json()
     assert {"description", "purpose", "prompt_template", "prompt_examples"} <= set(info)
     diagram_modules = {module["module"] for module in info["architecture"]["modules"]}
-    assert set(modules) <= diagram_modules, set(modules) - diagram_modules
+    assert modules_seen <= diagram_modules, modules_seen - diagram_modules
 
     png = client.get("/api/model_architecture")
     assert png.status_code == 200, png.text[:200]

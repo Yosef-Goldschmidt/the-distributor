@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import threading
 from datetime import datetime, timezone
 from typing import Any
 
@@ -13,13 +14,18 @@ from app.stores import corpus, pinecone_store, supabase_store
 
 
 class Trace:
-    """Ordered record of every module invocation, exposed as `steps` in the API."""
+    """Ordered record of every module invocation, exposed as `steps` in the API.
+
+    Thread-safe because MatchScorer and RiskChecker run concurrently.
+    """
 
     def __init__(self) -> None:
         self.steps: list[dict[str, Any]] = []
+        self._lock = threading.Lock()
 
     def add(self, module: str, prompt: Any, response: Any) -> None:
-        self.steps.append({"module": module, "prompt": prompt, "response": response})
+        with self._lock:
+            self.steps.append({"module": module, "prompt": prompt, "response": response})
 
 
 def today() -> str:
@@ -256,11 +262,21 @@ def assemble(
 ) -> list[dict[str, Any]]:
     """Apply the weighted formula in code — the LLM never invents the number."""
 
+    now = datetime.now(timezone.utc).date()
     assembled: list[dict[str, Any]] = []
+
     for candidate in candidates:
         scored = scores.get(candidate["id"], {})
         risk = risks.get(candidate["id"], {})
-        ratings = scored.get("ratings", {}) or {}
+        ratings = dict(scored.get("ratings", {}) or {})
+        evidence = dict(scored.get("evidence", {}) or {})
+
+        urgency, urgency_reason = scoring.deadline_urgency(
+            candidate.get("typical_deadline_month"), now
+        )
+        ratings["deadline_urgency"] = urgency
+        evidence["deadline_urgency"] = urgency_reason
+
         computed = scoring.compute_score(ratings, risk.get("premiere_risk"))
 
         record = {
@@ -274,7 +290,7 @@ def assemble(
             "website": candidate.get("website"),
             "retrieval_score": candidate.get("retrieval_score", 0.0),
             "ratings": ratings,
-            "evidence": scored.get("evidence", {}),
+            "evidence": evidence,
             "headline": scored.get("headline"),
             "premiere_risk": risk.get("premiere_risk", "none"),
             "deadline_status": risk.get("deadline_status", "open"),
@@ -292,6 +308,7 @@ def assemble(
             "operation": "deterministic_weighted_score",
             "weights": scoring.WEIGHTS,
             "premiere_penalty_table": scoring.PREMIERE_PENALTY,
+            "deadline_urgency": f"computed in code against {now.isoformat()}",
         },
         {
             "scored": len(ranked),

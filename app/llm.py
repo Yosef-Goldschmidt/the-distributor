@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import re
+import threading
 from typing import Any
 
 import httpx
@@ -46,6 +47,8 @@ class LLMClient:
             "completion_tokens": 0,
             "reasoning_tokens": 0,
         }
+        # Modules may run concurrently, so usage accounting needs a lock.
+        self._lock = threading.Lock()
 
     def complete(
         self,
@@ -137,10 +140,11 @@ class LLMClient:
     def _record(self, body: dict[str, Any]) -> None:
         usage = body.get("usage") or {}
         details = usage.get("completion_tokens_details") or {}
-        self.usage["calls"] += 1
-        self.usage["prompt_tokens"] += int(usage.get("prompt_tokens") or 0)
-        self.usage["completion_tokens"] += int(usage.get("completion_tokens") or 0)
-        self.usage["reasoning_tokens"] += int(details.get("reasoning_tokens") or 0)
+        with self._lock:
+            self.usage["calls"] += 1
+            self.usage["prompt_tokens"] += int(usage.get("prompt_tokens") or 0)
+            self.usage["completion_tokens"] += int(usage.get("completion_tokens") or 0)
+            self.usage["reasoning_tokens"] += int(details.get("reasoning_tokens") or 0)
 
     def complete_json(self, system: str, user: str, **kwargs: Any) -> dict[str, Any]:
         raw = self.complete(system, user, **kwargs)

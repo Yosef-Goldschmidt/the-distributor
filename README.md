@@ -36,13 +36,16 @@ These names are identical in the architecture diagram (`/api/model_architecture`
 `steps` trace returned by `/api/execute`, and in `/api/agent_info`.
 
 **Cost:** six LLM calls per run (seven to eight if the Replanner asks for a revision).
+MatchScorer and RiskChecker run concurrently, which keeps a run well inside the
+300-second serverless limit.
 Embeddings use a separate embedding model, and retrieval, company memory and the score
 arithmetic cost nothing.
 
 ### Scoring
 
-The LLM never invents the number. It rates each dimension 0–5 with a short evidence
-phrase; `app/agent/scoring.py` owns the weights and the arithmetic:
+The LLM never invents the number. It rates five dimensions 0–5 with a short evidence
+phrase, deadline urgency is derived from the calendar in code, and
+`app/agent/scoring.py` owns the weights and the arithmetic:
 
 | Dimension | Weight |
 | --- | ---: |
@@ -51,7 +54,7 @@ phrase; `app/agent/scoring.py` owns the weights and the arithmetic:
 | Past lineup / winner similarity | 20 |
 | Company relationship history | 15 |
 | Strategic value | 15 |
-| Deadline urgency | 10 |
+| Deadline urgency (computed in code) | 10 |
 
 Premiere risk is applied as a penalty (`high` −15, `medium` −7), not as a score component.
 Buckets are then assigned deterministically: **Submit First**, **Prioritize Next**,

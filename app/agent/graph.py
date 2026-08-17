@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 from app import config
@@ -53,10 +54,21 @@ def run(user_prompt: str) -> dict[str, Any]:
             memory = modules.company_memory(trace, candidates)
             outcome = f"{len(memory.get('history', []))} prior relationships matched"
         elif module_name == "MatchScorer":
-            scores = modules.match_scorer(llm, trace, profile, candidates, memory)
-            outcome = f"{len(scores)} festivals rated"
+            # MatchScorer and RiskChecker are independent, so they run concurrently
+            # to stay comfortably inside the 300s serverless limit.
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                score_future = pool.submit(
+                    modules.match_scorer, llm, trace, profile, candidates, memory
+                )
+                risk_future = pool.submit(
+                    modules.risk_checker, llm, trace, profile, candidates
+                )
+                scores = score_future.result()
+                risks = risk_future.result()
+            outcome = f"{len(scores)} festivals rated, {len(risks)} risk assessments"
         elif module_name == "RiskChecker":
-            risks = modules.risk_checker(llm, trace, profile, candidates)
+            if not risks:
+                risks = modules.risk_checker(llm, trace, profile, candidates)
             ranked = modules.assemble(candidates, scores, risks, trace)
             outcome = f"{len(risks)} risk assessments, scores computed"
         elif module_name == "RoadmapBuilder":
