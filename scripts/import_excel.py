@@ -5,7 +5,15 @@
 
 Contact names, e-mail addresses, invoice numbers and fees are never imported.
 
+By default the distribution company is anonymised: its name becomes a fictional
+one and its catalogue titles are replaced by stable pseudonyms, so the published
+repository does not expose a real company's slate or festival strategy. The
+festival facts and the relationship structure (which festival, how many
+screenings, which years, which awards) are preserved exactly.
+Pass --real-company to keep the original names for internal use.
+
 Usage:  python scripts/import_excel.py "/path/to/workbook.xlsx"
+        python scripts/import_excel.py "/path/to/workbook.xlsx" --real-company
 """
 
 from __future__ import annotations
@@ -13,7 +21,9 @@ from __future__ import annotations
 import argparse
 import collections
 import difflib
+import hashlib
 import json
+import random
 import re
 import sys
 import unicodedata
@@ -95,6 +105,80 @@ STRATEGIC_VALUE = {
 }
 
 NOISE = {"", "none", "n/a", "#n/a", "--", "-", "?", "tbd", "no info"}
+
+REAL_COMPANY = {
+    "id": "go2films",
+    "name": "Go2Films",
+    "country": "Israel",
+    "profile": (
+        "Jerusalem-based international distributor and world sales agent for Israeli and "
+        "Jewish-interest cinema, handling documentary and fiction features plus shorts. "
+        "Runs a large recurring circuit of Jewish film festivals, cultural institutions and "
+        "embassies alongside international festival submissions."
+    ),
+}
+
+ANON_COMPANY = {
+    "id": "meridian-films",
+    "name": "Meridian Films",
+    "country": "Israel",
+    "profile": (
+        "Israeli international distributor and world sales agent for Israeli and "
+        "Jewish-interest cinema, handling documentary and fiction features plus shorts. "
+        "Runs a large recurring circuit of Jewish film festivals, cultural institutions and "
+        "embassies alongside international festival submissions."
+    ),
+}
+
+# Word pools for stable pseudonymous film titles.
+TITLE_A = [
+    "Salt", "Ash", "Border", "Winter", "Harvest", "Iron", "Paper", "River", "Desert", "Stone",
+    "Amber", "Quiet", "Hollow", "Northern", "Second", "Broken", "Distant", "Open", "Last", "First",
+    "Golden", "Silent", "Narrow", "Bright", "Bitter", "Long", "Small", "Deep", "Wild", "Old",
+]
+TITLE_B = [
+    "Road", "Season", "Letters", "House", "Garden", "Field", "Window", "Return", "Crossing",
+    "Wedding", "Archive", "Kitchen", "Chorus", "Passage", "Harbour", "Lesson", "Portrait",
+    "Inheritance", "Testimony", "Threshold", "Migration", "Anthem", "Vigil", "Trade", "Shelter",
+    "Language", "Distance", "Promise", "Silence", "Bureau",
+]
+TITLE_SOLO = [
+    "Afterlight", "Ashfall", "Northbound", "Homeland", "Undertow", "Groundwork", "Nightshift",
+    "Aftermath", "Watershed", "Crosswind", "Landfall", "Foreshore", "Wintering", "Kinship",
+]
+
+
+class Anonymiser:
+    """Deterministic, collision-free pseudonyms for catalogue titles."""
+
+    def __init__(self, enabled: bool) -> None:
+        self.enabled = enabled
+        self.mapping: dict[str, str] = {}
+        self._used: set[str] = set()
+
+    def title(self, original: str | None) -> str | None:
+        if not self.enabled or not original:
+            return original
+        if original in self.mapping:
+            return self.mapping[original]
+
+        seed = int(hashlib.sha1(original.encode("utf-8")).hexdigest()[:12], 16)
+        rng = random.Random(seed)
+        for attempt in range(60):
+            if attempt < 40:
+                candidate = f"{rng.choice(TITLE_A)} {rng.choice(TITLE_B)}"
+            else:
+                candidate = rng.choice(TITLE_SOLO)
+            if attempt > 20:
+                candidate = f"The {candidate}"
+            if candidate not in self._used:
+                break
+        else:
+            candidate = f"Untitled {len(self._used) + 1}"
+
+        self._used.add(candidate)
+        self.mapping[original] = candidate
+        return candidate
 
 
 def clean(value) -> str:
@@ -186,7 +270,7 @@ def parse_previous_films(raw: str | None) -> list[dict]:
 
 
 # ---------------------------------------------------------------- festivals
-def import_festivals(workbook) -> list[dict]:
+def import_festivals(workbook, anonymiser: Anonymiser) -> list[dict]:
     sheet = workbook["Adam Chart"]
     rows = [
         row for row in sheet.iter_rows(min_row=2, values_only=True)
@@ -255,7 +339,10 @@ def import_festivals(workbook) -> list[dict]:
                 "submission_fee": clean_or_none(cell("price")),
                 "waiver": clean_or_none(cell("waiver")),
                 "website": clean_or_none(cell("website")),
-                "company_previous_films": parse_previous_films(clean_or_none(cell("previous_films"))),
+                "company_previous_films": [
+                    {"title": anonymiser.title(entry["title"]), "year": entry["year"]}
+                    for entry in parse_previous_films(clean_or_none(cell("previous_films")))
+                ],
                 "strategic_value": STRATEGIC_VALUE.get(tier, STRATEGIC_VALUE["C"]),
                 # Filled by scripts/merge_enrichment.py — descriptive text only.
                 "focus": None,
@@ -271,7 +358,7 @@ def import_festivals(workbook) -> list[dict]:
 
 
 # ------------------------------------------------------------ company memory
-def import_company(workbook, festivals: list[dict]) -> dict:
+def import_company(workbook, festivals: list[dict], anonymiser: Anonymiser, company: dict) -> dict:
     sheet = workbook["BAKARA"]
     rows = [
         row for row in sheet.iter_rows(min_row=3, values_only=True)
@@ -305,7 +392,7 @@ def import_company(workbook, festivals: list[dict]) -> dict:
             return row[index] if index < len(row) else None
 
         festival_name = clean_or_none(cell("festival"))
-        film = clean_or_none(cell("film"))
+        film = anonymiser.title(clean_or_none(cell("film")))
         year_raw = clean(cell("year"))
         year = int(float(year_raw)) if re.fullmatch(r"\d{4}(\.0)?", year_raw) else None
         award = clean_or_none(cell("award"))
@@ -338,7 +425,7 @@ def import_company(workbook, festivals: list[dict]) -> dict:
         record = per_festival.setdefault(
             festival_id,
             {
-                "company_id": "go2films",
+                "company_id": company["id"],
                 "festival_id": festival_id,
                 "festival_name": festival_name,
                 "screenings": 0,
@@ -366,7 +453,7 @@ def import_company(workbook, festivals: list[dict]) -> dict:
         record = per_festival.setdefault(
             festival["id"],
             {
-                "company_id": "go2films", "festival_id": festival["id"],
+                "company_id": company["id"], "festival_id": festival["id"],
                 "festival_name": festival["name"], "screenings": 0,
                 "films": [], "years": [], "awards": [], "categories": [],
             },
@@ -389,16 +476,8 @@ def import_company(workbook, festivals: list[dict]) -> dict:
 
     films = sorted(film_stats.values(), key=lambda item: item["screenings"], reverse=True)
 
-    company = {
-        "id": "go2films",
-        "name": "Go2Films",
-        "country": "Israel",
-        "profile": (
-            "Jerusalem-based international distributor and world sales agent for Israeli and "
-            "Jewish-interest cinema, handling documentary and fiction features plus shorts. "
-            "Runs a large recurring circuit of Jewish film festivals, cultural institutions and "
-            "embassies alongside international festival submissions."
-        ),
+    company_record = {
+        **company,
         "circuit_summary": {
             "screening_records": len(rows),
             "distinct_venues": len(venue_counts),
@@ -406,7 +485,7 @@ def import_company(workbook, festivals: list[dict]) -> dict:
             "years_covered": "2008-2027",
             "top_venue_types": category_counts.most_common(8),
             "top_countries": country_counts.most_common(10),
-            "top_venues": venue_counts.most_common(15),
+            "top_venues": [] if anonymiser.enabled else venue_counts.most_common(15),
         },
         "films": films[:150],
     }
@@ -415,7 +494,7 @@ def import_company(workbook, festivals: list[dict]) -> dict:
         f"company memory: {len(history)} festivals with history "
         f"({matched_rows} of {len(rows)} screening rows matched the festival list)"
     )
-    return {"company": company, "history": history}
+    return {"company": company_record, "history": history}
 
 
 def build_note(record: dict) -> str:
@@ -437,15 +516,27 @@ def build_note(record: dict) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("workbook")
+    parser.add_argument(
+        "--real-company",
+        action="store_true",
+        help="keep the real company name and catalogue titles (internal use only)",
+    )
     args = parser.parse_args()
 
     path = Path(args.workbook).expanduser()
     if not path.exists():
         raise SystemExit(f"workbook not found: {path}")
 
+    anonymiser = Anonymiser(enabled=not args.real_company)
+    company = REAL_COMPANY if args.real_company else ANON_COMPANY
+    print(
+        f"company: {company['name']} "
+        f"({'real data' if args.real_company else 'anonymised'})"
+    )
+
     workbook = openpyxl.load_workbook(path, data_only=True)
-    festivals = import_festivals(workbook)
-    company = import_company(workbook, festivals)
+    festivals = import_festivals(workbook, anonymiser)
+    company_data = import_company(workbook, festivals, anonymiser, company)
 
     data_dir = ROOT / "data"
     data_dir.mkdir(exist_ok=True)
@@ -453,9 +544,17 @@ def main() -> None:
         json.dumps(festivals, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     (data_dir / "company.json").write_text(
-        json.dumps(company, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(company_data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     print(f"wrote {data_dir/'festivals.json'} and {data_dir/'company.json'}")
+
+    if anonymiser.enabled and anonymiser.mapping:
+        # Kept out of version control: the only link back to the real catalogue.
+        mapping_path = data_dir / "anonymisation_map.json"
+        mapping_path.write_text(
+            json.dumps(anonymiser.mapping, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        print(f"wrote {mapping_path} ({len(anonymiser.mapping)} titles pseudonymised, gitignored)")
 
 
 if __name__ == "__main__":

@@ -132,6 +132,15 @@ python scripts/dry_run.py "an environmental documentary"  # retrieval-only check
 
 Run `scripts/schema.sql` in the Supabase SQL editor before `seed_supabase.py`.
 
+### Anonymisation
+
+`import_excel.py` anonymises the distribution company by default: the company name becomes
+fictional and every catalogue title is replaced by a stable pseudonym, while the festival
+facts and the relationship structure (which festival, how many screenings, which years,
+which awards) are preserved exactly. The title mapping is written to
+`data/anonymisation_map.json`, which is git-ignored. Pass `--real-company` for an internal
+build that keeps the real names.
+
 ---
 
 ## Deployment (Vercel)
