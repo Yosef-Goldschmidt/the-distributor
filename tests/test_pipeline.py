@@ -22,6 +22,17 @@ sys.path.insert(0, str(ROOT))
 FIXTURE_DIR = Path(tempfile.mkdtemp(prefix="distributor-test-"))
 os.environ["DATA_DIR"] = str(FIXTURE_DIR)
 
+# Keep the test hermetic: no live Supabase, Pinecone or LLM, even when .env is
+# populated. These are set before app.config is imported, and python-dotenv does
+# not override existing environment variables.
+os.environ["SUPABASE_URL"] = ""
+os.environ["SUPABASE_ANON_KEY"] = ""
+os.environ["SUPABASE_SERVICE_KEY"] = ""
+os.environ["PINECONE_API_KEY"] = ""
+os.environ["LLM_API_KEY"] = ""
+os.environ["LLM_EMBED_MODEL"] = ""
+os.environ["LLM_EMBEDDING_MODEL"] = ""
+
 FESTIVALS = [
     {
         "id": "docaviv", "name": "Docaviv", "country": "Israel", "city": "Tel Aviv",
@@ -191,7 +202,14 @@ def fake_complete_json(self, system, user, **kwargs):  # noqa: ANN001
 
 
 def main() -> None:
+    from app import config
+
+    assert not config.supabase_enabled(), "test must not reach live Supabase"
+    assert not config.pinecone_enabled(), "test must not reach live Pinecone"
+    assert not config.llm_enabled(), "test must not reach the live LLM"
+
     LLMClient.complete_json = fake_complete_json  # type: ignore[method-assign]
+    LLMClient.enabled = True  # type: ignore[assignment]
 
     result = graph.run("Salt and Ash, an Israeli environmental documentary.")
 
