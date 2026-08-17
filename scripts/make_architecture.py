@@ -135,7 +135,7 @@ def main() -> None:
         ("FilmAnalyzer", "Genre, themes, premiere status, audience", BLUE),
         ("FestivalSearch", "Semantic retrieval over the festival index", GREEN),
         ("CompanyMemory", "Prior submissions, acceptances, awards", GREEN),
-        ("MatchScorer", "LLM rates 6 dimensions 0-5 → weighted 0-100 in code", BLUE),
+        ("MatchScorer", "LLM rates 5 dimensions 0-5 → weighted 0-100 in code", BLUE),
         ("RiskChecker", "Premiere, eligibility and deadline risk", BLUE),
         ("RoadmapBuilder", "Bucketed strategy: submit / delay / avoid", BLUE),
     ]
@@ -166,7 +166,7 @@ def main() -> None:
     )
     draw.text(
         (60, 776),
-        "Scoring  ·  thematic fit 25  ·  genre fit 15  ·  past lineup / winner similarity 20  ·  company relationship 15  ·  strategic value 15  ·  deadline urgency 10  ·  premiere risk = penalty",
+        "Scoring  ·  LLM-rated: thematic fit 25  ·  genre fit 15  ·  past lineup / winner similarity 20  ·  company relationship 15  ·  strategic value 15    Computed in code: deadline urgency 10  ·  premiere risk = penalty",
         font=font(17), fill=MUTED,
     )
     draw.text(
@@ -177,7 +177,7 @@ def main() -> None:
     draw.line([60, 850, W - 60, 850], fill=LINE, width=2)
     draw.text(
         (60, 874),
-        "Every module above appears by the same name in the `steps` trace returned by POST /api/execute.",
+        "Every module above appears by the same name in the `steps` trace returned by POST /api/execute.  ·  A world-premiere requirement counts as an opportunity while the film still has its premiere available.",
         font=font(17), fill=MUTED,
     )
 
