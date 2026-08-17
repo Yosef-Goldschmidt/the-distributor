@@ -54,7 +54,7 @@ SUPABASE_KEY = _clean(os.getenv("SUPABASE_SERVICE_KEY")) or _clean(os.getenv("SU
 COMPANY_ID = _clean(os.getenv("COMPANY_ID")) or "meridian-films"
 
 # ----------------------------------------------------------------- Agent knobs
-CANDIDATE_POOL_SIZE = int(_clean(os.getenv("CANDIDATE_POOL_SIZE")) or 16)
+CANDIDATE_POOL_SIZE = int(_clean(os.getenv("CANDIDATE_POOL_SIZE")) or 12)
 MAX_REPLAN_ROUNDS = int(_clean(os.getenv("MAX_REPLAN_ROUNDS")) or 1)
 # A revision is skipped past this point so a run stays inside the 300s
 # serverless limit even in the worst case.
