@@ -1,0 +1,601 @@
+[
+ {
+  "id": "skip-city-iff",
+  "name": "Skip City IFF",
+  "city": "Saitama",
+  "country": "Japan",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "first_feature"
+  ],
+  "month": "July",
+  "website": "https://filmfreeway.com/SKIPCITYINTERNATIONALD-CinemaFESTIVAL"
+ },
+ {
+  "id": "women-make-waves",
+  "name": "Women Make Waves",
+  "city": "Taipei",
+  "country": "Taiwan",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers",
+   "lgbtq"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/WomenMakeWavesFilmFestivalTaiwan"
+ },
+ {
+  "id": "arlington-international-film-festival",
+  "name": "Arlington International Film Festival",
+  "city": "Arlington",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "short_form"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/arlingtoninternationalfilmfestival"
+ },
+ {
+  "id": "ebs-international-documentary-festival-eidf",
+  "name": "EBS International Documentary Festival (EIDF)",
+  "city": "Seoul",
+  "country": "South Korea",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "August",
+  "website": "https://www.eidf.co.kr/eng/community/notice/view/30003075650?c.page=1&searchConditionCondition=0&searchCondition=&searchK"
+ },
+ {
+  "id": "sound-unseen",
+  "name": "Sound Unseen",
+  "city": "Minneapolis",
+  "country": "USA",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "music"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/SoundUnseen"
+ },
+ {
+  "id": "see-the-sound",
+  "name": "See The Sound",
+  "city": "Cologne",
+  "country": "Germany",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "February",
+  "website": "https://www.seethesound.de/en/"
+ },
+ {
+  "id": "olhar-de-cinema-curitiba-iff",
+  "name": "Olhar de Cinema – Curitiba IFF",
+  "city": "Curitiba",
+  "country": "Brazil",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://www.olhardecinema.com.br/en/2024-call-for-entries/"
+ },
+ {
+  "id": "film-by-the-sea",
+  "name": "Film by the Sea",
+  "city": "Zeeland",
+  "country": "Netherlands",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "September",
+  "website": "https://www.filmbythesea.nl/"
+ },
+ {
+  "id": "poff-shorts",
+  "name": "PÖFF Shorts",
+  "city": "Tallinn",
+  "country": "Estonia",
+  "tier": "B",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form",
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/poffshorts"
+ },
+ {
+  "id": "braunschweig-iff",
+  "name": "Braunschweig IFF",
+  "city": "Braunschweig",
+  "country": "Germany",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "first_feature"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/BraunschweigInternationalFilmFestival"
+ },
+ {
+  "id": "mecal-pro",
+  "name": "Mecal Pro",
+  "city": "Barcelona",
+  "country": "Spain",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/mecalbcn"
+ },
+ {
+  "id": "the-bay-iff",
+  "name": "The Bay IFF",
+  "city": "Brighton",
+  "country": "UK",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "January",
+  "website": "https://filmfreeway.com/TheBayFilmFestival"
+ },
+ {
+  "id": "raindance-ff",
+  "name": "Raindance FF",
+  "city": "London",
+  "country": "UK",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/Raindance"
+ },
+ {
+  "id": "doqumenta-iff",
+  "name": "Doqumenta IFF",
+  "city": "Mexico",
+  "country": "Mexico",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "August",
+  "website": "https://filmfreeway.com/doqumenta"
+ },
+ {
+  "id": "villinus-documentary-film-festival",
+  "name": "Villinus Documentary Film Festival",
+  "city": "Villinus",
+  "country": "Lithuania",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "December",
+  "website": "https://vdff.lt/en/"
+ },
+ {
+  "id": "evolution-mallorca-international-film-festival",
+  "name": "Evolution Mallorca International Film Festival",
+  "city": "Palma",
+  "country": "Spain",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/EvolutionMallorcaFilmFestival"
+ },
+ {
+  "id": "richmond-iff",
+  "name": "Richmond IFF",
+  "city": "RIchmond",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/RICHMONDINTERNATIONALFILMFESTIVAL"
+ },
+ {
+  "id": "new-horizons-iff",
+  "name": "New Horizons IFF",
+  "city": "Wroclaw",
+  "country": "Poland",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "July",
+  "website": "https://www.nowehoryzonty.pl/artykul.do?lang=en&id=3076"
+ },
+ {
+  "id": "woodstock-film-festival",
+  "name": "Woodstock Film Festival",
+  "city": "Woodstock",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "short_form"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/WoodstockFilmFestival"
+ },
+ {
+  "id": "new-york-human-rights-iff",
+  "name": "New York Human Rights IFF",
+  "city": "New York",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/NewYorkHumanRightsFilmFestival"
+ },
+ {
+  "id": "lunenburg-doc-fest",
+  "name": "Lunenburg Doc Fest",
+  "city": "Lunenburg",
+  "country": "Canada",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/LunenburgDocFest"
+ },
+ {
+  "id": "basta-fest",
+  "name": "Basta Fest",
+  "city": "Basta",
+  "country": "Serbia",
+  "tier": "C",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form",
+   "general"
+  ],
+  "month": "July",
+  "website": "https://filmfreeway.com/BastaFest"
+ },
+ {
+  "id": "biografilm-ff",
+  "name": "Biografilm FF",
+  "city": "Bologna",
+  "country": "Italy",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://filmmakers.festhome.com/festival/biografilm-festival"
+ },
+ {
+  "id": "zinebi-bilbao-ff",
+  "name": "Zinebi Bilbao FF",
+  "city": "Bilbao",
+  "country": "Spain",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "first_feature"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/ZINEBI"
+ },
+ {
+  "id": "play-doc",
+  "name": "Play-Doc",
+  "city": "Pontevedra",
+  "country": "Spain",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "May",
+  "website": "https://www.play-doc.com/en/call-for-entries/"
+ },
+ {
+  "id": "chagrin-documentary-iff",
+  "name": "Chagrin Documentary IFF",
+  "city": "Chagrin Falls",
+  "country": "USA",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/ChagrinDocumentaryFilmFest"
+ },
+ {
+  "id": "stockholm-iff",
+  "name": "Stockholm IFF",
+  "city": "Stockholm",
+  "country": "Sweden",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/StockholmFilmFestival"
+ },
+ {
+  "id": "imagine-this-women-s-iff",
+  "name": "Imagine This Women's IFF",
+  "city": "New York",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/ITWIFF"
+ },
+ {
+  "id": "rockaway-film-festival",
+  "name": "Rockaway Film Festival",
+  "city": "New York",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "short_form"
+  ],
+  "month": "August",
+  "website": "https://filmfreeway.com/RockawayFilmFestival"
+ },
+ {
+  "id": "austin-film-festival",
+  "name": "Austin Film Festival",
+  "city": "Texas",
+  "country": "USA",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/AustinFilmFestival"
+ },
+ {
+  "id": "paris-film-art-festival",
+  "name": "Paris Film Art Festival",
+  "city": "Paris",
+  "country": "France",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "art"
+  ],
+  "month": "December",
+  "website": "https://filmfreeway.com/ParisFilmArtFestival"
+ },
+ {
+  "id": "oregon-short-film-festival",
+  "name": "Oregon Short Film Festival",
+  "city": "Oregon",
+  "country": "USA",
+  "tier": "C",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/OregonShortFilmFestival"
+ },
+ {
+  "id": "karlovy-vary",
+  "name": "Karlovy Vary",
+  "city": "Karlovy Vary",
+  "country": "Czech Republic",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://www.kviff.com/en/programme/film-entry"
+ },
+ {
+  "id": "chelsea-film-festival",
+  "name": "Chelsea Film Festival",
+  "city": "New York",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [],
+  "month": "October",
+  "website": "https://filmfreeway.com/ChelseaFilmFestival"
+ },
+ {
+  "id": "dokufest-kosovo",
+  "name": "DokuFest Kosovo",
+  "city": "Prizen",
+  "country": "Kosovo",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "August",
+  "website": "https://filmfreeway.com/DokuFest"
+ },
+ {
+  "id": "filmfest-osnabruck",
+  "name": "FilmFest Osnabrück",
+  "city": "Osnabrück",
+  "country": "Germany",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "October",
+  "website": "https://filmfest-osnabrueck.de/film-entry-2023/"
+ },
+ {
+  "id": "shanghai-international-film-festival",
+  "name": "Shanghai International Film Festival",
+  "city": "Shanghai",
+  "country": "China",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://www.siff.com/english/"
+ },
+ {
+  "id": "makedox",
+  "name": "Makedox",
+  "city": "Skopje",
+  "country": "Macedonia",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "August",
+  "website": "https://filmfreeway.com/MakeDoxFestival"
+ },
+ {
+  "id": "films-for-future",
+  "name": "Films For Future",
+  "city": "Zurich",
+  "country": "Switzerland",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://www.films-for-future.org/"
+ },
+ {
+  "id": "the-ida-awards",
+  "name": "The IDA awards",
+  "city": "Los Angeles",
+  "country": "USA",
+  "tier": "A",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "December",
+  "website": "https://ida.secure-platform.com/a/"
+ },
+ {
+  "id": "festival-du-film-de-cabourg",
+  "name": "Festival du Film de Cabourg",
+  "city": "Cabourg",
+  "country": "France",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "romance"
+  ],
+  "month": "June",
+  "website": "https://www.festival-cabourg.com/#"
+ },
+ {
+  "id": "singapore-iff",
+  "name": "Singapore IFF",
+  "city": "Singapore",
+  "country": "Singapore",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://sgiff.com/call-for-entry/"
+ },
+ {
+  "id": "filmfestival-cottbus",
+  "name": "FilmFestival Cottbus",
+  "city": "Cottbus",
+  "country": "Germany",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://www.filmfestivalcottbus.de/en/news-en.html"
+ },
+ {
+  "id": "tokyo-iff",
+  "name": "Tokyo IFF",
+  "city": "Tokyo",
+  "country": "Japan",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://www.tiff-jp.net/entry/competition2024/index_en.html"
+ },
+ {
+  "id": "seoul-international-drama-awards",
+  "name": "Seoul International Drama Awards",
+  "city": "Seoul",
+  "country": "Korea",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": "https://www.seouldrama.org/eng/bbs/board.php?bo_table=webzine&wr_id=127"
+ }
+]

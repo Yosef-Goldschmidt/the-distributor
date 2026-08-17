@@ -1,0 +1,599 @@
+[
+ {
+  "id": "istanbul-iff",
+  "name": "Istanbul IFF",
+  "city": "Istanbul",
+  "country": "Turkey",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://film.iksv.org/en"
+ },
+ {
+  "id": "cultureels-ethnographic-film-festival",
+  "name": "CULTUREELS – Ethnographic Film Festival",
+  "city": "Helsinki",
+  "country": "Finland",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "ethnographic"
+  ],
+  "month": "April",
+  "website": "https://www.cultureels.com/"
+ },
+ {
+  "id": "asian-women-s-film-festival-iawrt",
+  "name": "Asian Women's Film Festival (IAWRT)",
+  "city": "New Delhi",
+  "country": "India",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/iawrtfilmfest2023"
+ },
+ {
+  "id": "castellinaria-festival-del-cinema-giovane",
+  "name": "Castellinaria Festival del cinema giovane",
+  "city": "Bellinzona",
+  "country": "Switzerland",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/CastellinariaFilmFestivalBellinzona"
+ },
+ {
+  "id": "innovative-iff",
+  "name": "Innovative IFF",
+  "city": "Bangalore",
+  "country": "India",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://registration.iiff.film/"
+ },
+ {
+  "id": "mumbai-international-film-festival",
+  "name": "Mumbai International Film Festival",
+  "city": "Mumbai",
+  "country": "India",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/MumbaiInternationalFilmFestival-MIFF"
+ },
+ {
+  "id": "nuremberg-human-rights-film-festival",
+  "name": "Nuremberg Human Rights Film Festival",
+  "city": "Nuremberg",
+  "country": "Germany",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "October",
+  "website": "https://www.nihrff.de/en/"
+ },
+ {
+  "id": "fraud-film-festival",
+  "name": "Fraud Film Festival",
+  "city": "Amsterdam",
+  "country": "Netherlands",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://fraudefilmfestival.com/"
+ },
+ {
+  "id": "moscow-international-visual-anthropology-festival",
+  "name": "Moscow International Visual Anthropology Festival",
+  "city": "Moscow",
+  "country": "Russia",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "ethnographic"
+  ],
+  "month": null,
+  "website": "https://visantmedia.mes.msu.ru/en/festival/"
+ },
+ {
+  "id": "films-femmes-mediterranee",
+  "name": "Films Femmes Méditerranée",
+  "city": "Marseille",
+  "country": "France",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers",
+   "mediterranean"
+  ],
+  "month": "November",
+  "website": "https://www.facebook.com/filmsfemmesmed"
+ },
+ {
+  "id": "film-without-borders",
+  "name": "Film without Borders",
+  "city": "Berlin",
+  "country": "Germany",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "September",
+  "website": null
+ },
+ {
+  "id": "freiburger-filmforum",
+  "name": "Freiburger Filmforum",
+  "city": "Breisgau",
+  "country": "Germany",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "ethnographic"
+  ],
+  "month": null,
+  "website": "https://www.freiburger-filmforum.de/en/"
+ },
+ {
+  "id": "margaret-mead-iff",
+  "name": "Margaret Mead IFF",
+  "city": "New York",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/MargaretMeadFilmFestival"
+ },
+ {
+  "id": "bastau-iff",
+  "name": "Bastau IFF",
+  "city": "Bastau",
+  "country": "Kazakhstan",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "first_feature"
+  ],
+  "month": "December",
+  "website": "https://filmfreeway.com/BastauInternationalFilmFestival"
+ },
+ {
+  "id": "mirage-iff",
+  "name": "Mirage IFF",
+  "city": "Oslo",
+  "country": "Norway",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://www.mirage.no/"
+ },
+ {
+  "id": "john-e-o-connor-film-award-american-historical-associasion",
+  "name": "John E. O'Connor Film Award - American Historical Associasion",
+  "city": null,
+  "country": "USA",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": null,
+  "website": "https://www.historians.org/awards-and-grants/awards-and-prizes/john-e-oconnor-film-award"
+ },
+ {
+  "id": "pyeongchang-international-peace-film-festival",
+  "name": "PyeongChang International Peace Film Festival",
+  "city": "Gangwon-do",
+  "country": "South Korea",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "http://pipff.org/eng"
+ },
+ {
+  "id": "guangzhou-international-documentary-ff",
+  "name": "Guangzhou International Documentary FF",
+  "city": "Guangzhou",
+  "country": "China",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "December",
+  "website": "https://filmfreeway.com/GZDOC"
+ },
+ {
+  "id": "red-sea-international-film-festival",
+  "name": "Red Sea International Film Festival",
+  "city": "Jeddah",
+  "country": "Saudi Arabia",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "mediterranean"
+  ],
+  "month": "December",
+  "website": "https://redseafilmfest.com/en/"
+ },
+ {
+  "id": "youngabout-international-film-festival-for-young-people",
+  "name": "Youngabout - International Film Festival for Young People",
+  "city": "Bologna",
+  "country": "Italy",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "November",
+  "website": "http://www.youngabout.com/"
+ },
+ {
+  "id": "pasific-meridian-iff",
+  "name": "Pasific Meridian IFF",
+  "city": "Vladivostok",
+  "country": "Russia",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "September",
+  "website": "http://pacificmeridianfest.ru/en/"
+ },
+ {
+  "id": "lifeart-festival",
+  "name": "LifeArt Festival",
+  "city": "Los Angeles",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "art"
+  ],
+  "month": "December",
+  "website": "https://filmfreeway.com/LifeArt"
+ },
+ {
+  "id": "cinedoc-tbilisi",
+  "name": "CinéDOC-Tbilisi",
+  "city": "Tbilisi",
+  "country": "Georgia",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "September",
+  "website": "https://cinedoc-tbilisi.com/en"
+ },
+ {
+  "id": "ficunam",
+  "name": "FICUNAM",
+  "city": "Mexico City",
+  "country": "Mexico",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://ficunam.unam.mx/en/open-call-international-competition-ficunam-2024/"
+ },
+ {
+  "id": "doker",
+  "name": "DOKer",
+  "city": "Moscow",
+  "country": "Russia",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general",
+   "short_form"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/MIDFF"
+ },
+ {
+  "id": "tashkent-international-film-festival",
+  "name": "Tashkent International Film Festival",
+  "city": "Tashkent",
+  "country": "Uzbekistan",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "September",
+  "website": "https://tiffest.uz/"
+ },
+ {
+  "id": "side-by-side-lgbt-iff",
+  "name": "Side-by-Side LGBT IFF",
+  "city": "St. Petersburg",
+  "country": "Russia",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "lgbtq"
+  ],
+  "month": "November",
+  "website": "https://bok-o-bok.com/en/"
+ },
+ {
+  "id": "artdocfest-iff",
+  "name": "Artdocfest IFF",
+  "city": "Riga",
+  "country": "Latvia",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "December",
+  "website": "https://artdocfest.com/en/"
+ },
+ {
+  "id": "mo-friese",
+  "name": "MO&FRIESE",
+  "city": "Hamburg",
+  "country": "Germany",
+  "tier": "B",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form",
+   "youth"
+  ],
+  "month": "June",
+  "website": "https://www.shortfilmdepot.com/fr/home/festivals/details/id/164/festival/kurzfilm-festival-hamburg-mofriese-junges-kurzfilm-festival"
+ },
+ {
+  "id": "movies-on-war-festival",
+  "name": "Movies on War Festival",
+  "city": "Elverum",
+  "country": "Norway",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "November",
+  "website": null
+ },
+ {
+  "id": "act-human-rights-film-fstival",
+  "name": "ACT - Human Rights Film Fstival",
+  "city": "Colorado",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "April",
+  "website": "https://actfilmfest.colostate.edu/"
+ },
+ {
+  "id": "cinema-touching-disability",
+  "name": "Cinema Touching Disability",
+  "city": "Texas",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "disability"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/ctdfilmfest"
+ },
+ {
+  "id": "moscow-iff",
+  "name": "Moscow IFF",
+  "city": "Moscow",
+  "country": "Russia",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "http://www.moscowfilmfestival.ru/miff43/index.php?l=e&q=3"
+ },
+ {
+  "id": "busan-int-kids-and-youth-film-festival-biky",
+  "name": "Busan Int. Kids and Youth Film Festival (BIKY)",
+  "city": "Busan",
+  "country": "Korea",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "July",
+  "website": "https://filmfreeway.com/biky"
+ },
+ {
+  "id": "documed",
+  "name": "Documed",
+  "city": "Tunisia",
+  "country": "Tunisia",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "mediterranean"
+  ],
+  "month": "April",
+  "website": "https://filmmakers.festhome.com/festival/festival-du-cinema-documentaire-mediterraneen-en-tunisie"
+ },
+ {
+  "id": "jayu-human-rights-film-festoval",
+  "name": "JAYU - Human Rights Film Festoval",
+  "city": "Toronto",
+  "country": "Canada",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "December",
+  "website": "https://filmfreeway.com/JAYU"
+ },
+ {
+  "id": "mill-valley-film-festival",
+  "name": "Mill Valley Film Festival",
+  "city": "San Rafael",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/MillValleyFilmFestival"
+ },
+ {
+  "id": "boston-international-kids-film-festival",
+  "name": "Boston International Kids Film Festival",
+  "city": "Boston",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/BostonInternationalKidsFilmFestival"
+ },
+ {
+  "id": "buff-iff",
+  "name": "BUFF IFF",
+  "city": "Malmö",
+  "country": "Sweden",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "March",
+  "website": "https://www.buff.se/en/"
+ },
+ {
+  "id": "brussels-mediterranean-film-festival-cinemamed",
+  "name": "Brussels Mediterranean Film Festival (Cinemamed)",
+  "city": "Bruxelles",
+  "country": "Belgium",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "mediterranean"
+  ],
+  "month": "November",
+  "website": "http://www.cinemamed.be/"
+ },
+ {
+  "id": "luxemburg-city-film-festival",
+  "name": "Luxemburg City Film Festival",
+  "city": "Luxemburg City",
+  "country": "Luxemburg",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "February",
+  "website": "https://www.luxfilmfest.lu/en/soumissions/"
+ },
+ {
+  "id": "venice-international-film-critics-week",
+  "name": "Venice International Film Critics’ Week",
+  "city": "Venice",
+  "country": "Italy",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "first_feature"
+  ],
+  "month": "August",
+  "website": "https://www.sicvenezia.it/en/submit-film/"
+ },
+ {
+  "id": "bucheon-fantastic-international-film-festival",
+  "name": "Bucheon Fantastic International Film Festival",
+  "city": "Bucheon",
+  "country": "South Korea",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "July",
+  "website": "https://www.bifan.kr/eng/program/index_film.asp"
+ },
+ {
+  "id": "antenna-iff",
+  "name": "Antenna IFF",
+  "city": "Glebe",
+  "country": "Australia",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/AntennaFestival"
+ },
+ {
+  "id": "slamdance-iff",
+  "name": "Slamdance IFF",
+  "city": "Los Angeles",
+  "country": "USA",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "first_feature"
+  ],
+  "month": "February",
+  "website": "https://filmfreeway.com/SlamdanceFilmFestival"
+ }
+]

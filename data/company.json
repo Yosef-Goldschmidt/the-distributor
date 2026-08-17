@@ -1,0 +1,5301 @@
+{
+  "company": {
+    "id": "go2films",
+    "name": "Go2Films",
+    "country": "Israel",
+    "profile": "Jerusalem-based international distributor and world sales agent for Israeli and Jewish-interest cinema, handling documentary and fiction features plus shorts. Runs a large recurring circuit of Jewish film festivals, cultural institutions and embassies alongside international festival submissions.",
+    "circuit_summary": {
+      "screening_records": 11119,
+      "distinct_venues": 2786,
+      "catalogue_titles": 853,
+      "years_covered": "2008-2027",
+      "top_venue_types": [
+        [
+          "Jff",
+          5111
+        ],
+        [
+          "Iff",
+          1666
+        ],
+        [
+          "Jewish Org",
+          1242
+        ],
+        [
+          "Embassy",
+          320
+        ],
+        [
+          "University",
+          263
+        ],
+        [
+          "Org",
+          213
+        ],
+        [
+          "Tv",
+          64
+        ],
+        [
+          "Museum",
+          34
+        ]
+      ],
+      "top_countries": [
+        [
+          "USA",
+          4620
+        ],
+        [
+          "Canada",
+          613
+        ],
+        [
+          "UK",
+          368
+        ],
+        [
+          "Germany",
+          277
+        ],
+        [
+          "France",
+          249
+        ],
+        [
+          "Italy",
+          206
+        ],
+        [
+          "Russia",
+          144
+        ],
+        [
+          "Australia",
+          141
+        ],
+        [
+          "Poland",
+          130
+        ],
+        [
+          "Austria",
+          127
+        ]
+      ],
+      "top_venues": [
+        [
+          "SERET",
+          163
+        ],
+        [
+          "Toronto JFF",
+          147
+        ],
+        [
+          "Washington JFF",
+          136
+        ],
+        [
+          "UK JFF",
+          118
+        ],
+        [
+          "Chicago Festival of Israeli Cinema",
+          91
+        ],
+        [
+          "San Francisco JFF",
+          85
+        ],
+        [
+          "Boston JFF",
+          85
+        ],
+        [
+          "Israfest Foundation (LA Israeli FF)",
+          80
+        ],
+        [
+          "Miami JFF",
+          79
+        ],
+        [
+          "Atlanta JFF",
+          75
+        ],
+        [
+          "East Bay JFF",
+          72
+        ],
+        [
+          "Palm Beach JFF",
+          72
+        ],
+        [
+          "WZO",
+          68
+        ],
+        [
+          "Philadelphia Israeli FF",
+          67
+        ],
+        [
+          "Hong Kong JFF",
+          67
+        ]
+      ]
+    },
+    "films": [
+      {
+        "title": "Ben Gurion, Epilogue",
+        "screenings": 285,
+        "first_year": 2017,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "The Unorthodox",
+        "screenings": 149,
+        "first_year": 2018,
+        "last_year": 2026,
+        "awards": [
+          "Special Mention Best Feature",
+          "Best Film Award",
+          "Best Film, Best Screenplay, Best Photography"
+        ]
+      },
+      {
+        "title": "Reckonings",
+        "screenings": 136,
+        "first_year": 2022,
+        "last_year": 2026,
+        "awards": [
+          "Audience Award",
+          "Audience Award Winner"
+        ]
+      },
+      {
+        "title": "Harmonia",
+        "screenings": 115,
+        "first_year": 2016,
+        "last_year": 2025,
+        "awards": [
+          "AUDIENCE AWARD",
+          "UNIVERSITY OF NICOSIA STUDENT JURY AWARD"
+        ]
+      },
+      {
+        "title": "Numbered",
+        "screenings": 114,
+        "first_year": 2012,
+        "last_year": 2022,
+        "awards": []
+      },
+      {
+        "title": "Eli and Ben",
+        "screenings": 114,
+        "first_year": 2009,
+        "last_year": 2016,
+        "awards": []
+      },
+      {
+        "title": "Magic Men",
+        "screenings": 113,
+        "first_year": 2014,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "Melting Away",
+        "screenings": 110,
+        "first_year": 2011,
+        "last_year": 2018,
+        "awards": []
+      },
+      {
+        "title": "Running on Sand",
+        "screenings": 107,
+        "first_year": 2024,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Golda",
+        "screenings": 107,
+        "first_year": 2019,
+        "last_year": 2024,
+        "awards": [
+          "Best Editing Award",
+          "Best Documentary Award",
+          "Best Documentary Film"
+        ]
+      },
+      {
+        "title": "Joe's Violin",
+        "screenings": 99,
+        "first_year": 2017,
+        "last_year": 2025,
+        "awards": [
+          "Audience Favorite for Best Short Film"
+        ]
+      },
+      {
+        "title": "Women in Sink",
+        "screenings": 96,
+        "first_year": 2015,
+        "last_year": 2021,
+        "awards": []
+      },
+      {
+        "title": "An Israeli Love Story",
+        "screenings": 95,
+        "first_year": 2017,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "Srugim",
+        "screenings": 91,
+        "first_year": 2008,
+        "last_year": 2019,
+        "awards": []
+      },
+      {
+        "title": "We Will Dance Again",
+        "screenings": 87,
+        "first_year": 2024,
+        "last_year": 2026,
+        "awards": [
+          "WInner of 2 awards: Best Film in Category “In Truth We Trust”, Best International Editing"
+        ]
+      },
+      {
+        "title": "Dear God",
+        "screenings": 87,
+        "first_year": 2014,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Five Hours from Paris",
+        "screenings": 86,
+        "first_year": 2010,
+        "last_year": 2020,
+        "awards": []
+      },
+      {
+        "title": "Sabena Hijacking- My Version",
+        "screenings": 86,
+        "first_year": 2015,
+        "last_year": 2018,
+        "awards": []
+      },
+      {
+        "title": "Torn",
+        "screenings": 84,
+        "first_year": 2011,
+        "last_year": 2020,
+        "awards": []
+      },
+      {
+        "title": "Muhi- Generally Temporary",
+        "screenings": 84,
+        "first_year": 2017,
+        "last_year": 2020,
+        "awards": [
+          "SILVER NANOOK for Discovery of New Subjects and New Heroes",
+          "Audience Award (Premio del pubblico) AND Grand Jury Prize (Premio della Giuria)",
+          "THE EDWARD SNOWDEN AWARD, Section Documetary Film",
+          "Audience Award",
+          "Best Documentary Film",
+          "AMNESTY INTERNATIONAL AWARD Special Mention",
+          "Best Documentary",
+          "Golden Kapok Award for Best Documentary Feature, Golden Kapok Award for Best Documentary Director",
+          "Night Award for Documentary",
+          "GOLDEN DOVE AWARD for Best Long Documetary",
+          "Mayor of Tel Aviv-Jaffa Award for Best Debut Film"
+        ]
+      },
+      {
+        "title": "The Property",
+        "screenings": 77,
+        "first_year": 2025,
+        "last_year": 2027,
+        "awards": []
+      },
+      {
+        "title": "Soda",
+        "screenings": 77,
+        "first_year": 2024,
+        "last_year": 2027,
+        "awards": []
+      },
+      {
+        "title": "The Boy",
+        "screenings": 75,
+        "first_year": 2023,
+        "last_year": 2025,
+        "awards": [
+          "2 Awards - Best Screenplay, Prix Interculturel award"
+        ]
+      },
+      {
+        "title": "King Bibi",
+        "screenings": 74,
+        "first_year": 2018,
+        "last_year": 2022,
+        "awards": [
+          "Jury award for Best documentary"
+        ]
+      },
+      {
+        "title": "Holy Holocaust",
+        "screenings": 73,
+        "first_year": 2021,
+        "last_year": 2023,
+        "awards": [
+          "Special Jury Mention",
+          "Animation Award",
+          "Special Mention",
+          "Honorable Mention",
+          "Best Documentary",
+          "Best Animation",
+          "Best Short Documentary",
+          "Best BASED ON HIS/HER STORY Award",
+          "Grand Prize for the Hearts, Minds, Souls Award"
+        ]
+      },
+      {
+        "title": "Rock in the Red Zone",
+        "screenings": 68,
+        "first_year": 2015,
+        "last_year": 2017,
+        "awards": []
+      },
+      {
+        "title": "My Australia",
+        "screenings": 66,
+        "first_year": 2012,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "Salsa Tel Aviv",
+        "screenings": 66,
+        "first_year": 2011,
+        "last_year": 2021,
+        "awards": []
+      },
+      {
+        "title": "Dead Sea Guardians",
+        "screenings": 63,
+        "first_year": 2022,
+        "last_year": 2026,
+        "awards": [
+          "WINNER Religions for Peace International Award",
+          "WINNER Special Jury Mention"
+        ]
+      },
+      {
+        "title": "A Film Unfinished",
+        "screenings": 63,
+        "first_year": 2009,
+        "last_year": 2022,
+        "awards": []
+      },
+      {
+        "title": "Family in Transition",
+        "screenings": 61,
+        "first_year": 2018,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Presenting Princess Shaw",
+        "screenings": 60,
+        "first_year": 2015,
+        "last_year": 2020,
+        "awards": []
+      },
+      {
+        "title": "Operation Wedding",
+        "screenings": 58,
+        "first_year": 2016,
+        "last_year": 2025,
+        "awards": [
+          "Best Documentary",
+          "Best Feature Documentary",
+          "Best Feature Film",
+          "Documentary of the Month",
+          "Best Documentary, Audience Choice",
+          "Audience Choice Award"
+        ]
+      },
+      {
+        "title": "Home",
+        "screenings": 56,
+        "first_year": 2024,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "Arab Labor 1",
+        "screenings": 56,
+        "first_year": 2008,
+        "last_year": 2012,
+        "awards": []
+      },
+      {
+        "title": "Remember Baghdad",
+        "screenings": 55,
+        "first_year": 2018,
+        "last_year": 2027,
+        "awards": [
+          "Special Mention"
+        ]
+      },
+      {
+        "title": "Voices from El Sayed",
+        "screenings": 55,
+        "first_year": 2009,
+        "last_year": 2018,
+        "awards": []
+      },
+      {
+        "title": "Across the Line",
+        "screenings": 54,
+        "first_year": 2017,
+        "last_year": 2023,
+        "awards": [
+          "Best Middle East- Israeli Film",
+          "Jury Mention",
+          "Audience Award",
+          "Main Prize Gold Busho 2018"
+        ]
+      },
+      {
+        "title": "Dancing in Jaffa",
+        "screenings": 54,
+        "first_year": 2013,
+        "last_year": 2019,
+        "awards": []
+      },
+      {
+        "title": "AKA Nadia",
+        "screenings": 53,
+        "first_year": 2016,
+        "last_year": 2019,
+        "awards": []
+      },
+      {
+        "title": "The Wonderful Kingdom of Papa Alaev",
+        "screenings": 52,
+        "first_year": 2016,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "Mendelsohn's Incessant Visions",
+        "screenings": 52,
+        "first_year": 2011,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "Shtisel",
+        "screenings": 51,
+        "first_year": 2013,
+        "last_year": 2020,
+        "awards": []
+      },
+      {
+        "title": "999: The Forgotten Girls",
+        "screenings": 50,
+        "first_year": 2023,
+        "last_year": 2027,
+        "awards": []
+      },
+      {
+        "title": "The Art of Waiting",
+        "screenings": 49,
+        "first_year": 2019,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "Ma'abarot",
+        "screenings": 47,
+        "first_year": 2019,
+        "last_year": 2027,
+        "awards": [
+          "Jury Mention"
+        ]
+      },
+      {
+        "title": "The Fourth Window",
+        "screenings": 47,
+        "first_year": 2021,
+        "last_year": 2023,
+        "awards": [
+          "Best Feature Documentary Award"
+        ]
+      },
+      {
+        "title": "Black Honey- The Life and Poetry of Avraham Sutzkever",
+        "screenings": 47,
+        "first_year": 2018,
+        "last_year": 2022,
+        "awards": [
+          "Audience Choice Award for Best Documentary"
+        ]
+      },
+      {
+        "title": "Unsettling",
+        "screenings": 47,
+        "first_year": 2018,
+        "last_year": 2020,
+        "awards": [
+          "Nominated for Best Feature Documentary",
+          "Special Mention for Best Feature Documentary",
+          "Bob Simon Award for Best Film"
+        ]
+      },
+      {
+        "title": "Pinchas",
+        "screenings": 47,
+        "first_year": 2008,
+        "last_year": 2016,
+        "awards": []
+      },
+      {
+        "title": "Yerusalem",
+        "screenings": 46,
+        "first_year": 2021,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Echo",
+        "screenings": 46,
+        "first_year": 2018,
+        "last_year": 2021,
+        "awards": [
+          "Best Film and the BEST ACTRESS (Yael Abecassis)",
+          "Best Actor Award"
+        ]
+      },
+      {
+        "title": "Berenshtein",
+        "screenings": 45,
+        "first_year": 2021,
+        "last_year": 2023,
+        "awards": [
+          "Audience Award for Best Feature",
+          "Jury Award for Best Feature",
+          "Audience Award for Best Feature Film"
+        ]
+      },
+      {
+        "title": "Partner with the Enemy",
+        "screenings": 45,
+        "first_year": 2015,
+        "last_year": 2019,
+        "awards": []
+      },
+      {
+        "title": "A Letter to David",
+        "screenings": 44,
+        "first_year": 2025,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Marry Me However",
+        "screenings": 44,
+        "first_year": 2020,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "Sabotage",
+        "screenings": 43,
+        "first_year": 2023,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Barren - Vardi",
+        "screenings": 43,
+        "first_year": 2022,
+        "last_year": 2024,
+        "awards": [
+          "Best Feature Film Award",
+          "Next Wave Award"
+        ]
+      },
+      {
+        "title": "Vita Activa- The Spirit of Hannah Arendt",
+        "screenings": 42,
+        "first_year": 2015,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "Menachem and Fred",
+        "screenings": 42,
+        "first_year": 2009,
+        "last_year": 2021,
+        "awards": []
+      },
+      {
+        "title": "Halisa",
+        "screenings": 41,
+        "first_year": 2025,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Labors of Love",
+        "screenings": 41,
+        "first_year": 2025,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Abulele",
+        "screenings": 41,
+        "first_year": 2016,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "Dimona Twist",
+        "screenings": 40,
+        "first_year": 2017,
+        "last_year": 2021,
+        "awards": []
+      },
+      {
+        "title": "Children of Nobody",
+        "screenings": 39,
+        "first_year": 2023,
+        "last_year": 2025,
+        "awards": [
+          "Best International Film"
+        ]
+      },
+      {
+        "title": "The Fifth Heaven",
+        "screenings": 39,
+        "first_year": 2012,
+        "last_year": 2021,
+        "awards": []
+      },
+      {
+        "title": "Open Your Eyes",
+        "screenings": 38,
+        "first_year": 2017,
+        "last_year": 2020,
+        "awards": []
+      },
+      {
+        "title": "Arabic Movie",
+        "screenings": 38,
+        "first_year": 2015,
+        "last_year": 2019,
+        "awards": []
+      },
+      {
+        "title": "Three Mothers",
+        "screenings": 37,
+        "first_year": 2011,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "A Jewish Girl in Shanghai",
+        "screenings": 37,
+        "first_year": 2011,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Doubtful",
+        "screenings": 37,
+        "first_year": 2018,
+        "last_year": 2021,
+        "awards": [
+          "Best Actor Award (Adar Hazazi)",
+          "Best Director Award"
+        ]
+      },
+      {
+        "title": "Between Worlds",
+        "screenings": 36,
+        "first_year": 2017,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "Inside the Mossad",
+        "screenings": 35,
+        "first_year": 2018,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Menachem Begin: Peace and War",
+        "screenings": 35,
+        "first_year": 2020,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "The Testament",
+        "screenings": 34,
+        "first_year": 2017,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "Arabani",
+        "screenings": 34,
+        "first_year": 2013,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "Red Leaves",
+        "screenings": 34,
+        "first_year": 2015,
+        "last_year": 2021,
+        "awards": []
+      },
+      {
+        "title": "Desert Brides",
+        "screenings": 34,
+        "first_year": 2008,
+        "last_year": 2018,
+        "awards": []
+      },
+      {
+        "title": "More Than I Deserve",
+        "screenings": 33,
+        "first_year": 2022,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Closed Circuit",
+        "screenings": 33,
+        "first_year": 2022,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "Kosher Beach",
+        "screenings": 33,
+        "first_year": 2019,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "There are No Lions in Tel Aviv",
+        "screenings": 33,
+        "first_year": 2019,
+        "last_year": 2022,
+        "awards": [
+          "Research Award"
+        ]
+      },
+      {
+        "title": "Masel Tov Cocktail",
+        "screenings": 32,
+        "first_year": 2021,
+        "last_year": 2023,
+        "awards": [
+          "Audience Choice Award for Best Short",
+          "Best Short Film Award"
+        ]
+      },
+      {
+        "title": "Shadow in Baghdad",
+        "screenings": 32,
+        "first_year": 2014,
+        "last_year": 2022,
+        "awards": []
+      },
+      {
+        "title": "A Common Goal",
+        "screenings": 31,
+        "first_year": 2020,
+        "last_year": 2022,
+        "awards": []
+      },
+      {
+        "title": "Born in Jerusalem and Still Alive",
+        "screenings": 31,
+        "first_year": 2019,
+        "last_year": 2021,
+        "awards": [
+          "Best Festure Film"
+        ]
+      },
+      {
+        "title": "Arab Labor 2",
+        "screenings": 31,
+        "first_year": 2010,
+        "last_year": 2015,
+        "awards": []
+      },
+      {
+        "title": "Irena's Vow",
+        "screenings": 30,
+        "first_year": 2023,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "An Average Story",
+        "screenings": 30,
+        "first_year": 2017,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "Hotline",
+        "screenings": 30,
+        "first_year": 2015,
+        "last_year": 2017,
+        "awards": []
+      },
+      {
+        "title": "Muranow",
+        "screenings": 29,
+        "first_year": 2020,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Requiem for a Whale",
+        "screenings": 29,
+        "first_year": 2022,
+        "last_year": 2025,
+        "awards": [
+          "Best Student Doc",
+          "Best Student Documentary Short Film",
+          "Best Cinematography for Students Film | Second Award for Best Students Film"
+        ]
+      },
+      {
+        "title": "That Orchestra with the Broken Instruments",
+        "screenings": 29,
+        "first_year": 2021,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "The Dead of Jaffa",
+        "screenings": 29,
+        "first_year": 2019,
+        "last_year": 2023,
+        "awards": [
+          "Honorable Mention"
+        ]
+      },
+      {
+        "title": "Speer Goes to Hollywood",
+        "screenings": 29,
+        "first_year": 2022,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "The Dreamers",
+        "screenings": 29,
+        "first_year": 2011,
+        "last_year": 2017,
+        "awards": []
+      },
+      {
+        "title": "Kaddish for a Friend",
+        "screenings": 29,
+        "first_year": 2013,
+        "last_year": 2015,
+        "awards": []
+      },
+      {
+        "title": "Welcome and our Condolences",
+        "screenings": 28,
+        "first_year": 2014,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "A Fish Tale",
+        "screenings": 28,
+        "first_year": 2019,
+        "last_year": 2023,
+        "awards": [
+          "Audience Favorite Award – Documentary, The Other Israel Award for Best Israeli Film Highlighting Minority Populations"
+        ]
+      },
+      {
+        "title": "Sacred Sperm",
+        "screenings": 28,
+        "first_year": 2015,
+        "last_year": 2017,
+        "awards": []
+      },
+      {
+        "title": "By Summer's End",
+        "screenings": 28,
+        "first_year": 2012,
+        "last_year": 2015,
+        "awards": []
+      },
+      {
+        "title": "Real Estate",
+        "screenings": 27,
+        "first_year": 2024,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Apples and Oranges",
+        "screenings": 27,
+        "first_year": 2021,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "The Raft",
+        "screenings": 27,
+        "first_year": 2020,
+        "last_year": 2022,
+        "awards": [
+          "Winner Best Director Award"
+        ]
+      },
+      {
+        "title": "Outdoors",
+        "screenings": 27,
+        "first_year": 2018,
+        "last_year": 2021,
+        "awards": []
+      },
+      {
+        "title": "Lenin in October",
+        "screenings": 27,
+        "first_year": 2011,
+        "last_year": 2017,
+        "awards": []
+      },
+      {
+        "title": "A Green Chariot",
+        "screenings": 27,
+        "first_year": 2008,
+        "last_year": 2015,
+        "awards": []
+      },
+      {
+        "title": "Bella",
+        "screenings": 26,
+        "first_year": 2025,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Eid",
+        "screenings": 26,
+        "first_year": 2025,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Golden Voices",
+        "screenings": 26,
+        "first_year": 2020,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "Café Nagler",
+        "screenings": 26,
+        "first_year": 2016,
+        "last_year": 2022,
+        "awards": []
+      },
+      {
+        "title": "The Rabbi from Hezbollah",
+        "screenings": 26,
+        "first_year": 2019,
+        "last_year": 2022,
+        "awards": [
+          "Most Viewed Film"
+        ]
+      },
+      {
+        "title": "Vice Versa",
+        "screenings": 26,
+        "first_year": 2015,
+        "last_year": 2020,
+        "awards": []
+      },
+      {
+        "title": "The Hangman",
+        "screenings": 26,
+        "first_year": 2011,
+        "last_year": 2017,
+        "awards": []
+      },
+      {
+        "title": "Grossman",
+        "screenings": 25,
+        "first_year": 2022,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "Fluchkes",
+        "screenings": 25,
+        "first_year": 2011,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "Refusenik",
+        "screenings": 25,
+        "first_year": 2008,
+        "last_year": 2010,
+        "awards": []
+      },
+      {
+        "title": "Highway 65",
+        "screenings": 24,
+        "first_year": 2024,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "Kishon",
+        "screenings": 24,
+        "first_year": 2017,
+        "last_year": 2025,
+        "awards": [
+          "Jury Special mention documentary"
+        ]
+      },
+      {
+        "title": "Good Morning Son",
+        "screenings": 24,
+        "first_year": 2019,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "Cabaret Total",
+        "screenings": 23,
+        "first_year": 2025,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "The Stronghold",
+        "screenings": 23,
+        "first_year": 2025,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Full Support",
+        "screenings": 23,
+        "first_year": 2024,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Golda's War Diaries",
+        "screenings": 23,
+        "first_year": 2023,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Neurim",
+        "screenings": 23,
+        "first_year": 2021,
+        "last_year": 2025,
+        "awards": [
+          "Jury Award for Best Student Fiction Film"
+        ]
+      },
+      {
+        "title": "Leaving Paradise",
+        "screenings": 23,
+        "first_year": 2021,
+        "last_year": 2022,
+        "awards": [
+          "Best Editing Award"
+        ]
+      },
+      {
+        "title": "I think this is the closest to how the footage looked",
+        "screenings": 23,
+        "first_year": 2013,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "Laces",
+        "screenings": 23,
+        "first_year": 2018,
+        "last_year": 2022,
+        "awards": [
+          "Audience Award",
+          "Best Narrative Feature"
+        ]
+      },
+      {
+        "title": "The Love Letter",
+        "screenings": 23,
+        "first_year": 2018,
+        "last_year": 2021,
+        "awards": [
+          "Best Short film",
+          "Special Jury Mention",
+          "Special Mention for short film"
+        ]
+      },
+      {
+        "title": "Love, Statistically Speaking",
+        "screenings": 22,
+        "first_year": 2025,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Telling Nonie",
+        "screenings": 22,
+        "first_year": 2024,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "Asia",
+        "screenings": 22,
+        "first_year": 2020,
+        "last_year": 2022,
+        "awards": [
+          "Audience Award"
+        ]
+      },
+      {
+        "title": "Inner Flame",
+        "screenings": 21,
+        "first_year": 2018,
+        "last_year": 2023,
+        "awards": [
+          "First place winner from Athens Jewish Film Festival 12th shorts competition"
+        ]
+      },
+      {
+        "title": "A Kaddish for Bernie Madoff",
+        "screenings": 21,
+        "first_year": 2021,
+        "last_year": 2022,
+        "awards": [
+          "1st Feature Directors Award",
+          "Visionary Award",
+          "Audience Award"
+        ]
+      },
+      {
+        "title": "Beneath the Silence",
+        "screenings": 21,
+        "first_year": 2017,
+        "last_year": 2019,
+        "awards": [
+          "Award in the Spirit of Faith"
+        ]
+      },
+      {
+        "title": "Dolphin Boy",
+        "screenings": 21,
+        "first_year": 2012,
+        "last_year": 2018,
+        "awards": []
+      },
+      {
+        "title": "From Slavery to Freedom",
+        "screenings": 20,
+        "first_year": 2019,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "A Letter to David - The complete version",
+        "screenings": 20,
+        "first_year": 2026,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "UnBroken",
+        "screenings": 20,
+        "first_year": 2024,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Torah Tropical",
+        "screenings": 20,
+        "first_year": 2024,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Here and Now",
+        "screenings": 20,
+        "first_year": 2018,
+        "last_year": 2025,
+        "awards": [
+          "Best Script"
+        ]
+      },
+      {
+        "title": "The Artist's Daughter",
+        "screenings": 20,
+        "first_year": 2022,
+        "last_year": 2024,
+        "awards": []
+      },
+      {
+        "title": "The Last Chapter of A.B. Yehoshua",
+        "screenings": 20,
+        "first_year": 2022,
+        "last_year": 2023,
+        "awards": []
+      },
+      {
+        "title": "An Ordinary Life",
+        "screenings": 20,
+        "first_year": 2020,
+        "last_year": 2022,
+        "awards": [
+          "First Time Doc Film",
+          "Best International Documentary Award",
+          "Best International Documentary Feature Award",
+          "Best International Feature Documentary"
+        ]
+      },
+      {
+        "title": "Once Upon a Boy",
+        "screenings": 20,
+        "first_year": 2020,
+        "last_year": 2022,
+        "awards": [
+          "Best Screenplay Award"
+        ]
+      },
+      {
+        "title": "Israel: A Home Movie",
+        "screenings": 20,
+        "first_year": 2013,
+        "last_year": 2018,
+        "awards": []
+      },
+      {
+        "title": "Box For Life",
+        "screenings": 19,
+        "first_year": 2017,
+        "last_year": 2026,
+        "awards": []
+      },
+      {
+        "title": "Generation 1.5",
+        "screenings": 19,
+        "first_year": 2023,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "The Performance",
+        "screenings": 19,
+        "first_year": 2024,
+        "last_year": 2025,
+        "awards": []
+      },
+      {
+        "title": "Back in Berlin",
+        "screenings": 19,
+        "first_year": 2022,
+        "last_year": 2024,
+        "awards": []
+      }
+    ]
+  },
+  "history": [
+    {
+      "company_id": "go2films",
+      "festival_id": "religion-today-film-festival",
+      "festival_name": "Religion Today Film Festival",
+      "screenings": 70,
+      "films": [
+        "Beshert",
+        "Kosher Test",
+        "Wedding Night",
+        "40 Steps",
+        "Paradise",
+        "Sand Flakes",
+        "Dead Sea Guardians",
+        "Berenshtein",
+        "Razzouk Tattoo",
+        "Yerusalem",
+        "Esau",
+        "There is No Other Place (The Church)"
+      ],
+      "years": [
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "awards": [
+        {
+          "film": "Dead Sea Guardians",
+          "year": 2022,
+          "award": "WINNER Religions for Peace International Award"
+        },
+        {
+          "film": "Razzouk Tattoo",
+          "year": 2022,
+          "award": "Special Mention"
+        },
+        {
+          "film": "The Unorthodox",
+          "year": 2020,
+          "award": "Special Mention Best Feature"
+        },
+        {
+          "film": "Remember Baghdad",
+          "year": 2018,
+          "award": "Special Mention"
+        },
+        {
+          "film": "Beneath the Silence",
+          "year": 2018,
+          "award": "Award in the Spirit of Faith"
+        },
+        {
+          "film": "Across the Line",
+          "year": 2018,
+          "award": "Jury Mention"
+        }
+      ],
+      "categories": [
+        "IFF",
+        "Org.",
+        "org.",
+        "JFF"
+      ],
+      "result": "awarded",
+      "note": "70 screening(s) between 2009-2026. titles: Beshert, Kosher Test, Wedding Night, 40 Steps, Paradise. awards: WINNER Religions for Peace International Award (Dead Sea Guardians, 2022); Special Mention (Razzouk Tattoo, 2022); Special Mention Best Feature (The Unorthodox, 2020)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "santa-barbara-iff",
+      "festival_name": "Santa Barbara IFF",
+      "screenings": 41,
+      "films": [
+        "Soda",
+        "Housewitz",
+        "Requiem for a Whale",
+        "Apples and Oranges",
+        "On This Happy Note",
+        "Dead Sea Guardians",
+        "Four Mothers",
+        "The Art of Waiting",
+        "The Dead of Jaffa",
+        "Golda",
+        "Kosher Beach",
+        "Born in Jerusalem and Still Alive"
+      ],
+      "years": [
+        2012,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "41 screening(s) between 2012-2025. titles: Soda, Housewitz, Requiem for a Whale, Apples and Oranges, On This Happy Note."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "master-of-art",
+      "festival_name": "Master of Art IFF",
+      "screenings": 25,
+      "films": [
+        "Kichka: Telling Myself",
+        "Tattooed4life",
+        "Fiddler's Journey to the Big Screen",
+        "Spinoza",
+        "Look, Soon You Won't See Anything",
+        "Soviet Life- Zoya Cherkassky",
+        "Vita Activa- The Spirit of Hannah Arendt",
+        "The Pianist from Ramallah",
+        "The Last Chapter of A.B. Yehoshua",
+        "The Fourth Window",
+        "Glass Negatives",
+        "Mendelsohn's Incessant Visions"
+      ],
+      "years": [
+        2017,
+        2018,
+        2019,
+        2021,
+        2022,
+        2023,
+        2025,
+        2026
+      ],
+      "awards": [
+        {
+          "film": "Soviet Life- Zoya Cherkassky",
+          "year": 2023,
+          "award": "Best Short Documentary"
+        },
+        {
+          "film": "Glass Negatives",
+          "year": 2021,
+          "award": "Best Short Documentary"
+        },
+        {
+          "film": "Hope I'm In The Frame",
+          "year": 2018,
+          "award": "Best Documentary in CINEMA"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "25 screening(s) between 2017-2026. titles: Kichka: Telling Myself, Tattooed4life, Fiddler's Journey to the Big Screen, Spinoza, Look, Soon You Won't See Anything. awards: Best Short Documentary (Soviet Life- Zoya Cherkassky, 2023); Best Short Documentary (Glass Negatives, 2021); Best Documentary in CINEMA (Hope I'm In The Frame, 2018)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "ann-arbor-ff",
+      "festival_name": "Ann Arbor JFF",
+      "screenings": 24,
+      "films": [
+        "Stay Forte",
+        "Girls Like Us",
+        "Children of Nobody",
+        "Golda's War Diaries",
+        "Home",
+        "Reckonings",
+        "Back in Berlin",
+        "The Fourth Window",
+        "A Kaddish for Bernie Madoff",
+        "Dead Sea Guardians",
+        "Berenshtein",
+        "Muranow"
+      ],
+      "years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2021,
+        2022,
+        2023,
+        2024,
+        2026
+      ],
+      "awards": [],
+      "categories": [
+        "JFF",
+        "riva"
+      ],
+      "result": "selected",
+      "note": "24 screening(s) between 2016-2026. titles: Stay Forte, Girls Like Us, Children of Nobody, Golda's War Diaries, Home."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "centre-film-festival",
+      "festival_name": "Centre IFF",
+      "screenings": 21,
+      "films": [
+        "Torah Tropical",
+        "Eid",
+        "The Property",
+        "Kosher Test",
+        "Halisa",
+        "A Letter to David",
+        "Tattooed4life",
+        "The Boy",
+        "Single Light",
+        "See You 'Round the Block",
+        "The Vanishing Soldier",
+        "Six Thirty"
+      ],
+      "years": [
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "awards": [
+        {
+          "film": "Holy Holocaust",
+          "year": 2022,
+          "award": "Best Short Documentary"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "21 screening(s) between 2022-2025. titles: Torah Tropical, Eid, The Property, Kosher Test, Halisa. awards: Best Short Documentary (Holy Holocaust, 2022)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "documentary-edge-iff",
+      "festival_name": "Documentary Edge IFF",
+      "screenings": 20,
+      "films": [
+        "Full Support",
+        "We Will Dance Again",
+        "Soviet Life- Zoya Cherkassky",
+        "Fiddler's Journey on the Big Screen",
+        "Dead Sea Guardians",
+        "Speer Goes to Hollywood",
+        "Herd",
+        "Holy Holocaust",
+        "Love & Stuff",
+        "After Munich",
+        "Dancing in Jaffa",
+        "Cause of Death"
+      ],
+      "years": [
+        2012,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "awards": [
+        {
+          "film": "We Will Dance Again",
+          "year": 2024,
+          "award": "WInner of 2 awards: Best Film in Category “In Truth We Trust”, Best International Editing"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "20 screening(s) between 2012-2025. titles: Full Support, We Will Dance Again, Soviet Life- Zoya Cherkassky, Fiddler's Journey on the Big Screen, Dead Sea Guardians. awards: WInner of 2 awards: Best Film in Category “In Truth We Trust”, Best International Editing (We Will Dance Again, 2024)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "krakow-iff",
+      "festival_name": "Krakow IFF",
+      "screenings": 20,
+      "films": [
+        "Full Support",
+        "Holy Holocaust",
+        "Fiddler's Journey on the Big Screen",
+        "Leaving Paradise",
+        "Marry Me However",
+        "Kosher Beach",
+        "Family in Transition",
+        "Muhi- Generally Temporary",
+        "Shmama",
+        "The Wonderful Kingdom of Papa Alaev",
+        "#uploading_holocaust",
+        "Sacred Sperm"
+      ],
+      "years": [
+        2011,
+        2012,
+        2013,
+        2015,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "20 screening(s) between 2011-2025. titles: Full Support, Holy Holocaust, Fiddler's Journey on the Big Screen, Leaving Paradise, Marry Me However."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "richmond-iff",
+      "festival_name": "Richmond IFF",
+      "screenings": 16,
+      "films": [
+        "Bella",
+        "Kichka: Telling Myself",
+        "Frequency",
+        "Half a Date",
+        "Dalia's Tea Casts a Shadow Over Mount Fuji",
+        "My One and Only",
+        "Dear Mom",
+        "A Place of Her Own",
+        "Out at Six",
+        "A Letter to David",
+        "Soda",
+        "Giado"
+      ],
+      "years": [
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "16 screening(s) between 2023-2026. titles: Bella, Kichka: Telling Myself, Frequency, Half a Date, Dalia's Tea Casts a Shadow Over Mount Fuji."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "dok-fest-munich",
+      "festival_name": "Dok.Fest Munich",
+      "screenings": 11,
+      "films": [
+        "Out at Six",
+        "Housewitz",
+        "Muranow",
+        "After Munich",
+        "Kosher Beach",
+        "The Dead of Jaffa",
+        "Unsettling",
+        "Kishon",
+        "Elish's Notebooks",
+        "My German Children"
+      ],
+      "years": [
+        2013,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2026
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "11 screening(s) between 2013-2026. titles: Out at Six, Housewitz, Muranow, After Munich, Kosher Beach."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "tashkent-international-film-festival",
+      "festival_name": "Tashkent International Film Festival",
+      "screenings": 11,
+      "films": [
+        "Real Estate",
+        "The Boy",
+        "Running on Sand",
+        "Sand Flakes",
+        "Barren",
+        "Asia",
+        "The Wonderful Kingdom of Papa Alaev",
+        "Little Victories",
+        "The Raft",
+        "A Waste of Space",
+        "Handa Handa 4"
+      ],
+      "years": [
+        2021,
+        2023,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "11 screening(s) between 2021-2024. titles: Real Estate, The Boy, Running on Sand, Sand Flakes, Barren."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "shanghai-international-film-festival",
+      "festival_name": "Shanghai International Film Festival",
+      "screenings": 11,
+      "films": [
+        "Running on sand",
+        "The Other City",
+        "Muranow",
+        "Open Your Eyes",
+        "Echo",
+        "Private Album",
+        "Back To Berlin",
+        "Beneath the Silence",
+        "Land of Genesis",
+        "A film unfinished",
+        "Salsa Tel Aviv"
+      ],
+      "years": [
+        2012,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2023,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "11 screening(s) between 2012-2024. titles: Running on sand, The Other City, Muranow, Open Your Eyes, Echo."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "idfa",
+      "festival_name": "IDFA (Special Screening for Liberation Day)",
+      "screenings": 11,
+      "films": [
+        "Joe's Violin",
+        "Herd",
+        "Housewitz",
+        "Backwards",
+        "Cause of Death",
+        "Muhi- Generally Temporary",
+        "Before My Feet Touch the Ground",
+        "Death in the Terminal",
+        "Presenting Princess Shaw",
+        "Vita Activa- The Spirit of Hannah Arendt",
+        "A Film Unfinished"
+      ],
+      "years": [
+        2011,
+        2015,
+        2016,
+        2017,
+        2018,
+        2021,
+        2024
+      ],
+      "awards": [
+        {
+          "film": "Backwards",
+          "year": 2018,
+          "award": "IDFA Special Jury Award for Student Documentary"
+        }
+      ],
+      "categories": [
+        "IFF",
+        "JFF"
+      ],
+      "result": "awarded",
+      "note": "11 screening(s) between 2011-2024. titles: Joe's Violin, Herd, Housewitz, Backwards, Cause of Death. awards: IDFA Special Jury Award for Student Documentary (Backwards, 2018)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "shanghai-tv-film-festival",
+      "festival_name": "Shanghai TV Film Festival",
+      "screenings": 11,
+      "films": [
+        "Bronca",
+        "Once Upon a Boy",
+        "Vice Versa",
+        "Gisi",
+        "Good Garbage",
+        "My German Children",
+        "Just the two of us",
+        "Desert Brides",
+        "The Hangman",
+        "Fluchkes",
+        "Lady of the Court"
+      ],
+      "years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2016,
+        2020,
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "11 screening(s) between 2011-2023. titles: Bronca, Once Upon a Boy, Vice Versa, Gisi, Good Garbage."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "this-human-world",
+      "festival_name": "This Human World",
+      "screenings": 9,
+      "films": [
+        "Muhi",
+        "Dead Sea Guardians",
+        "How To Say Silence",
+        "Once Upon a Boy",
+        "Women in Sink",
+        "Red Leaves",
+        "Numbered",
+        "Duma",
+        "A Film Unfinished"
+      ],
+      "years": [
+        2010,
+        2012,
+        2013,
+        2016,
+        2020,
+        2021,
+        2022,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "9 screening(s) between 2010-2024. titles: Muhi, Dead Sea Guardians, How To Say Silence, Once Upon a Boy, Women in Sink."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "tallinn-black-nights-iff",
+      "festival_name": "Tallin Black Nights",
+      "screenings": 9,
+      "films": [
+        "Full Support",
+        "Sand Flakes",
+        "Holy Holocaust",
+        "Barren - Vardi",
+        "Summer Nights",
+        "Blind Spot",
+        "A Kaddish for Bernie Madoff",
+        "Presenting Princess Shaw",
+        "Arabani"
+      ],
+      "years": [
+        2013,
+        2016,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF",
+        "Market"
+      ],
+      "result": "selected",
+      "note": "9 screening(s) between 2013-2024. titles: Full Support, Sand Flakes, Holy Holocaust, Barren - Vardi, Summer Nights."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "mediterranean-film-festival",
+      "festival_name": "Mediterranean Film Festival",
+      "screenings": 9,
+      "films": [
+        "We Will Dance Again",
+        "Summer Nights",
+        "No Hard Feelings",
+        "Cause of Death",
+        "Family in Transition",
+        "My Father's Son",
+        "Before My Feet Touch the Ground",
+        "Muhi- Generally Temporary",
+        "Hotline"
+      ],
+      "years": [
+        2015,
+        2018,
+        2019,
+        2021,
+        2022,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "9 screening(s) between 2015-2024. titles: We Will Dance Again, Summer Nights, No Hard Feelings, Cause of Death, Family in Transition."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "flahertiana-idff",
+      "festival_name": "Flahertiana IDFF",
+      "screenings": 9,
+      "films": [
+        "The Three of Us",
+        "How To Say Silence",
+        "A Waste of Space",
+        "Alone Together",
+        "Holding it In",
+        "Muhi- Generally Temporary",
+        "The Wonderful Kingdom of Papa Alaev",
+        "Presenting Princess Shaw",
+        "Probation Time"
+      ],
+      "years": [
+        2015,
+        2016,
+        2018,
+        2020,
+        2021,
+        2022,
+        2024
+      ],
+      "awards": [
+        {
+          "film": "How To Say Silence",
+          "year": 2022,
+          "award": "Special Jury Mention + Audience Award"
+        },
+        {
+          "film": "Muhi- Generally Temporary",
+          "year": 2018,
+          "award": "SILVER NANOOK for Discovery of New Subjects and New Heroes"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "9 screening(s) between 2015-2024. titles: The Three of Us, How To Say Silence, A Waste of Space, Alone Together, Holding it In. awards: Special Jury Mention + Audience Award (How To Say Silence, 2022); SILVER NANOOK for Discovery of New Subjects and New Heroes (Muhi- Generally Temporary, 2018)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "doc-nyc",
+      "festival_name": "DOC NYC",
+      "screenings": 9,
+      "films": [
+        "The Three of Us",
+        "Requiem for a Whale",
+        "Closed Circuit",
+        "Love & Stuff",
+        "Kosher Beach",
+        "Golda",
+        "Family in Transition",
+        "Elish's Notebooks",
+        "The Wonderful Kingdom of Papa Alaev"
+      ],
+      "years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2022,
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "9 screening(s) between 2016-2023. titles: The Three of Us, Requiem for a Whale, Closed Circuit, Love & Stuff, Kosher Beach."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "tirana-iff",
+      "festival_name": "Tirana International Film Festival",
+      "screenings": 9,
+      "films": [
+        "The Pageant",
+        "The Unorthodox",
+        "Across the Line",
+        "Harmonia",
+        "Heroine",
+        "The Wonderful Kingdom of Papa Alaev",
+        "An Israeli Love story",
+        "Beneath the Silence",
+        "Ten Buildings Away"
+      ],
+      "years": [
+        2015,
+        2017,
+        2019,
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "9 screening(s) between 2015-2021. titles: The Pageant, The Unorthodox, Across the Line, Harmonia, Heroine."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "transylvania-iff",
+      "festival_name": "Transylvania IFF",
+      "screenings": 8,
+      "films": [
+        "That Orchestra with the Broken Instruments",
+        "The Round Number",
+        "The Fourth Window",
+        "Elish's Notebooks",
+        "The Accursed",
+        "Magic Men",
+        "Voices from El Sayed"
+      ],
+      "years": [
+        2009,
+        2014,
+        2016,
+        2018,
+        2022,
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "Org.",
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "8 screening(s) between 2009-2023. titles: That Orchestra with the Broken Instruments, The Round Number, The Fourth Window, Elish's Notebooks, The Accursed."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "thessaloniki-documentary-festival",
+      "festival_name": "Thessaloniki Documentary Festival",
+      "screenings": 8,
+      "films": [
+        "Wedding Night",
+        "Closed Circuit",
+        "Housewitz",
+        "The Students of Umberto Primo",
+        "Dead Sea Guardians",
+        "Muhi- Generally Temporary",
+        "White Night",
+        "Brides, Aris, rebellios son, soul tripping, stars, displaced",
+        "displaced"
+      ],
+      "years": [
+        2009,
+        2013,
+        2018,
+        2022,
+        2023
+      ],
+      "awards": [
+        {
+          "film": "The Students of Umberto Primo",
+          "year": 2022,
+          "award": "Jury Award for Best Documentary"
+        },
+        {
+          "film": "Muhi- Generally Temporary",
+          "year": 2018,
+          "award": "AMNESTY INTERNATIONAL AWARD Special Mention"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "8 screening(s) between 2009-2023. titles: Wedding Night, Closed Circuit, Housewitz, The Students of Umberto Primo, Dead Sea Guardians. awards: Jury Award for Best Documentary (The Students of Umberto Primo, 2022); AMNESTY INTERNATIONAL AWARD Special Mention (Muhi- Generally Temporary, 2018)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "hotdocs",
+      "festival_name": "Hot Docs",
+      "screenings": 8,
+      "films": [
+        "The Artist's Daughter",
+        "Housewitz",
+        "Holy Holocaust",
+        "Love & Stuff",
+        "Death in the Terminal",
+        "Muhi- Generally Temporary",
+        "The Wonderful Kingdom of Papa Alaev",
+        "Presenting Princess Shaw"
+      ],
+      "years": [
+        2016,
+        2017,
+        2020,
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "iff",
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "8 screening(s) between 2016-2022. titles: The Artist's Daughter, Housewitz, Holy Holocaust, Love & Stuff, Death in the Terminal."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "sole-luna-ff",
+      "festival_name": "Sole Luna FF",
+      "screenings": 8,
+      "films": [
+        "Out Loud",
+        "Before My Feet Touch the Ground",
+        "Arabic Movie",
+        "Women in Sink",
+        "Vita Activa- The Spirit of Hannah Arendt"
+      ],
+      "years": [
+        2016,
+        2018,
+        2020
+      ],
+      "awards": [
+        {
+          "film": "Out Loud",
+          "year": 2020,
+          "award": "Special Mention- Editing Award"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "8 screening(s) between 2016-2020. titles: Out Loud, Before My Feet Touch the Ground, Arabic Movie, Women in Sink, Vita Activa- The Spirit of Hannah Arendt. awards: Special Mention- Editing Award (Out Loud, 2020)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "international-human-rights-film-festival-albania",
+      "festival_name": "International Human Rights Film Festival in Albania",
+      "screenings": 7,
+      "films": [
+        "A Letter to David",
+        "Telling Nonie",
+        "Closed Circuit",
+        "Unsettling",
+        "Cause of Death",
+        "Wild Kids",
+        "The Patriot"
+      ],
+      "years": [
+        2018,
+        2019,
+        2023,
+        2024,
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "7 screening(s) between 2018-2025. titles: A Letter to David, Telling Nonie, Closed Circuit, Unsettling, Cause of Death."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "cleveland-international-film-festival-ciff",
+      "festival_name": "Cleveland IFF",
+      "screenings": 7,
+      "films": [
+        "More Than Friends",
+        "Golda",
+        "The Art of Waiting",
+        "King Bibi",
+        "Open Your Eyes",
+        "Across the Line",
+        "Dear God"
+      ],
+      "years": [
+        2015,
+        2018,
+        2019,
+        2020,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "7 screening(s) between 2015-2024. titles: More Than Friends, Golda, The Art of Waiting, King Bibi, Open Your Eyes."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "women-make-waves",
+      "festival_name": "Women Make Waves IFF",
+      "screenings": 7,
+      "films": [
+        "Phoenix",
+        "House Call-Vika",
+        "Women in Sink",
+        "By Summer's End",
+        "White Night",
+        "Jerusalem ER",
+        "Sixty and the city"
+      ],
+      "years": [
+        2012,
+        2013,
+        2016,
+        2017,
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "7 screening(s) between 2012-2019. titles: Phoenix, House Call-Vika, Women in Sink, By Summer's End, White Night."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "zagrebdox",
+      "festival_name": "Zagrebdox",
+      "screenings": 6,
+      "films": [
+        "Telling Nonie",
+        "Summer Nights",
+        "The Wonderful Kingdom of Papa Alaev",
+        "Women in Sink",
+        "Sixty and the city",
+        "Dolphin Boy"
+      ],
+      "years": [
+        2012,
+        2016,
+        2017,
+        2022,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "6 screening(s) between 2012-2024. titles: Telling Nonie, Summer Nights, The Wonderful Kingdom of Papa Alaev, Women in Sink, Sixty and the city."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "buenos-aires-international-independent-ff-bafici",
+      "festival_name": "Buenos Aires Int'l Independent FF (BAFICI)",
+      "screenings": 6,
+      "films": [
+        "See you 'round the block",
+        "The Round Number",
+        "Zohar- The Return",
+        "The love Letter",
+        "Hotline",
+        "A Place of Her Own"
+      ],
+      "years": [
+        2012,
+        2015,
+        2019,
+        2022,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "6 screening(s) between 2012-2024. titles: See you 'round the block, The Round Number, Zohar- The Return, The love Letter, Hotline."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "woodstock-film-festival",
+      "festival_name": "Woodstock IFF",
+      "screenings": 6,
+      "films": [
+        "Irena's Vow",
+        "Here and Now",
+        "Family Matters",
+        "Pinchas"
+      ],
+      "years": [
+        2009,
+        2015,
+        2018,
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "6 screening(s) between 2009-2023. titles: Irena's Vow, Here and Now, Family Matters, Pinchas."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "zlin-iff",
+      "festival_name": "Zlín Film Festival",
+      "screenings": 6,
+      "films": [
+        "Sand Flakes",
+        "My Father's Son",
+        "The Raft",
+        "Dancing in Jaffa",
+        "Foreign Letters",
+        "My Australia"
+      ],
+      "years": [
+        2012,
+        2014,
+        2020,
+        2023
+      ],
+      "awards": [
+        {
+          "film": "My Father's Son",
+          "year": 2020,
+          "award": "Best Documentary Student Competition"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "6 screening(s) between 2012-2023. titles: Sand Flakes, My Father's Son, The Raft, Dancing in Jaffa, Foreign Letters. awards: Best Documentary Student Competition (My Father's Son, 2020)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "arlington-international-film-festival",
+      "festival_name": "Arlington IFF",
+      "screenings": 5,
+      "films": [
+        "Giado",
+        "Holy Holocaust",
+        "On This Happy Note",
+        "The Pianist from Ramallah",
+        "Marry Me However"
+      ],
+      "years": [
+        2021,
+        2022,
+        2023,
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "5 screening(s) between 2021-2025. titles: Giado, Holy Holocaust, On This Happy Note, The Pianist from Ramallah, Marry Me However."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "cinemed-montpellier",
+      "festival_name": "Cinemed Montpellier",
+      "screenings": 5,
+      "films": [
+        "Single Light",
+        "Red Leaves",
+        "Melting Away",
+        "Pinchas"
+      ],
+      "years": [
+        2008,
+        2011,
+        2015,
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "5 screening(s) between 2008-2023. titles: Single Light, Red Leaves, Melting Away, Pinchas."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "taiwan-international-ethnographic-film-festival",
+      "festival_name": "Taiwan International Ethnographic Film Festival",
+      "screenings": 5,
+      "films": [
+        "40 Steps",
+        "In Between",
+        "Desert Brides",
+        "Voices from El Sayed"
+      ],
+      "years": [
+        2009,
+        2015,
+        2016,
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "5 screening(s) between 2009-2023. titles: 40 Steps, In Between, Desert Brides, Voices from El Sayed."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "film-without-borders",
+      "festival_name": "Film Without Borders",
+      "screenings": 5,
+      "films": [
+        "Holy Holocaust",
+        "A Land Without Borders",
+        "Across the Line",
+        "Joe's Violin",
+        "Presenting Princess Shaw"
+      ],
+      "years": [
+        2017,
+        2018,
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "5 screening(s) between 2017-2023. titles: Holy Holocaust, A Land Without Borders, Across the Line, Joe's Violin, Presenting Princess Shaw."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "virgin-spring-cinefest",
+      "festival_name": "Virgin Spring Cinefest",
+      "screenings": 5,
+      "films": [
+        "Perfect",
+        "A Private Death",
+        "Holding It in",
+        "A Common Goal",
+        "Once Upon a Boy"
+      ],
+      "years": [
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "5 screening(s) between 2021. titles: Perfect, A Private Death, Holding It in, A Common Goal, Once Upon a Boy."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "minsk-iff",
+      "festival_name": "Minsk IFF",
+      "screenings": 5,
+      "films": [
+        "There are No Lions in Tel Aviv",
+        "Muhi- Generally Temporary",
+        "Café Nagler",
+        "Thou Shalt not Dance",
+        "Six Million and One"
+      ],
+      "years": [
+        2012,
+        2016,
+        2018,
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "5 screening(s) between 2012-2019. titles: There are No Lions in Tel Aviv, Muhi- Generally Temporary, Café Nagler, Thou Shalt not Dance, Six Million and One."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "dok-leipzig",
+      "festival_name": "DOK Leipzig",
+      "screenings": 5,
+      "films": [
+        "Phoenix",
+        "Muhi- Generally Temporary",
+        "White Night",
+        "Desert Brides"
+      ],
+      "years": [
+        2008,
+        2012,
+        2017,
+        2018
+      ],
+      "awards": [
+        {
+          "film": "Muhi- Generally Temporary",
+          "year": 2017,
+          "award": "GOLDEN DOVE AWARD for Best Long Documetary"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "5 screening(s) between 2008-2018. titles: Phoenix, Muhi- Generally Temporary, White Night, Desert Brides. awards: GOLDEN DOVE AWARD for Best Long Documetary (Muhi- Generally Temporary, 2017)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "cinedoc-tbilisi",
+      "festival_name": "Cinedoc Tbilisi",
+      "screenings": 5,
+      "films": [
+        "Muhi- Generally Temporary",
+        "Presenting Princess Shaw",
+        "1 Building and 40 people dancing",
+        "The Chaos Within"
+      ],
+      "years": [
+        2015,
+        2017,
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "5 screening(s) between 2015-2018. titles: Muhi- Generally Temporary, Presenting Princess Shaw, 1 Building and 40 people dancing, The Chaos Within."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "watch-docs",
+      "festival_name": "WATCH DOCS",
+      "screenings": 5,
+      "films": [
+        "Muhi- Generally Temporary",
+        "The Patriot",
+        "Women in Sink",
+        "Voices from El Sayed",
+        "Desert Brides"
+      ],
+      "years": [
+        2008,
+        2009,
+        2015,
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "5 screening(s) between 2008-2017. titles: Muhi- Generally Temporary, The Patriot, Women in Sink, Voices from El Sayed, Desert Brides."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "chagrin-documentary-iff",
+      "festival_name": "Chagrin Documentary IFF",
+      "screenings": 4,
+      "films": [
+        "Out at Six",
+        "Once Upon a Boy",
+        "Golda",
+        "Fluchkes"
+      ],
+      "years": [
+        2012,
+        2020,
+        2026
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2012-2026. titles: Out at Six, Once Upon a Boy, Golda, Fluchkes."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "hamburg-filmfest",
+      "festival_name": "Hamburg IFF",
+      "screenings": 4,
+      "films": [
+        "Esther",
+        "Outdoors",
+        "Presenting Princess Shaw",
+        "Album 61"
+      ],
+      "years": [
+        2014,
+        2016,
+        2018,
+        2026
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2014-2026. titles: Esther, Outdoors, Presenting Princess Shaw, Album 61."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "odessa-iff",
+      "festival_name": "Odessa IFF",
+      "screenings": 4,
+      "films": [
+        "Bella",
+        "My One and Only",
+        "The Property",
+        "Five Hours from Paris"
+      ],
+      "years": [
+        2018,
+        2025,
+        2026
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2018-2026. titles: Bella, My One and Only, The Property, Five Hours from Paris."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "flickers-rhode-island",
+      "festival_name": "Flickers' Rhode Island",
+      "screenings": 4,
+      "films": [
+        "Sun Bay",
+        "Holy Holocaust",
+        "The Pageant",
+        "Neurim"
+      ],
+      "years": [
+        2021,
+        2022,
+        2026
+      ],
+      "awards": [
+        {
+          "film": "Holy Holocaust",
+          "year": 2022,
+          "award": "Grand Prize for the Hearts, Minds, Souls Award"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "4 screening(s) between 2021-2026. titles: Sun Bay, Holy Holocaust, The Pageant, Neurim. awards: Grand Prize for the Hearts, Minds, Souls Award (Holy Holocaust, 2022)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "mumbai-international-film-festival",
+      "festival_name": "Mumbai IFF",
+      "screenings": 4,
+      "films": [
+        "Full Support",
+        "Out at Six",
+        "The Fourth Window",
+        "#uploading_holocaust"
+      ],
+      "years": [
+        2018,
+        2021,
+        2026
+      ],
+      "awards": [
+        {
+          "film": "The Fourth Window",
+          "year": 2021,
+          "award": "Best Feature Documentary Award"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "4 screening(s) between 2018-2026. titles: Full Support, Out at Six, The Fourth Window, #uploading_holocaust. awards: Best Feature Documentary Award (The Fourth Window, 2021)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "filmfestival-kitzbuhel",
+      "festival_name": "Filmfestival Kitzbühel",
+      "screenings": 4,
+      "films": [
+        "A Letter to David",
+        "Full Support",
+        "Echo",
+        "The Love Letter"
+      ],
+      "years": [
+        2018,
+        2019,
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2018-2025. titles: A Letter to David, Full Support, Echo, The Love Letter."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "rotterdam-iff-iffr",
+      "festival_name": "International Film Festival Rotterdam",
+      "screenings": 4,
+      "films": [
+        "Eid",
+        "The Wonderful Kingdom of Papa Alaev"
+      ],
+      "years": [
+        2017,
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2017-2025. titles: Eid, The Wonderful Kingdom of Papa Alaev."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "bosifest",
+      "festival_name": "Bosifest",
+      "screenings": 4,
+      "films": [
+        "The Three of Us",
+        "Once Upon a Boy",
+        "The Sign for Love",
+        "How Much Love"
+      ],
+      "years": [
+        2015,
+        2019,
+        2020,
+        2024
+      ],
+      "awards": [
+        {
+          "film": "The Three of Us",
+          "year": 2024,
+          "award": "Grand Prix"
+        },
+        {
+          "film": "Once Upon a Boy",
+          "year": 2020,
+          "award": "Best Screenplay Award"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "4 screening(s) between 2015-2024. titles: The Three of Us, Once Upon a Boy, The Sign for Love, How Much Love. awards: Grand Prix (The Three of Us, 2024); Best Screenplay Award (Once Upon a Boy, 2020)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "unaff",
+      "festival_name": "UNAFF",
+      "screenings": 4,
+      "films": [
+        "We Will Dance Again",
+        "Reckonings",
+        "The Pianist from Ramallah",
+        "Joe's Violin"
+      ],
+      "years": [
+        2017,
+        2021,
+        2022,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2017-2024. titles: We Will Dance Again, Reckonings, The Pianist from Ramallah, Joe's Violin."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "film-by-the-sea",
+      "festival_name": "Film by the Sea",
+      "screenings": 4,
+      "films": [
+        "Dead Sea Guardians",
+        "The Fourth Window",
+        "Speer Goes to Hollywood",
+        "Back in Berlin"
+      ],
+      "years": [
+        2022,
+        2023,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2022-2024. titles: Dead Sea Guardians, The Fourth Window, Speer Goes to Hollywood, Back in Berlin."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "palm-springs-international-shortfest",
+      "festival_name": "Palm Springs International ShortFest",
+      "screenings": 4,
+      "films": [
+        "More Than Friends",
+        "Backwards",
+        "Open Your Eyes",
+        "The Love Letter"
+      ],
+      "years": [
+        2018,
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2018-2019. titles: More Than Friends, Backwards, Open Your Eyes, The Love Letter."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "ethnografilm-paris",
+      "festival_name": "Ethnografilm Paris",
+      "screenings": 4,
+      "films": [
+        "40 Steps",
+        "Homeboys",
+        "Soviet Life- Zoya Cherkassky",
+        "A Waste of Space"
+      ],
+      "years": [
+        2022,
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2022-2023. titles: 40 Steps, Homeboys, Soviet Life- Zoya Cherkassky, A Waste of Space."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "festival-mix-mexico",
+      "festival_name": "Festival Mix México",
+      "screenings": 4,
+      "films": [
+        "Cosmopolitan",
+        "How to Say Silence",
+        "Marry Me However",
+        "Melting Away"
+      ],
+      "years": [
+        2014,
+        2021,
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2014-2022. titles: Cosmopolitan, How to Say Silence, Marry Me However, Melting Away."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "flying-broom-film-festival",
+      "festival_name": "Flying Broom Film Festival",
+      "screenings": 4,
+      "films": [
+        "Four Mothers",
+        "Kosher Beach",
+        "21 Days Inside",
+        "A Fish Tale"
+      ],
+      "years": [
+        2020,
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2020-2021. titles: Four Mothers, Kosher Beach, 21 Days Inside, A Fish Tale."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "olhares-do-mediterraneo-women-s-film-festival",
+      "festival_name": "Olhares do Mediterrâneo - Women's Film Festival",
+      "screenings": 4,
+      "films": [
+        "A Fish Tale",
+        "Café Nagler",
+        "The Wonderful Kingdom of Papa Alaev",
+        "Women in Sink"
+      ],
+      "years": [
+        2016,
+        2017,
+        2020
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2016-2020. titles: A Fish Tale, Café Nagler, The Wonderful Kingdom of Papa Alaev, Women in Sink."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "middle-east-now",
+      "festival_name": "Middle east now",
+      "screenings": 4,
+      "films": [
+        "Out Loud",
+        "Muhi- Generally Temporary",
+        "The Writer",
+        "Women in Sink"
+      ],
+      "years": [
+        2016,
+        2018,
+        2020
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2016-2020. titles: Out Loud, Muhi- Generally Temporary, The Writer, Women in Sink."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "montreal-festival-du-nouveau-cinema",
+      "festival_name": "Montreal Festival du Nouveau Cinéma",
+      "screenings": 4,
+      "films": [
+        "Shmama",
+        "Torn",
+        "Melting Away",
+        "A Place of Her Own"
+      ],
+      "years": [
+        2011,
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2011-2018. titles: Shmama, Torn, Melting Away, A Place of Her Own."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "biografilm-ff",
+      "festival_name": "Biografilm FF",
+      "screenings": 4,
+      "films": [
+        "Muhi- Generally Temporary",
+        "#uploading_holocaust",
+        "Presenting Princess Shaw",
+        "Hotline"
+      ],
+      "years": [
+        2015,
+        2016,
+        2017,
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2015-2018. titles: Muhi- Generally Temporary, #uploading_holocaust, Presenting Princess Shaw, Hotline."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "message-to-man-iff",
+      "festival_name": "Message to Man",
+      "screenings": 4,
+      "films": [
+        "Silicon Wadi",
+        "The Chaos Within",
+        "Sacred Sperm",
+        "I think this is the closest to how the footage looked"
+      ],
+      "years": [
+        2013,
+        2015
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2013-2015. titles: Silicon Wadi, The Chaos Within, Sacred Sperm, I think this is the closest to how the footage looked."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "sundance-iff",
+      "festival_name": "Sundance IFF",
+      "screenings": 4,
+      "films": [
+        "I think this is the closest to how the footage looked"
+      ],
+      "years": [
+        2014
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "4 screening(s) between 2014. titles: I think this is the closest to how the footage looked."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "exground-filmfestival",
+      "festival_name": "Exground Filmfestival",
+      "screenings": 3,
+      "films": [
+        "The Holiness",
+        "Full Support",
+        "Kosher Test"
+      ],
+      "years": [
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2025. titles: The Holiness, Full Support, Kosher Test."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "chelsea-film-festival",
+      "festival_name": "Chelsea IFF",
+      "screenings": 3,
+      "films": [
+        "Six Thirty",
+        "Soviet Life- Zoya Cherkassky",
+        "Holy Holocaust"
+      ],
+      "years": [
+        2022,
+        2023,
+        2024
+      ],
+      "awards": [
+        {
+          "film": "Holy Holocaust",
+          "year": 2022,
+          "award": "Best Animation"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "3 screening(s) between 2022-2024. titles: Six Thirty, Soviet Life- Zoya Cherkassky, Holy Holocaust. awards: Best Animation (Holy Holocaust, 2022)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "innovative-iff",
+      "festival_name": "Innovative IFF",
+      "screenings": 3,
+      "films": [
+        "Real Estate",
+        "We Will Dance Again",
+        "Barren"
+      ],
+      "years": [
+        2023,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2023-2024. titles: Real Estate, We Will Dance Again, Barren."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "international-festival-of-films-on-art-le-fifa",
+      "festival_name": "International Festival of Films on Art (FIFA)",
+      "screenings": 3,
+      "films": [
+        "The Artist's Daughter",
+        "Homeboys",
+        "The Fourth Window"
+      ],
+      "years": [
+        2022,
+        2023,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2022-2024. titles: The Artist's Daughter, Homeboys, The Fourth Window."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "warsaw-iff",
+      "festival_name": "Warsaw International Film Festival",
+      "screenings": 3,
+      "films": [
+        "Bronca!",
+        "The Fourth Window",
+        "Vice Versa"
+      ],
+      "years": [
+        2015,
+        2021,
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2015-2022. titles: Bronca!, The Fourth Window, Vice Versa."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "gottingen-international-ethnographic-film-festival",
+      "festival_name": "Göttingen International Ethnographic Film Festival",
+      "screenings": 3,
+      "films": [
+        "An Ordinary Life",
+        "Third Person",
+        "Women in Sink"
+      ],
+      "years": [
+        2016,
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2016-2022. titles: An Ordinary Life, Third Person, Women in Sink."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "reelabilities-film-festival",
+      "festival_name": "Reelabilities",
+      "screenings": 3,
+      "films": [
+        "Neurim",
+        "Once Upon a Boy"
+      ],
+      "years": [
+        2020,
+        2021,
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "Org."
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2020-2022. titles: Neurim, Once Upon a Boy."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "budapest-international-documentary-festival",
+      "festival_name": "Budapest International Documentary Film Festival",
+      "screenings": 3,
+      "films": [
+        "Leaving Paradise",
+        "Presenting Princess Shaw",
+        "Women in Sink"
+      ],
+      "years": [
+        2016,
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2016-2022. titles: Leaving Paradise, Presenting Princess Shaw, Women in Sink."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "nevada-women-s-film-festival",
+      "festival_name": "Nevada Women's FF",
+      "screenings": 3,
+      "films": [
+        "Four Mothers",
+        "Little Victories",
+        "Alone Together"
+      ],
+      "years": [
+        2021
+      ],
+      "awards": [
+        {
+          "film": "Four Mothers",
+          "year": 2021,
+          "award": "Femmy Award for the Spirit of Activism"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "3 screening(s) between 2021. titles: Four Mothers, Little Victories, Alone Together. awards: Femmy Award for the Spirit of Activism (Four Mothers, 2021)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "sarasota-iff",
+      "festival_name": "Sarasota Film Festival",
+      "screenings": 3,
+      "films": [
+        "A Kaddish for Bernie Madoff",
+        "Women in Sink",
+        "Menachem and Fred"
+      ],
+      "years": [
+        2010,
+        2016,
+        2021
+      ],
+      "awards": [
+        {
+          "film": "A Kaddish for Bernie Madoff",
+          "year": 2021,
+          "award": "Visionary Award"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "3 screening(s) between 2010-2021. titles: A Kaddish for Bernie Madoff, Women in Sink, Menachem and Fred. awards: Visionary Award (A Kaddish for Bernie Madoff, 2021)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "docudays-iff",
+      "festival_name": "Docudays",
+      "screenings": 3,
+      "films": [
+        "Love & Stuff",
+        "Joe's Violin",
+        "Women in Sink"
+      ],
+      "years": [
+        2016,
+        2017,
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2016-2021. titles: Love & Stuff, Joe's Violin, Women in Sink."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "bengaluru-iff",
+      "festival_name": "Bengaluru IFF",
+      "screenings": 3,
+      "films": [
+        "The Unorthodox",
+        "Golden Voices",
+        "Born in Jerusalem and Still Alive"
+      ],
+      "years": [
+        2020
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2020. titles: The Unorthodox, Golden Voices, Born in Jerusalem and Still Alive."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "kassel-dokfest",
+      "festival_name": "Kassel Dokfest",
+      "screenings": 3,
+      "films": [
+        "Family in Transition",
+        "The Wonderful Kingdom of Papa Alaev",
+        "Vita Activa- The Spirit of Hannah Arendt"
+      ],
+      "years": [
+        2015,
+        2016,
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2015-2019. titles: Family in Transition, The Wonderful Kingdom of Papa Alaev, Vita Activa- The Spirit of Hannah Arendt."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "astra-iff",
+      "festival_name": "Astra IFF",
+      "screenings": 3,
+      "films": [
+        "Backwards",
+        "My Father's Son",
+        "Unsettling"
+      ],
+      "years": [
+        2018,
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2018-2019. titles: Backwards, My Father's Son, Unsettling."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "chicago-iff",
+      "festival_name": "Chicago IFF",
+      "screenings": 3,
+      "films": [
+        "Echo",
+        "Ten Buildings Away",
+        "Numbered"
+      ],
+      "years": [
+        2012,
+        2015,
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2012-2018. titles: Echo, Ten Buildings Away, Numbered."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "vancouver-iff",
+      "festival_name": "Vancouver IFF",
+      "screenings": 3,
+      "films": [
+        "Open Your Eyes",
+        "Vita Activa- The Spirit of Hannah Arendt",
+        "Jerusalem ER"
+      ],
+      "years": [
+        2013,
+        2016,
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2013-2018. titles: Open Your Eyes, Vita Activa- The Spirit of Hannah Arendt, Jerusalem ER."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "sao-paulo-international-film-festival",
+      "festival_name": "Sao Paulo IFF",
+      "screenings": 3,
+      "films": [
+        "Dimona Twist",
+        "Vita Activa- The Spirit of Hannah Arendt",
+        "The Wonderful Kingdom of Papa Alaev"
+      ],
+      "years": [
+        2016,
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2016-2017. titles: Dimona Twist, Vita Activa- The Spirit of Hannah Arendt, The Wonderful Kingdom of Papa Alaev."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "sheffield-doc-fest",
+      "festival_name": "Sheffield Doc Fest",
+      "screenings": 3,
+      "films": [
+        "Death in the Terminal",
+        "Presenting Princess Shaw",
+        "Voices from El Sayed"
+      ],
+      "years": [
+        2009,
+        2016,
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2009-2017. titles: Death in the Terminal, Presenting Princess Shaw, Voices from El Sayed."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "dokufest-kosovo",
+      "festival_name": "Dokufest Kosovo",
+      "screenings": 3,
+      "films": [
+        "Presenting Princess Shaw",
+        "Dancing in Jaffa",
+        "Voices from El Sayed"
+      ],
+      "years": [
+        2009,
+        2014,
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2009-2016. titles: Presenting Princess Shaw, Dancing in Jaffa, Voices from El Sayed."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "medfilm-festival",
+      "festival_name": "MedFilm Festival",
+      "screenings": 3,
+      "films": [
+        "Hotline",
+        "Ten Buildings Away",
+        "The Accursed"
+      ],
+      "years": [
+        2015
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2015. titles: Hotline, Ten Buildings Away, The Accursed."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "taiwan-international-documentary-ff",
+      "festival_name": "Taiwan Documentary IFF",
+      "screenings": 3,
+      "films": [
+        "Sumna's Letter",
+        "A Film Unfinished"
+      ],
+      "years": [
+        2009,
+        2012,
+        2013
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "3 screening(s) between 2009-2013. titles: Sumna's Letter, A Film Unfinished."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "artdocfest-iff",
+      "festival_name": "Art Docfest",
+      "screenings": 2,
+      "films": [
+        "A Letter to David",
+        "The Pianist from Ramallah"
+      ],
+      "years": [
+        2022,
+        2026
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2022-2026. titles: A Letter to David, The Pianist from Ramallah."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "middlebury-new-filmmakers-festival",
+      "festival_name": "Middlebury New Filmmakers Festival",
+      "screenings": 2,
+      "films": [
+        "Kosher Test",
+        "Golda"
+      ],
+      "years": [
+        2023,
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2023-2025. titles: Kosher Test, Golda."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "mediterranean-film-festival-split-croatia",
+      "festival_name": "Mediterranean Film Festival Split CROATIA",
+      "screenings": 2,
+      "films": [
+        "Eid",
+        "Magic Men"
+      ],
+      "years": [
+        2014,
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2014-2025. titles: Eid, Magic Men."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "stockholm-iff",
+      "festival_name": "Stockholm",
+      "screenings": 2,
+      "films": [
+        "The Boy",
+        "The Testament"
+      ],
+      "years": [
+        2017,
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "Cinema",
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2017-2024. titles: The Boy, The Testament."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "bastau-iff",
+      "festival_name": "Bastau IFF",
+      "screenings": 2,
+      "films": [
+        "The Artist's Daughter",
+        "How To Say Silence"
+      ],
+      "years": [
+        2022,
+        2023
+      ],
+      "awards": [
+        {
+          "film": "How To Say Silence",
+          "year": 2022,
+          "award": "Special Mention"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "2 screening(s) between 2022-2023. titles: The Artist's Daughter, How To Say Silence. awards: Special Mention (How To Say Silence, 2022)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "toronto-iff",
+      "festival_name": "Toronto International Film Festival",
+      "screenings": 2,
+      "films": [
+        "Irena's Vow",
+        "Weitzman 10"
+      ],
+      "years": [
+        2009,
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2009-2023. titles: Irena's Vow, Weitzman 10."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "reels-international-film-festival",
+      "festival_name": "Reels International Film Festival",
+      "screenings": 2,
+      "films": [
+        "Rashbi's Secret",
+        "An Ordinary Life"
+      ],
+      "years": [
+        2022,
+        2023
+      ],
+      "awards": [
+        {
+          "film": "An Ordinary Life",
+          "year": 2022,
+          "award": "First Time Doc Film"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "2 screening(s) between 2022-2023. titles: Rashbi's Secret, An Ordinary Life. awards: First Time Doc Film (An Ordinary Life, 2022)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "days-of-ethnographic-film-def",
+      "festival_name": "Days of Ethnographic Cinema",
+      "screenings": 2,
+      "films": [
+        "A Fish Tale",
+        "Neigbourhood"
+      ],
+      "years": [
+        2014,
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2014-2022. titles: A Fish Tale, Neigbourhood."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "makedox",
+      "festival_name": "Makedox",
+      "screenings": 2,
+      "films": [
+        "Herd",
+        "A Film Unfinished"
+      ],
+      "years": [
+        2011,
+        2022
+      ],
+      "awards": [
+        {
+          "film": "Herd",
+          "year": 2022,
+          "award": "Special Mention"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "2 screening(s) between 2011-2022. titles: Herd, A Film Unfinished. awards: Special Mention (Herd, 2022)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "sxsw",
+      "festival_name": "SXSW",
+      "screenings": 2,
+      "films": [
+        "Summer Nights",
+        "Presenting Princess Shaw"
+      ],
+      "years": [
+        2016,
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2016-2022. titles: Summer Nights, Presenting Princess Shaw."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "primed",
+      "festival_name": "PriMed",
+      "screenings": 2,
+      "films": [
+        "There is No Other Place (The Church)",
+        "Arabic Movie",
+        "The Church)"
+      ],
+      "years": [
+        2016,
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2016-2021. titles: There is No Other Place (The Church), Arabic Movie, The Church)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "beldocs",
+      "festival_name": "Beldocs",
+      "screenings": 2,
+      "films": [
+        "There is No Other Place (The Church)",
+        "Golda",
+        "The Church)"
+      ],
+      "years": [
+        2020,
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2020-2021. titles: There is No Other Place (The Church), Golda, The Church)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "tempo-documentary-ff",
+      "festival_name": "Tempo Documentary FF",
+      "screenings": 2,
+      "films": [
+        "Leaving Paradise",
+        "Presenting Princess Shaw"
+      ],
+      "years": [
+        2016,
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2016-2021. titles: Leaving Paradise, Presenting Princess Shaw."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "hamptons-doc-fest",
+      "festival_name": "Hamptons Doc Fest",
+      "screenings": 2,
+      "films": [
+        "Love & Stuff",
+        "King Bibi"
+      ],
+      "years": [
+        2019,
+        2020
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2019-2020. titles: Love & Stuff, King Bibi."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "ethnofest",
+      "festival_name": "Ethnofest",
+      "screenings": 2,
+      "films": [
+        "Kosher Beach",
+        "Unsettling"
+      ],
+      "years": [
+        2018,
+        2020
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2018-2020. titles: Kosher Beach, Unsettling."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "cyprus-film-days",
+      "festival_name": "Cyprus Film Days",
+      "screenings": 2,
+      "films": [
+        "The Art of Waiting",
+        "Harmonia"
+      ],
+      "years": [
+        2017,
+        2020
+      ],
+      "awards": [
+        {
+          "film": "Harmonia",
+          "year": 2017,
+          "award": "UNIVERSITY OF NICOSIA STUDENT JURY AWARD"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "2 screening(s) between 2017-2020. titles: The Art of Waiting, Harmonia. awards: UNIVERSITY OF NICOSIA STUDENT JURY AWARD (Harmonia, 2017)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "docsmx",
+      "festival_name": "DocsMX",
+      "screenings": 2,
+      "films": [
+        "Cause of death",
+        "Family in Transition"
+      ],
+      "years": [
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2019. titles: Cause of death, Family in Transition."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "jaipur-iff",
+      "festival_name": "Jaipur IFF",
+      "screenings": 2,
+      "films": [
+        "Laces",
+        "Ten Buildings Away"
+      ],
+      "years": [
+        2016,
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2016-2019. titles: Laces, Ten Buildings Away."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "goa-iff",
+      "festival_name": "GOA IFF",
+      "screenings": 2,
+      "films": [
+        "The Unorthodox",
+        "Harmonia"
+      ],
+      "years": [
+        2016,
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2016-2018. titles: The Unorthodox, Harmonia."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "melbourne-international-film-festival",
+      "festival_name": "Melbourne International Film Festival",
+      "screenings": 2,
+      "films": [
+        "Shmama",
+        "Death in the Terminal"
+      ],
+      "years": [
+        2017,
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2017-2018. titles: Shmama, Death in the Terminal."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "istanbul-iff",
+      "festival_name": "Istanbul Film Festival",
+      "screenings": 2,
+      "films": [
+        "Doubtful",
+        "Muhi- Generally Temporary"
+      ],
+      "years": [
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2018. titles: Doubtful, Muhi- Generally Temporary."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "boulder-iff",
+      "festival_name": "Boulder IFF",
+      "screenings": 2,
+      "films": [
+        "Elish's Notebooks",
+        "Joe's Violin"
+      ],
+      "years": [
+        2017,
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2017-2018. titles: Elish's Notebooks, Joe's Violin."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "luxemburg-city-film-festival",
+      "festival_name": "Luxembourg City Film Festival",
+      "screenings": 2,
+      "films": [
+        "#uploading_holocaust",
+        "Dancing in Jaffa"
+      ],
+      "years": [
+        2014,
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2014-2018. titles: #uploading_holocaust, Dancing in Jaffa."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "viennale-ff",
+      "festival_name": "VIENNALE FF",
+      "screenings": 2,
+      "films": [
+        "Dimona Twist",
+        "Hotline"
+      ],
+      "years": [
+        2015,
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "JFF",
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2015-2017. titles: Dimona Twist, Hotline."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "jecheon-international-music-film-festival",
+      "festival_name": "Jecheon International Music&Film Festival",
+      "screenings": 2,
+      "films": [
+        "Joe's Violin",
+        "Presenting Princess Shaw"
+      ],
+      "years": [
+        2016,
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2016-2017. titles: Joe's Violin, Presenting Princess Shaw."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "docs-barcelona",
+      "festival_name": "DocBarcelona",
+      "screenings": 2,
+      "films": [
+        "The Wonderful Kingdom of Papa Alaev",
+        "SideWalk"
+      ],
+      "years": [
+        2009,
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2009-2017. titles: The Wonderful Kingdom of Papa Alaev, SideWalk."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "san-francisco-iff-sffilm",
+      "festival_name": "San Francisco IFF",
+      "screenings": 2,
+      "films": [
+        "Muhi- Generally Temporary",
+        "Presenting Princess Shaw"
+      ],
+      "years": [
+        2016,
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2016-2017. titles: Muhi- Generally Temporary, Presenting Princess Shaw."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "vermont-iff",
+      "festival_name": "Vermont IFF",
+      "screenings": 2,
+      "films": [
+        "The Wonderful Kingdom of Papa Alaev",
+        "Women in Sink"
+      ],
+      "years": [
+        2016,
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2016-2017. titles: The Wonderful Kingdom of Papa Alaev, Women in Sink."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "docpoint-film-festival",
+      "festival_name": "DocPoint",
+      "screenings": 2,
+      "films": [
+        "The Wonderful Kingdom of Papa Alaev"
+      ],
+      "years": [
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2017. titles: The Wonderful Kingdom of Papa Alaev."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "la-cabina-iff-international-medium-length-ff",
+      "festival_name": "La Cabina IFF",
+      "screenings": 2,
+      "films": [
+        "Women in Sink",
+        "Chametz"
+      ],
+      "years": [
+        2011,
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2011-2016. titles: Women in Sink, Chametz."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "doclisboa",
+      "festival_name": "Doclisboa",
+      "screenings": 2,
+      "films": [
+        "Hotline"
+      ],
+      "years": [
+        2015,
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2015-2016. titles: Hotline."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "vision-du-reel",
+      "festival_name": "Vision Du Reel",
+      "screenings": 2,
+      "films": [
+        "Presenting Princess Shaw",
+        "The Hangman"
+      ],
+      "years": [
+        2011,
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2011-2016. titles: Presenting Princess Shaw, The Hangman."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "annapolis-film-festival",
+      "festival_name": "Annapolis IFF",
+      "screenings": 2,
+      "films": [
+        "Women in Sink",
+        "Partner with the Enemy"
+      ],
+      "years": [
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2016. titles: Women in Sink, Partner with the Enemy."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "true-false",
+      "festival_name": "True/False IFF",
+      "screenings": 2,
+      "films": [
+        "Presenting Princess Shaw",
+        "Probation Time"
+      ],
+      "years": [
+        2015,
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2015-2016. titles: Presenting Princess Shaw, Probation Time."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "berlinale",
+      "festival_name": "Berlinale",
+      "screenings": 2,
+      "films": [
+        "Café Nagler",
+        "Hotline"
+      ],
+      "years": [
+        2015,
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "2 screening(s) between 2015-2016. titles: Café Nagler, Hotline."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "mar-del-plata-iff",
+      "festival_name": "Mar Del Plata IFF",
+      "screenings": 1,
+      "films": [
+        "A Letter to David"
+      ],
+      "years": [
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2025. titles: A Letter to David."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "karlovy-vary",
+      "festival_name": "Karlovy Vary IFF",
+      "screenings": 1,
+      "films": [
+        "A Letter to David"
+      ],
+      "years": [
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2025. titles: A Letter to David."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "minneapolis-st-paul-iff",
+      "festival_name": "Minneapolis St. Paul IFF",
+      "screenings": 1,
+      "films": [
+        "The Property"
+      ],
+      "years": [
+        2025
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2025. titles: The Property."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "the-fine-arts-film-festival",
+      "festival_name": "Fine Arts Film Festival",
+      "screenings": 1,
+      "films": [
+        "The Artist's Daughter"
+      ],
+      "years": [
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2024. titles: The Artist's Daughter."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "palm-springs-iff",
+      "festival_name": "Palm Springs IFF",
+      "screenings": 1,
+      "films": [
+        "Running on Sand"
+      ],
+      "years": [
+        2024
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2024. titles: Running on Sand."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "kolkata-iff",
+      "festival_name": "Kolkata IFF",
+      "screenings": 1,
+      "films": [
+        "Children of Nobody"
+      ],
+      "years": [
+        2023
+      ],
+      "awards": [
+        {
+          "film": "Children of Nobody",
+          "year": 2023,
+          "award": "Best International Film"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "1 screening(s) between 2023. titles: Children of Nobody. awards: Best International Film (Children of Nobody, 2023)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "girona-film-festival",
+      "festival_name": "Girona FIlm Festival",
+      "screenings": 1,
+      "films": [
+        "The Boy"
+      ],
+      "years": [
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2023. titles: The Boy."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "films-for-future",
+      "festival_name": "Films For Future",
+      "screenings": 1,
+      "films": [
+        "Dead Sea Guardians"
+      ],
+      "years": [
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2023. titles: Dead Sea Guardians."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "san-sabastian-iff",
+      "festival_name": "San Sebastian International Film Festival",
+      "screenings": 1,
+      "films": [
+        "Single Light"
+      ],
+      "years": [
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2023. titles: Single Light."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "rockaway-film-festival",
+      "festival_name": "Rockaway FIlm Festival",
+      "screenings": 1,
+      "films": [
+        "I Think This is the Closest to How the footage looked"
+      ],
+      "years": [
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2023. titles: I Think This is the Closest to How the footage looked."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "nafa-international-ethnographic-film-festival",
+      "festival_name": "NAFA Ethnographic FIlm Festival",
+      "screenings": 1,
+      "films": [
+        "To Cure Longing"
+      ],
+      "years": [
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2023. titles: To Cure Longing."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "sarajevo-film-festival",
+      "festival_name": "Sarajevo Film Festival",
+      "screenings": 1,
+      "films": [
+        "Sabotage"
+      ],
+      "years": [
+        2023
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2023. titles: Sabotage."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "inncontro-film-festival",
+      "festival_name": "Inncontro Film Festival",
+      "screenings": 1,
+      "films": [
+        "A Fish Tale"
+      ],
+      "years": [
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2022. titles: A Fish Tale."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "edinburgh-film-festival",
+      "festival_name": "Edinburgh International Film Festival",
+      "screenings": 1,
+      "films": [
+        "Holy Holocaust"
+      ],
+      "years": [
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2022. titles: Holy Holocaust."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "olhar-de-cinema-curitiba-iff",
+      "festival_name": "Olhar de Cinema – Curitiba IFF",
+      "screenings": 1,
+      "films": [
+        "Holy Holocaust"
+      ],
+      "years": [
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2022. titles: Holy Holocaust."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "giffoni-film-festival-gff",
+      "festival_name": "Giffoni",
+      "screenings": 1,
+      "films": [
+        "Dead Sea Guardians"
+      ],
+      "years": [
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2022. titles: Dead Sea Guardians."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "cultureels-ethnographic-film-festival",
+      "festival_name": "CULTUREELS Ethnographic Film Festival",
+      "screenings": 1,
+      "films": [
+        "A Fish Tale"
+      ],
+      "years": [
+        2022
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2022. titles: A Fish Tale."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "femart",
+      "festival_name": "FemArt Festival",
+      "screenings": 1,
+      "films": [
+        "Four Mothers"
+      ],
+      "years": [
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2021. titles: Four Mothers."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "filmfest-osnabruck",
+      "festival_name": "FilmFest Osnabrück",
+      "screenings": 1,
+      "films": [
+        "Marry Me However"
+      ],
+      "years": [
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2021. titles: Marry Me However."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "hampton-iff",
+      "festival_name": "Hamptons IFF",
+      "screenings": 1,
+      "films": [
+        "Neurim"
+      ],
+      "years": [
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2021. titles: Neurim."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "imagine-this-women-s-iff",
+      "festival_name": "Imagine This Women's International Film Festival",
+      "screenings": 1,
+      "films": [
+        "An Ordinary Life"
+      ],
+      "years": [
+        2021
+      ],
+      "awards": [
+        {
+          "film": "An Ordinary Life",
+          "year": 2021,
+          "award": "Best International Documentary Feature Award"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "1 screening(s) between 2021. titles: An Ordinary Life. awards: Best International Documentary Feature Award (An Ordinary Life, 2021)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "calgary-iff",
+      "festival_name": "Calgary International Film Festival",
+      "screenings": 1,
+      "films": [
+        "Leaving Paradise"
+      ],
+      "years": [
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2021. titles: Leaving Paradise."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "thessaloniki-international-film-festival",
+      "festival_name": "Thessaloniki IFF",
+      "screenings": 1,
+      "films": [
+        "The Fourth Window"
+      ],
+      "years": [
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2021. titles: The Fourth Window."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "moscow-international-visual-anthropology-festival",
+      "festival_name": "Moscow International Festival of Visual Anthropology",
+      "screenings": 1,
+      "films": [
+        "Kosher Beach"
+      ],
+      "years": [
+        2021
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2021. titles: Kosher Beach."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "heartland-international-film-festival",
+      "festival_name": "Heartland International Film Festival",
+      "screenings": 1,
+      "films": [
+        "Golda"
+      ],
+      "years": [
+        2020
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2020. titles: Golda."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "margaret-mead-iff",
+      "festival_name": "Margaret Mead Film Festival",
+      "screenings": 1,
+      "films": [
+        "Covered Up"
+      ],
+      "years": [
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2019. titles: Covered Up."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "ebs-international-documentary-festival-eidf",
+      "festival_name": "EBS International Documentary Festival",
+      "screenings": 1,
+      "films": [
+        "There are No Lions in Tel Aviv"
+      ],
+      "years": [
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2019. titles: There are No Lions in Tel Aviv."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "doqumenta-iff",
+      "festival_name": "Doqumenta IFF",
+      "screenings": 1,
+      "films": [
+        "Family in Transition"
+      ],
+      "years": [
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2019. titles: Family in Transition."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "beijing-iff",
+      "festival_name": "Beijing IFF",
+      "screenings": 1,
+      "films": [
+        "The Unorthodox"
+      ],
+      "years": [
+        2019
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2019. titles: The Unorthodox."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "brussels-mediterranean-film-festival-cinemamed",
+      "festival_name": "Brussels Mediterranean IFF",
+      "screenings": 1,
+      "films": [
+        "Muhi- Generally Temporary"
+      ],
+      "years": [
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2018. titles: Muhi- Generally Temporary."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "camerimage-iff",
+      "festival_name": "Camerimage Film Festival",
+      "screenings": 1,
+      "films": [
+        "The Wounded Healer"
+      ],
+      "years": [
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2018. titles: The Wounded Healer."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "seattle-iff",
+      "festival_name": "Seattle IFF",
+      "screenings": 1,
+      "films": [
+        "Doubtful"
+      ],
+      "years": [
+        2018
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2018. titles: Doubtful."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "tribeca",
+      "festival_name": "Tribeca Film Festival",
+      "screenings": 1,
+      "films": [
+        "The Love Letter"
+      ],
+      "years": [
+        2018
+      ],
+      "awards": [
+        {
+          "film": "The Love Letter",
+          "year": 2018,
+          "award": "Special Mention for short film"
+        }
+      ],
+      "categories": [
+        "IFF"
+      ],
+      "result": "awarded",
+      "note": "1 screening(s) between 2018. titles: The Love Letter. awards: Special Mention for short film (The Love Letter, 2018)."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "the-molodist-kyiv-iff",
+      "festival_name": "The Molodist Kyiv IFF",
+      "screenings": 1,
+      "films": [
+        "Harmonia"
+      ],
+      "years": [
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2017. titles: Harmonia."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "inscience-iff",
+      "festival_name": "InScience",
+      "screenings": 1,
+      "films": [
+        "The Testament"
+      ],
+      "years": [
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2017. titles: The Testament."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "busan-iff",
+      "festival_name": "BUSAN IFF",
+      "screenings": 1,
+      "films": [
+        "The Testament"
+      ],
+      "years": [
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2017. titles: The Testament."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "festival-dei-popoli",
+      "festival_name": "Festival dei Popoli",
+      "screenings": 1,
+      "films": [
+        "Death in the Terminal"
+      ],
+      "years": [
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2017. titles: Death in the Terminal."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "sofia-iff",
+      "festival_name": "Sofia International Film Festival",
+      "screenings": 1,
+      "films": [
+        "Beneath the Silence"
+      ],
+      "years": [
+        2017
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2017. titles: Beneath the Silence."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "art-film-fest",
+      "festival_name": "ART FILM FEST",
+      "screenings": 1,
+      "films": [
+        "Presenting Princess Shaw"
+      ],
+      "years": [
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2016. titles: Presenting Princess Shaw."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "sydney-film-festival-sff",
+      "festival_name": "Sydney IFF",
+      "screenings": 1,
+      "films": [
+        "Presenting Princess Shaw"
+      ],
+      "years": [
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2016. titles: Presenting Princess Shaw."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "docville",
+      "festival_name": "Docville",
+      "screenings": 1,
+      "films": [
+        "Presenting Princess Shaw"
+      ],
+      "years": [
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2016. titles: Presenting Princess Shaw."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "it-s-all-true-ff",
+      "festival_name": "It's All True FF",
+      "screenings": 1,
+      "films": [
+        "Vita Activa- The Spirit of Hannah Arendt"
+      ],
+      "years": [
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2016. titles: Vita Activa- The Spirit of Hannah Arendt."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "ecu-the-european-independent-film-festival",
+      "festival_name": "ÉCU- The European Independent Film Festival",
+      "screenings": 1,
+      "films": [
+        "Women in Sink"
+      ],
+      "years": [
+        2016
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2016. titles: Women in Sink."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "festival-tous-courts",
+      "festival_name": "Festival Tous Courts",
+      "screenings": 1,
+      "films": [
+        "Ten Buildings Away"
+      ],
+      "years": [
+        2015
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2015. titles: Ten Buildings Away."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "hong-kong-iff",
+      "festival_name": "Hong Kong IFF",
+      "screenings": 1,
+      "films": [
+        "Hotline"
+      ],
+      "years": [
+        2015
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2015. titles: Hotline."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "japan-prize",
+      "festival_name": "Japan Prize",
+      "screenings": 1,
+      "films": [
+        "Dancing in Jaffa"
+      ],
+      "years": [
+        2014
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2014. titles: Dancing in Jaffa."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "nuremberg-human-rights-film-festival",
+      "festival_name": "Nuremberg Human Rights IFF",
+      "screenings": 1,
+      "films": [
+        "Numbered"
+      ],
+      "years": [
+        2014
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2014. titles: Numbered."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "international-film-festival-of-kerala",
+      "festival_name": "International Film Festival of Kerala",
+      "screenings": 1,
+      "films": [
+        "Arabani"
+      ],
+      "years": [
+        2013
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2013. titles: Arabani."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "busan-international-short-film-festival",
+      "festival_name": "Busan Short IFF",
+      "screenings": 1,
+      "films": [
+        "I think this is the closest to how the footage looked"
+      ],
+      "years": [
+        2013
+      ],
+      "awards": [],
+      "categories": [
+        "IFF"
+      ],
+      "result": "selected",
+      "note": "1 screening(s) between 2013. titles: I think this is the closest to how the footage looked."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "verzio-iff",
+      "festival_name": "Verzio",
+      "screenings": 1,
+      "films": [
+        "Torn"
+      ],
+      "years": [
+        2012
+      ],
+      "awards": [],
+      "categories": [],
+      "result": "selected",
+      "note": "1 screening(s) between 2012. titles: Torn."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "superfest-disability-film-festival",
+      "festival_name": "Superfest International Disability Film Festival",
+      "screenings": 1,
+      "films": [
+        "Voices from El Sayed"
+      ],
+      "years": [
+        2011
+      ],
+      "awards": [],
+      "categories": [],
+      "result": "selected",
+      "note": "1 screening(s) between 2011. titles: Voices from El Sayed."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "mostra-de-valencia",
+      "festival_name": "Mostra de VAlencia Film Festival",
+      "screenings": 1,
+      "films": [
+        "Arab Labor 1"
+      ],
+      "years": [
+        2010
+      ],
+      "awards": [],
+      "categories": [],
+      "result": "selected",
+      "note": "1 screening(s) between 2010. titles: Arab Labor 1."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "tokyo-iff",
+      "festival_name": "Tokyo international film festival",
+      "screenings": 1,
+      "films": [
+        "Five Hours from Paris"
+      ],
+      "years": [
+        2010
+      ],
+      "awards": [],
+      "categories": [],
+      "result": "selected",
+      "note": "1 screening(s) between 2010. titles: Five Hours from Paris."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "doxa",
+      "festival_name": "DOXA",
+      "screenings": 1,
+      "films": [
+        "Shining Stars and Maytal"
+      ],
+      "years": [
+        2009
+      ],
+      "awards": [],
+      "categories": [],
+      "result": "selected",
+      "note": "1 screening(s) between 2009. titles: Shining Stars and Maytal."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "riverrun-iff",
+      "festival_name": "Riverrun",
+      "screenings": 1,
+      "films": [
+        "Pinchas"
+      ],
+      "years": [
+        2009
+      ],
+      "awards": [],
+      "categories": [],
+      "result": "selected",
+      "note": "1 screening(s) between 2009. titles: Pinchas."
+    },
+    {
+      "company_id": "go2films",
+      "festival_id": "montreal-international-children-s-film-festival",
+      "festival_name": "Montreal International Children’s Film Festival",
+      "screenings": 1,
+      "films": [
+        "Pinchas"
+      ],
+      "years": [
+        2009
+      ],
+      "awards": [],
+      "categories": [],
+      "result": "selected",
+      "note": "1 screening(s) between 2009. titles: Pinchas."
+    }
+  ]
+}

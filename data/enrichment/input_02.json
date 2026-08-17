@@ -1,0 +1,601 @@
+[
+ {
+  "id": "taiwan-international-children-film-festival",
+  "name": "Taiwan International Children Film Festival",
+  "city": "Taipei",
+  "country": "Taiwan",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/TICFF"
+ },
+ {
+  "id": "cinemed-montpellier",
+  "name": "Cinemed Montpellier",
+  "city": "Montpellier",
+  "country": "France",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "mediterranean"
+  ],
+  "month": "October",
+  "website": "www.cinemed.tm.fr"
+ },
+ {
+  "id": "movies-that-matter-ff",
+  "name": "Movies That Matter FF",
+  "city": "Hauge",
+  "country": "Netherlands",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "March",
+  "website": "https://moviesthatmatter.nl/en/festival/industry/film-submissions/"
+ },
+ {
+  "id": "ann-arbor-ff",
+  "name": "Ann Arbor FF",
+  "city": "Ann Arbor",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/AAFilmFest"
+ },
+ {
+  "id": "mediterranean-film-festival",
+  "name": "Mediterranean Film Festival",
+  "city": "Široki Brijeg",
+  "country": "Bosnia and Hertzegovina",
+  "tier": "C",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form",
+   "mediterranean"
+  ],
+  "month": "October",
+  "website": "https://www.mff.ba/2023/opsirnije_x.asp?IDNovost=830"
+ },
+ {
+  "id": "short-shorts-film-festival-asia",
+  "name": "Short Shorts Film Festival & Asia",
+  "city": "Tokyo",
+  "country": "Japan",
+  "tier": "B+",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/ShortShortsFilmFestivalAsia"
+ },
+ {
+  "id": "watch-docs",
+  "name": "Watch Docs",
+  "city": "Warsaw",
+  "country": "Poland",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "human_rights"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/WATCHDOCS"
+ },
+ {
+  "id": "mostra-de-valencia",
+  "name": "Mostra de Valencia",
+  "city": "Valencia",
+  "country": "Spain",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "mediterranean"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/MostradeValencia"
+ },
+ {
+  "id": "jaipur-iff",
+  "name": "Jaipur IFF",
+  "city": "Jaipur",
+  "country": "India",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/JaipurInternationalFilmFestival"
+ },
+ {
+  "id": "boulder-iff",
+  "name": "Boulder IFF",
+  "city": "Colorado",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/BoulderInternationalFIlmFestival"
+ },
+ {
+  "id": "ethnografilm-paris",
+  "name": "Ethnografilm Paris",
+  "city": "Paris",
+  "country": "France",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "ethnographic"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/Ethnografilm"
+ },
+ {
+  "id": "international-festival-of-ethnological-film",
+  "name": "International Festival of Ethnological Film",
+  "city": "Belgrade",
+  "country": "Serbia",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "ethnographic"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/InternationalFestivalofEthnologicalFilm"
+ },
+ {
+  "id": "goa-iff",
+  "name": "GOA IFF",
+  "city": "Goa",
+  "country": "India",
+  "tier": "B",
+  "category": "Fiction",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/InternationalFilmFestivalofIndiaIFFI-Goa"
+ },
+ {
+  "id": "hainan-island-iff",
+  "name": "Hainan Island IFF",
+  "city": "Hainan",
+  "country": "China",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": "https://filmfreeway.com/HIIFF"
+ },
+ {
+  "id": "diagonale",
+  "name": "Diagonale",
+  "city": "Graz",
+  "country": "Austria",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [],
+  "month": "March",
+  "website": "https://www.diagonale.at/en/submission-diagonale24-competition-franz-grabner-prize/"
+ },
+ {
+  "id": "rotterdam-iff-iffr",
+  "name": "Rotterdam IFF (IFFR)",
+  "city": "Rotterdam",
+  "country": "Netherlands",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "January",
+  "website": "https://iffr.com/en"
+ },
+ {
+  "id": "cph-dox",
+  "name": "CPH:DOX",
+  "city": "Copenhagen",
+  "country": "Denmark",
+  "tier": "B+",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "March",
+  "website": "https://cphdox.dk/submit/"
+ },
+ {
+  "id": "berlinale",
+  "name": "Berlinale",
+  "city": "Berlin",
+  "country": "Germany",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "February",
+  "website": "https://www.berlinale.de/en/home.html"
+ },
+ {
+  "id": "ahmedabad-international-children-film-festival",
+  "name": "Ahmedabad International Children Film Festival",
+  "city": "Ahmedabad",
+  "country": "India",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth",
+   "short_form"
+  ],
+  "month": "December",
+  "website": "https://filmfreeway.com/aicff"
+ },
+ {
+  "id": "san-francisco-iff-sffilm",
+  "name": "San Francisco IFF (SFFILM)",
+  "city": "California",
+  "country": "USA",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/SFFILMFestival"
+ },
+ {
+  "id": "punto-de-vista",
+  "name": "Punto de Vista",
+  "city": "Pamplona",
+  "country": "Spain",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "February",
+  "website": "https://www.puntodevistafestival.com/en/registration-2025"
+ },
+ {
+  "id": "sxsw",
+  "name": "SXSW",
+  "city": "Texas",
+  "country": "USA",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://www.sxsw.com/apply/film-submissions/#status"
+ },
+ {
+  "id": "popoli-e-religioni-terni-film-festival",
+  "name": "Popoli e Religioni – Terni Film Festival",
+  "city": "Terni",
+  "country": "Italy",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "ethnographic"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/TerniFilmFestival"
+ },
+ {
+  "id": "sundance-iff",
+  "name": "Sundance IFF",
+  "city": "Park City UT",
+  "country": "USA",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "January",
+  "website": "https://www.sundance.org/festivals/sundance-film-festival/submit/"
+ },
+ {
+  "id": "trieste-iff",
+  "name": "Trieste IFF",
+  "city": "Trieste",
+  "country": "Italy",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "January",
+  "website": "https://vp.eventival.com/trieste/2023"
+ },
+ {
+  "id": "kinoproba-iff",
+  "name": "Kinoproba IFF",
+  "city": "Ekaterinburg",
+  "country": "Russia",
+  "tier": "C",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form",
+   "general"
+  ],
+  "month": "December",
+  "website": "https://kinoprobafest.com/"
+ },
+ {
+  "id": "fifdh",
+  "name": "FIFDH",
+  "city": "Geneva",
+  "country": "Switzerland",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "March",
+  "website": "https://fifdh.org/en/press-industry/submit-your-film"
+ },
+ {
+  "id": "reelabilities-film-festival",
+  "name": "ReelAbilities Film Festival",
+  "city": "New York",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "disability"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/ReelAbilities"
+ },
+ {
+  "id": "full-frame-idff",
+  "name": "Full Frame IDFF",
+  "city": "North Carolina",
+  "country": "USA",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "April",
+  "website": "https://www.fullframefest.org/2024-call-for-entries/"
+ },
+ {
+  "id": "master-of-art",
+  "name": "Master of Art",
+  "city": "Sofia",
+  "country": "Bulgaria",
+  "tier": "B",
+  "category": "Go2Friend IFF",
+  "focus_tag": [
+   "art"
+  ],
+  "month": "February",
+  "website": "https://filmfreeway.com/MASTEROFARTFILMFESTIVAL-364079"
+ },
+ {
+  "id": "goteborg-ff",
+  "name": "Goteborg FF",
+  "city": "Göteborg",
+  "country": "Sweden",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "January",
+  "website": "https://goteborgfilmfestival.se/en/submissions/"
+ },
+ {
+  "id": "vision-du-reel",
+  "name": "Vision du Reel",
+  "city": "Nyon",
+  "country": "Switzerland",
+  "tier": "A",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "April",
+  "website": "https://www.visionsdureel.ch/en/"
+ },
+ {
+  "id": "hotdocs",
+  "name": "HotDocs",
+  "city": "Toronto",
+  "country": "Canada",
+  "tier": "A",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "April",
+  "website": "https://hotdocs.ca/industry/conference/submit-a-film"
+ },
+ {
+  "id": "cinequest-film-vr-festival",
+  "name": "Cinequest Film & VR Festival",
+  "city": "San Jose",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/Cinequest"
+ },
+ {
+  "id": "salt-spring-film-festival",
+  "name": "Salt Spring Film Festival",
+  "city": "Salt Spring",
+  "country": "Canada",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://saltspringfilmfestival.com/submissions/"
+ },
+ {
+  "id": "one-world-czech-iff",
+  "name": "One World Czech IFF",
+  "city": "Prague",
+  "country": "Czech",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "human_rights"
+  ],
+  "month": "March",
+  "website": "https://www.oneworld.cz/2024/"
+ },
+ {
+  "id": "international-festival-of-films-on-art-le-fifa",
+  "name": "International Festival of Films on Art (Le FIFA)",
+  "city": "Montreal",
+  "country": "Canada",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "art",
+   "music"
+  ],
+  "month": "March",
+  "website": "https://lefifa.com/en/"
+ },
+ {
+  "id": "true-false",
+  "name": "True/False",
+  "city": "Columbia",
+  "country": "USA",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "February",
+  "website": "https://truefalse.org/"
+ },
+ {
+  "id": "gottingen-international-ethnographic-film-festival",
+  "name": "Göttingen International Ethnographic Film Festival",
+  "city": "Göttingen",
+  "country": "Germany",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "ethnographic"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/GIEFF"
+ },
+ {
+  "id": "kinolub",
+  "name": "KINOLUB",
+  "city": null,
+  "country": "Poland",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": null,
+  "website": "https://kinolub.pl/"
+ },
+ {
+  "id": "play-lisbon-s-international-children-s-film-festival",
+  "name": "PLAY - Lisbon's International Children's Film Festival",
+  "city": "Lisbon",
+  "country": "Portugal",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": null,
+  "website": "http://www.playfest.pt/"
+ },
+ {
+  "id": "inscience-iff",
+  "name": "InScience IFF",
+  "city": "Nijmegen",
+  "country": "Netherlands",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "science"
+  ],
+  "month": "April",
+  "website": "https://www.insciencefestival.nl/en/"
+ },
+ {
+  "id": "cinema-du-reel",
+  "name": "Cinema du Reel",
+  "city": "Paris",
+  "country": "France",
+  "tier": "B+",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "March",
+  "website": "https://www.cinemadureel.org/?lang=en"
+ },
+ {
+  "id": "one-world-romania-iff",
+  "name": "One World Romania IFF",
+  "city": "Bucharest",
+  "country": "Romania",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "human_rights"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/OWR19"
+ },
+ {
+  "id": "docudays-iff",
+  "name": "DocuDays IFF",
+  "city": "Kyiv",
+  "country": "Ukraine",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "human_rights"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/docudays"
+ }
+]

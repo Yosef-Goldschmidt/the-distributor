@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Distributor — AI agent for film festival strategy</title>
+<style>
+  :root {
+    --bg: #0e1117; --panel: #161b23; --panel-2: #1c2330; --line: #2a3242;
+    --text: #e6edf3; --muted: #8b97a8; --accent: #f0a35e; --accent-2: #6ea8fe;
+    --ok: #6ee7a8; --warn: #f6c177; --bad: #f2777a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  header { padding: 28px 24px 12px; border-bottom: 1px solid var(--line); }
+  h1 { margin: 0; font-size: 22px; letter-spacing: .2px; }
+  h1 span { color: var(--accent); }
+  header p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+  main { max-width: 1080px; margin: 0 auto; padding: 24px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  textarea {
+    width: 100%; min-height: 190px; resize: vertical; padding: 14px;
+    background: var(--panel-2); color: var(--text); border: 1px solid var(--line);
+    border-radius: 8px; font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  textarea:focus { outline: none; border-color: var(--accent-2); }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  button {
+    background: var(--accent); color: #191100; border: 0; border-radius: 8px;
+    padding: 11px 20px; font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  button:disabled { opacity: .55; cursor: not-allowed; }
+  button.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); font-weight: 500; }
+  .status { font-size: 13px; color: var(--muted); }
+  .status.err { color: var(--bad); }
+  h2 { font-size: 16px; margin: 0 0 12px; color: var(--accent); letter-spacing: .3px; text-transform: uppercase; }
+  .response h1 { font-size: 20px; margin: 0 0 10px; }
+  .response h2 { font-size: 15px; margin: 22px 0 8px; color: var(--accent); text-transform: none; letter-spacing: 0; }
+  .response h3 { font-size: 15px; margin: 16px 0 4px; color: var(--text); }
+  .response em { color: var(--muted); font-style: normal; font-size: 13px; }
+  .response ul { margin: 6px 0; padding-left: 20px; }
+  .response li { margin: 3px 0; }
+  .response p { margin: 8px 0; }
+  details.step { border: 1px solid var(--line); border-radius: 8px; margin-bottom: 8px; background: var(--panel-2); }
+  details.step > summary {
+    cursor: pointer; padding: 10px 14px; font-size: 14px; display: flex; gap: 10px; align-items: center;
+  }
+  .idx { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .mod { font-weight: 600; color: var(--accent-2); }
+  .step-body { padding: 0 14px 14px; }
+  .step-body h4 { margin: 12px 0 6px; font-size: 12px; text-transform: uppercase; color: var(--muted); letter-spacing: .5px; }
+  pre {
+    background: #0b0f16; border: 1px solid var(--line); border-radius: 6px; padding: 12px;
+    overflow: auto; max-height: 340px; font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: pre-wrap; word-break: break-word; margin: 0;
+  }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; font-size: 12px; color: var(--muted); }
+  .hidden { display: none; }
+  .turn { border-left: 2px solid var(--line); padding-left: 14px; margin-bottom: 26px; }
+  .turn .q { color: var(--muted); font-size: 13px; margin-bottom: 10px; white-space: pre-wrap; }
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 0 40px; }
+  a { color: var(--accent-2); }
+</style>
+</head>
+<body>
+<header>
+  <h1>The <span>Distributor</span></h1>
+  <p>An AI agent for film festival strategy — ranked submission roadmaps with scores, reasoning and risk.</p>
+</header>
+
+<main>
+  <div class="card">
+    <label for="prompt">Describe the film (synopsis, genre, themes, country, language, director, premiere status, runtime, audience)</label>
+    <textarea id="prompt" placeholder="Title: ...&#10;Format: feature documentary&#10;Country / Language: ...&#10;Runtime: ... minutes&#10;Director: ...&#10;Synopsis: ...&#10;Themes: ...&#10;Premiere status: no premiere yet&#10;Target audience: ...&#10;Goal: build a festival strategy for the next 12 months"></textarea>
+    <div class="row">
+      <button id="run">Run Agent</button>
+      <button id="sample" class="ghost">Load example</button>
+      <button id="clear" class="ghost">Clear</button>
+      <span id="status" class="status"></span>
+    </div>
+  </div>
+
+  <div id="output"></div>
+</main>
+
+<footer>
+  <a href="/api/agent_info">/api/agent_info</a> ·
+  <a href="/api/team_info">/api/team_info</a> ·
+  <a href="/api/model_architecture">/api/model_architecture</a> ·
+  <a href="/api/health">/api/health</a>
+</footer>
+
+<script>
+const SAMPLE = `Title: Salt and Ash
+Format: feature documentary
+Country / Language: Israel / Hebrew, Arabic
+Runtime: 89 minutes
+Director: Noa Ben-Ari, second feature; her debut short played Clermont-Ferrand
+Synopsis: In a shrinking Dead Sea village, three women who have worked the salt flats for thirty years fight a government plan to relocate them, while the ground literally collapses beneath their homes.
+Themes: environmental collapse, women's labour, displacement, community resistance
+Premiere status: no premiere yet
+Target audience: documentary and human-rights festival audiences, environmental programmers
+Goal: build a festival strategy for the next 12 months`;
+
+const $ = (id) => document.getElementById(id);
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function renderMarkdown(md) {
+  const lines = String(md || '').split('\n');
+  let html = '', inList = false;
+  const inline = (t) => escapeHtml(t)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>');
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) { if (inList) { html += '</ul>'; inList = false; } continue; }
+    if (line.startsWith('- ')) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += `<li>${inline(line.slice(2))}</li>`;
+      continue;
+    }
+    if (inList) { html += '</ul>'; inList = false; }
+    if (line.startsWith('### ')) html += `<h3>${inline(line.slice(4))}</h3>`;
+    else if (line.startsWith('## ')) html += `<h2>${inline(line.slice(3))}</h2>`;
+    else if (line.startsWith('# ')) html += `<h1>${inline(line.slice(2))}</h1>`;
+    else html += `<p>${inline(line)}</p>`;
+  }
+  if (inList) html += '</ul>';
+  return html;
+}
+
+function pretty(value) {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'string') return value;
+  try { return JSON.stringify(value, null, 2); } catch { return String(value); }
+}
+
+function stepsHtml(steps) {
+  if (!steps || !steps.length) return '<p class="status">No steps returned.</p>';
+  return steps.map((step, i) => `
+    <details class="step">
+      <summary><span class="idx">${String(i + 1).padStart(2, '0')}</span><span class="mod">${escapeHtml(step.module || 'unknown')}</span></summary>
+      <div class="step-body">
+        <h4>Prompt</h4><pre>${escapeHtml(pretty(step.prompt))}</pre>
+        <h4>Response</h4><pre>${escapeHtml(pretty(step.response))}</pre>
+      </div>
+    </details>`).join('');
+}
+
+function metaHtml(meta) {
+  if (!meta) return '';
+  const usage = meta.llm_usage || {};
+  const chips = [
+    meta.film_title ? `Film: ${meta.film_title}` : null,
+    `Candidates: ${meta.candidates_considered ?? '—'}`,
+    `LLM calls: ${usage.calls ?? '—'}`,
+    `Tokens in/out: ${usage.prompt_tokens ?? 0}/${usage.completion_tokens ?? 0}`,
+    `Revisions: ${meta.revision_rounds ?? 0}`,
+    meta.replanner_decision ? `Replanner: ${meta.replanner_decision}` : null,
+  ].filter(Boolean);
+  return `<div class="chips">${chips.map((c) => `<span class="chip">${escapeHtml(c)}</span>`).join('')}</div>`;
+}
+
+function addTurn(prompt, data) {
+  const turn = document.createElement('div');
+  turn.className = 'turn';
+  const ok = data.status === 'ok';
+  turn.innerHTML = `
+    <div class="q">${escapeHtml(prompt)}</div>
+    <div class="card">
+      <h2>Agent Response</h2>
+      ${ok
+        ? `<div class="response">${renderMarkdown(data.response)}</div>`
+        : `<p class="status err">${escapeHtml(data.error || 'Unknown error')}</p>`}
+      ${ok ? metaHtml(data.meta) : ''}
+    </div>
+    <div class="card">
+      <h2>Execution Trace (${(data.steps || []).length} steps)</h2>
+      ${stepsHtml(data.steps)}
+    </div>`;
+  $('output').prepend(turn);
+}
+
+async function run() {
+  const prompt = $('prompt').value.trim();
+  if (!prompt) { $('status').textContent = 'Enter a film description first.'; return; }
+  $('run').disabled = true;
+  $('status').className = 'status';
+  $('status').textContent = 'Running agent — planning, retrieving festivals, scoring…';
+  const started = Date.now();
+  try {
+    const res = await fetch('/api/execute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+    });
+    const data = await res.json();
+    addTurn(prompt, data);
+    const secs = ((Date.now() - started) / 1000).toFixed(1);
+    $('status').className = data.status === 'ok' ? 'status' : 'status err';
+    $('status').textContent = data.status === 'ok' ? `Done in ${secs}s.` : `Failed in ${secs}s.`;
+  } catch (err) {
+    $('status').className = 'status err';
+    $('status').textContent = `Request failed: ${err}`;
+  } finally {
+    $('run').disabled = false;
+  }
+}
+
+$('run').addEventListener('click', run);
+$('sample').addEventListener('click', () => { $('prompt').value = SAMPLE; });
+$('clear').addEventListener('click', () => { $('prompt').value = ''; $('output').innerHTML = ''; $('status').textContent = ''; });
+$('prompt').addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') run();
+});
+</script>
+</body>
+</html>

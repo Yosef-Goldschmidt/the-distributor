@@ -1,0 +1,9 @@
+{
+  "_TODO": "FILL THESE IN BEFORE SUBMITTING: group_batch_order_number is {batch#}_{order#} from the presentation list (batch is 1), e.g. '1_7'. Replace the placeholder emails with your real course emails.",
+  "group_batch_order_number": "1_00",
+  "team_name": "The Distributor",
+  "students": [
+    { "name": "Yosef Goldschmidt", "email": "REPLACE_ME@example.com" },
+    { "name": "Reuven Spitz", "email": "REPLACE_ME@example.com" }
+  ]
+}

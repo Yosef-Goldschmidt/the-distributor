@@ -1,0 +1,594 @@
+[
+ {
+  "id": "pordenone-docs-fest",
+  "name": "Pordenone Docs Fest",
+  "city": "Pordenone",
+  "country": "Italy",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": null,
+  "website": "https://www.pordenonedocsfest.it/en/pordenone-docs-fest/"
+ },
+ {
+  "id": "annapolis-film-festival",
+  "name": "Annapolis Film Festival",
+  "city": "Annapolis",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": "https://filmfreeway.com/AnnapolisFilmFestival"
+ },
+ {
+  "id": "lisboeta",
+  "name": "Lisboeta",
+  "city": "Nicosia",
+  "country": "Cyprus",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/LisboetaInternationalShortFilmFestival"
+ },
+ {
+  "id": "jeonju-international-film-festival",
+  "name": "JEONJU International Film Festival",
+  "city": "Jeonju",
+  "country": "South Korea",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "first_feature"
+  ],
+  "month": "May",
+  "website": "https://eng.jeonjufest.kr/"
+ },
+ {
+  "id": "sunscreen-film-festival",
+  "name": "Sunscreen Film Festival",
+  "city": "St. Petersburg",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/sunscreenfilmfestival"
+ },
+ {
+  "id": "beijing-iff",
+  "name": "Beijing IFF",
+  "city": "Beijing",
+  "country": "China",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://www.bjiff.com/Banner/202309/t20230927_168488.html"
+ },
+ {
+  "id": "international-short-film-festival-oberhausen",
+  "name": "International Short Film Festival Oberhausen",
+  "city": "Oberhausen",
+  "country": "Germany",
+  "tier": "B+",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form"
+  ],
+  "month": "April",
+  "website": "https://www.kurzfilmtage.de/en/"
+ },
+ {
+  "id": "milwaukee-film-festival",
+  "name": "Milwaukee Film Festival",
+  "city": "Wisconsin",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/MilwaukeeFilmFestival"
+ },
+ {
+  "id": "documentary-edge-iff",
+  "name": "Documentary Edge IFF",
+  "city": "Auckland",
+  "country": "New Zealand",
+  "tier": "B",
+  "category": "Go2Friend IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/DocEdgeFestival"
+ },
+ {
+  "id": "sheffield-doc-fest",
+  "name": "Sheffield Doc Fest",
+  "city": "Sheffield",
+  "country": "UK",
+  "tier": "A",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "June",
+  "website": "https://sheffdocfest.com/film-programme-entries"
+ },
+ {
+  "id": "virgin-spring-cinefest",
+  "name": "Virgin Spring Cinefest",
+  "city": "Kolkata",
+  "country": "India",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://www.wfcn.co/festival/vsc4390"
+ },
+ {
+  "id": "vienna-shorts",
+  "name": "Vienna Shorts",
+  "city": "Vienna",
+  "country": "Austria",
+  "tier": "B+",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/viennashorts"
+ },
+ {
+  "id": "reels-international-film-festival",
+  "name": "Reels International Film Festival",
+  "city": "Maharashtra",
+  "country": "India",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/5-RIFFFILMFESTIVAL2024"
+ },
+ {
+  "id": "inncontro-film-festival",
+  "name": "Inncontro Film Festival",
+  "city": "Innsbruck",
+  "country": "Austria",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "May",
+  "website": "https://iffi.at/en"
+ },
+ {
+  "id": "fidmarseille-iff",
+  "name": "FIDMarseille IFF",
+  "city": "Marseille",
+  "country": "France",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://fidmarseille.org/en/festival/inscrire-un-film/"
+ },
+ {
+  "id": "festival-curta-cinema-rio-de-janeiro-international-short-fil",
+  "name": "Festival Curta Cinema - Rio de Janeiro International Short Film Festival",
+  "city": "Rio",
+  "country": "Brazil",
+  "tier": "B",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/FestivalCurtaCinema"
+ },
+ {
+  "id": "fest-new-directors-new-films-festival",
+  "name": "FEST – New Directors | New Films Festival",
+  "city": "Espinho",
+  "country": "Portugal",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "first_feature"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/FestNewDirectorsNewFilmsFestival"
+ },
+ {
+  "id": "beldocs",
+  "name": "Beldocs",
+  "city": "Belgrade",
+  "country": "Serbia",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "ethnographic"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/BeldocsInternationalDocumentaryFilmFestival"
+ },
+ {
+  "id": "venice-iff",
+  "name": "Venice IFF",
+  "city": "Venice",
+  "country": "Italy",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "August",
+  "website": "https://www.labiennale.org/en/cinema/2023/submitting-film"
+ },
+ {
+  "id": "dc-shorts-international-film-festival",
+  "name": "DC Shorts International Film Festival",
+  "city": "DC",
+  "country": "USA",
+  "tier": "B",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/dcshorts"
+ },
+ {
+  "id": "nafa-international-ethnographic-film-festival",
+  "name": "NAFA International Ethnographic Film Festival",
+  "city": "changes every year",
+  "country": null,
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "ethnographic"
+  ],
+  "month": "November",
+  "website": "https://nafafilm.org/?q=festival"
+ },
+ {
+  "id": "addis-international-film-festival",
+  "name": "Addis International Film Festival",
+  "city": "Addis Ababa",
+  "country": "Ethiopia",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": null,
+  "website": "https://filmmakers.festhome.com/festival/addis-international-film-festival"
+ },
+ {
+  "id": "palm-springs-international-shortfest",
+  "name": "Palm Springs International Shortfest",
+  "city": "Palm Springs",
+  "country": "USA",
+  "tier": "B+",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/PalmSpringsInternationalShortFest"
+ },
+ {
+  "id": "oslo-pix-filmfestival",
+  "name": "Oslo Pix Filmfestival",
+  "city": "Oslo",
+  "country": "Norway",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": null
+ },
+ {
+  "id": "exground-filmfestival",
+  "name": "Exground Filmfestival",
+  "city": "Weisbaden",
+  "country": "Germany",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": "https://exground.com/en/?page_id=23"
+ },
+ {
+  "id": "espoo-cine-international-film-festival",
+  "name": "Espoo Ciné International Film Festival",
+  "city": "Espoo",
+  "country": "Finland",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "August",
+  "website": "espoocine.fi"
+ },
+ {
+  "id": "mdoc-melgaco-idf",
+  "name": "MDOC - Melgaço IDF",
+  "city": "Melgaço",
+  "country": "Portugal",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "July",
+  "website": "https://filmfreeway.com/mdocfestival"
+ },
+ {
+  "id": "docsmx",
+  "name": "DocsMX",
+  "city": "Mexico City",
+  "country": "Mexico",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "October",
+  "website": "https://convocatoria.docs-enlinea.com/en"
+ },
+ {
+  "id": "international-ethnographic-film-festival-oko",
+  "name": "International Ethnographic Film Festival OKO",
+  "city": "Odessa",
+  "country": "Ukraine",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "ethnographic"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/InternationalEthnographicFilmFestivalOKO"
+ },
+ {
+  "id": "japan-prize",
+  "name": "Japan Prize",
+  "city": "Tokyo",
+  "country": "Japan",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://www.nhk.or.jp/jp-prize/english/submit/audiovisual/"
+ },
+ {
+  "id": "melbourne-international-film-festival",
+  "name": "Melbourne International Film Festival",
+  "city": "Melbourne",
+  "country": "Australia",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "August",
+  "website": "https://filmfreeway.com/MelbourneInternationalFilmFestival"
+ },
+ {
+  "id": "peloponnisos-international-documentary-festival",
+  "name": "Peloponnisos International Documentary Festival",
+  "city": "Kalamata",
+  "country": "Greece",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/PeloponnisosInternationaldocumentaryFestival"
+ },
+ {
+  "id": "astra-iff",
+  "name": "Astra IFF",
+  "city": "Sibiu",
+  "country": "Romania",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "ethnographic"
+  ],
+  "month": "October",
+  "website": "https://www.astrafilm.ro/en/form"
+ },
+ {
+  "id": "ideal-international-film-festival",
+  "name": "iDEAL INTERNATIONAL FILM FESTIVAL",
+  "city": "Maharashtra",
+  "country": "India",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": "https://filmfreeway.com/IdealInternationalFilmFestival"
+ },
+ {
+  "id": "locarno-iff-semaine-de-la-critique",
+  "name": "Locarno IFF - Semaine de la critique",
+  "city": "Locarno",
+  "country": "Switzerland",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [],
+  "month": "August",
+  "website": "https://www.semainedelacritique.ch/"
+ },
+ {
+  "id": "sarasota-iff",
+  "name": "Sarasota IFF",
+  "city": "Florida",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/SarasotaFilmFestival"
+ },
+ {
+  "id": "documenta-madrid",
+  "name": "Documenta Madrid",
+  "city": "Madrid",
+  "country": "Spain",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "May",
+  "website": "https://www.documentamadrid.com/en"
+ },
+ {
+  "id": "art-film-fest",
+  "name": "Art Film Fest",
+  "city": "Bratislava",
+  "country": "Slovakia",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "art"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/iffartfilm"
+ },
+ {
+  "id": "shanghai-tv-film-festival",
+  "name": "Shanghai TV Film Festival",
+  "city": "Shanghai",
+  "country": "China",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://www.stvf.com/english/"
+ },
+ {
+  "id": "yerevan-international-short-film-festival",
+  "name": "Yerevan International Short Film Festival",
+  "city": "Yerevan",
+  "country": "Armenia",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/YerevanShortFilmFestival"
+ },
+ {
+  "id": "durban-international-film-festival",
+  "name": "Durban International Film Festival",
+  "city": "Durban",
+  "country": "South Africa",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "July",
+  "website": "https://filmfreeway.com/DurbanFilmFest"
+ },
+ {
+  "id": "sydney-film-festival-sff",
+  "name": "Sydney Film Festival (SFF)",
+  "city": "Sydney",
+  "country": "Australia",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/SydneyFilmFestival"
+ },
+ {
+  "id": "social-film-festival-artelesia",
+  "name": "Social Film Festival Artelesia",
+  "city": "Benevento",
+  "country": "Italy",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "disability"
+  ],
+  "month": "July",
+  "website": "https://filmfreeway.com/SOCIALFILMFESTIVALARTELESIA"
+ },
+ {
+  "id": "the-fine-arts-film-festival",
+  "name": "The Fine Arts Film Festival",
+  "city": "New York",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "art"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/TheFineArtsFilmFestival"
+ },
+ {
+  "id": "religion-today-film-festival",
+  "name": "Religion Today Film Festival",
+  "city": "Trento",
+  "country": "Italy",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "religion"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/ReligionTodayFilmFestival"
+ }
+]

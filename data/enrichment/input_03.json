@@ -1,0 +1,606 @@
+[
+ {
+  "id": "sofia-iff",
+  "name": "Sofia IFF",
+  "city": "Sofia",
+  "country": "Bulgaria",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "first_feature"
+  ],
+  "month": "March",
+  "website": "https://vp.eventival.com/siff/sofiaiff2024"
+ },
+ {
+  "id": "millenium-iff",
+  "name": "Millenium IFF",
+  "city": "Brussels",
+  "country": "Belgium",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "March",
+  "website": "http://www.festivalmillenium.org/"
+ },
+ {
+  "id": "docs-barcelona",
+  "name": "Docs Barcelona",
+  "city": "Barcelona",
+  "country": "Spain",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "May",
+  "website": "https://filmmakers.festhome.com/festivals#1588"
+ },
+ {
+  "id": "docpoint-film-festival",
+  "name": "DocPoint Film Festival",
+  "city": "Helsinki",
+  "country": "Finland",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "January",
+  "website": "https://docpointfestival.fi/en/"
+ },
+ {
+  "id": "ambulante",
+  "name": "Ambulante",
+  "city": "Mexico City",
+  "country": "Mexico",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "November",
+  "website": "https://www.ambulante.org/en/"
+ },
+ {
+  "id": "thessaloniki-international-film-festival",
+  "name": "Thessaloniki International Film Festival",
+  "city": "Thessaloniki",
+  "country": "Greece",
+  "tier": "A",
+  "category": "Fiction",
+  "focus_tag": [
+   "first_feature"
+  ],
+  "month": "November",
+  "website": "https://vp.eventival.com/thessaloniki/tiff64"
+ },
+ {
+  "id": "krakow-iff",
+  "name": "Krakow IFF",
+  "city": "Krakow",
+  "country": "Poland",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "May",
+  "website": "https://dot.krakowfilmfestival.pl/editors.entry/en"
+ },
+ {
+  "id": "nevada-women-s-film-festival",
+  "name": "Nevada Women's Film Festival",
+  "city": "Las Vegas",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/NevadaWomensFilmFestival"
+ },
+ {
+  "id": "it-s-all-true-ff",
+  "name": "It's all True FF",
+  "city": "Sao Paolo",
+  "country": "Brazil",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "April",
+  "website": "https://etudoverdade.com.br/inscricao_2025/en/"
+ },
+ {
+  "id": "thessaloniki-documentary-festival",
+  "name": "Thessaloniki Documentary Festival",
+  "city": "Thessaloniki",
+  "country": "Greece",
+  "tier": "A",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "March",
+  "website": "https://www.filmfestival.gr/en/documentary-festival"
+ },
+ {
+  "id": "days-of-ethnographic-film-def",
+  "name": "Days of Ethnographic Film (DEF)",
+  "city": "Ljubljana",
+  "country": "Slovenia",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "ethnographic"
+  ],
+  "month": "March",
+  "website": "http://www.def.si/about-festival/"
+ },
+ {
+  "id": "ethnocineca-idf",
+  "name": "Ethnocineca IDF",
+  "city": "Vienna",
+  "country": "Austria",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "ethnographic"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/ethnocineca_docfilmfestival"
+ },
+ {
+  "id": "minneapolis-st-paul-iff",
+  "name": "Minneapolis St. Paul IFF",
+  "city": "Minneapolis",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/mspiff"
+ },
+ {
+  "id": "docville",
+  "name": "Docville",
+  "city": "Leuven",
+  "country": "Belgium",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/docville"
+ },
+ {
+  "id": "busan-international-short-film-festival",
+  "name": "Busan International Short Film Festival",
+  "city": "Busan",
+  "country": "Korea",
+  "tier": "B",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/BISFF_submit"
+ },
+ {
+  "id": "brussels-short-film-festival",
+  "name": "Brussels Short Film Festival",
+  "city": "Brussels",
+  "country": "Belgium",
+  "tier": "B",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form"
+  ],
+  "month": "April",
+  "website": "https://bsff.be/en/bsff-2025-submit-your-film/"
+ },
+ {
+  "id": "santa-barbara-iff",
+  "name": "Santa Barbara IFF",
+  "city": "Santa Barbara",
+  "country": "USA",
+  "tier": "B",
+  "category": "Go2Friend IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "February",
+  "website": "https://filmfreeway.com/SBIFF"
+ },
+ {
+  "id": "taiwan-international-documentary-ff",
+  "name": "Taiwan international Documentary FF",
+  "city": "Taipei",
+  "country": "Taiwan",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "May",
+  "website": "https://www.tidf.org.tw/en/page/112933"
+ },
+ {
+  "id": "bergamo-film-meeting",
+  "name": "Bergamo Film Meeting",
+  "city": "Bergamo",
+  "country": "Italy",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/BergamoFilmMeeting"
+ },
+ {
+  "id": "indielisboa",
+  "name": "IndieLisboa",
+  "city": "Lisboa",
+  "country": "Portugal",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "short_form"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/IndieLisboa"
+ },
+ {
+  "id": "montreal-international-children-s-film-festival",
+  "name": "Montreal International Children's Film Festival",
+  "city": "Montreal",
+  "country": "Canada",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "March",
+  "website": "https://fifem.com/"
+ },
+ {
+  "id": "yamagata-idf",
+  "name": "Yamagata IDF",
+  "city": "Yamagata",
+  "country": "Japan",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "October",
+  "website": "http://www.yidff.jp/index.html.en"
+ },
+ {
+  "id": "riverrun-iff",
+  "name": "RiverRun IFF",
+  "city": "North Carolina",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/RiverRun"
+ },
+ {
+  "id": "buenos-aires-international-independent-ff-bafici",
+  "name": "Buenos Aires International Independent FF (BAFICI)",
+  "city": "Buenos Aires",
+  "country": "Argentina",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "first_feature"
+  ],
+  "month": "April",
+  "website": "https://bafici.org/noticias/inscripciones-para-el-26-bafici/"
+ },
+ {
+  "id": "cyprus-film-days",
+  "name": "Cyprus Film Days",
+  "city": "Limassol",
+  "country": "Cyprus",
+  "tier": "B",
+  "category": "Fiction",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/cyprusfilmdays"
+ },
+ {
+  "id": "tempo-documentary-ff",
+  "name": "Tempo Documentary FF",
+  "city": "Stockholm",
+  "country": "Sweden",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "March",
+  "website": "https://tempofestival.se/en/submit/"
+ },
+ {
+  "id": "wicked-queer-the-boston-lgbt-film-festival",
+  "name": "WICKED QUEER: The Boston LGBT Film Festival",
+  "city": "Boston",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "lgbtq"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/WickedQueer"
+ },
+ {
+  "id": "worldfest-houston-iff",
+  "name": "WorldFest-Houston IFF",
+  "city": "Texas",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/worldfest"
+ },
+ {
+  "id": "zagrebdox",
+  "name": "ZagrebDox",
+  "city": "Zagreb",
+  "country": "Croatia",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/ZagrebDox"
+ },
+ {
+  "id": "dok-fest-munich",
+  "name": "DOK.fest Munich",
+  "city": "Munich",
+  "country": "Germany",
+  "tier": "B",
+  "category": "Go2Friend IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "May",
+  "website": "https://www.dokfest-muenchen.de/Submission"
+ },
+ {
+  "id": "tribeca",
+  "name": "Tribeca",
+  "city": "New York",
+  "country": "USA",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/TribecaFestival"
+ },
+ {
+  "id": "seattle-iff",
+  "name": "Seattle IFF",
+  "city": "Seattle",
+  "country": "USA",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/SIFF"
+ },
+ {
+  "id": "ecu-the-european-independent-film-festival",
+  "name": "ÉCU - The European Independent Film Festival",
+  "city": "Paris",
+  "country": "France",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/ECUTheEuropeanIndependentFilmFestival"
+ },
+ {
+  "id": "dc-dox",
+  "name": "DC/DOX",
+  "city": "Washington DC",
+  "country": "USA",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/DCDOX"
+ },
+ {
+  "id": "encounters-south-african-idf",
+  "name": "Encounters South African IDF",
+  "city": "Cape Town",
+  "country": "South Africa",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "June",
+  "website": "https://www.encounters.co.za/"
+ },
+ {
+  "id": "doxa",
+  "name": "DOXA",
+  "city": "Vancouver",
+  "country": "Canada",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/DOXAFestival"
+ },
+ {
+  "id": "asolo-art-film-frestival",
+  "name": "Asolo Art FIlm Frestival",
+  "city": "Asolo",
+  "country": "Italy",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "art"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/AsoloArtFilmFestival-02"
+ },
+ {
+  "id": "hong-kong-iff",
+  "name": "Hong Kong IFF",
+  "city": "Hong Kong",
+  "country": "China",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/HKIFF"
+ },
+ {
+  "id": "flying-broom-film-festival",
+  "name": "Flying Broom Film Festival",
+  "city": "Ankara",
+  "country": "Turkey",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers"
+  ],
+  "month": "May",
+  "website": "https://flyingbroom.org/about-the-festival/"
+ },
+ {
+  "id": "kristiansand-international-children-s-ff",
+  "name": "Kristiansand International Children's FF",
+  "city": "Kristiansand",
+  "country": "Norway",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "April",
+  "website": "https://barnefilmfestivalen.no/en/"
+ },
+ {
+  "id": "bengaluru-iff",
+  "name": "Bengaluru IFF",
+  "city": "Bengaluru",
+  "country": "India",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "January",
+  "website": "https://biffes.org/"
+ },
+ {
+  "id": "transylvania-iff",
+  "name": "Transylvania IFF",
+  "city": "Cluj-Napoca",
+  "country": "Romania",
+  "tier": "B",
+  "category": "Go2Friend IFF",
+  "focus_tag": [
+   "first_feature"
+  ],
+  "month": "June",
+  "website": "https://tiff.ro/en"
+ },
+ {
+  "id": "cleveland-international-film-festival-ciff",
+  "name": "Cleveland International Film Festival (CIFF)",
+  "city": "Cleveland",
+  "country": "USA",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "March",
+  "website": "https://filmfreeway.com/ClevelandInternationalFilmFestival"
+ },
+ {
+  "id": "fisheye-film-festival",
+  "name": "Fisheye Film Festival",
+  "city": "London",
+  "country": "UK",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "April",
+  "website": "https://filmfreeway.com/FisheyeFilmFestival2026"
+ },
+ {
+  "id": "docs-against-gravity-iff",
+  "name": "Docs Against Gravity IFF",
+  "city": "Warsaw",
+  "country": "Poland",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "May",
+  "website": "https://vp.eventival.com/mdagff/2025"
+ }
+]

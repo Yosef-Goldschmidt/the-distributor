@@ -1,0 +1,596 @@
+[
+ {
+  "id": "zinebi-bilbao-short-ff",
+  "name": "Zinebi Bilbao Short FF",
+  "city": "Bilbao",
+  "country": "Spain",
+  "tier": "B+",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form",
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmmakers.festhome.com/festival/1104"
+ },
+ {
+  "id": "spotlight-iff",
+  "name": "Spotlight IFF",
+  "city": "Los Angeles",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "December",
+  "website": "https://filmfreeway.com/SpotlightInternationalFilmFestival"
+ },
+ {
+  "id": "middlebury-new-filmmakers-festival",
+  "name": "Middlebury New Filmmakers Festival",
+  "city": "Middlebury",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "August",
+  "website": "https://filmfreeway.com/MiddleburyNewFilmmakersFestival"
+ },
+ {
+  "id": "warsaw-iff",
+  "name": "Warsaw IFF",
+  "city": "Warsaw",
+  "country": "Poland",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/WarsawFilmFestival"
+ },
+ {
+  "id": "international-film-festival-of-kerala",
+  "name": "International Film Festival of Kerala",
+  "city": "Kerala",
+  "country": "India",
+  "tier": "B",
+  "category": "Fiction",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "December",
+  "website": "https://vp.eventival.com/idsffk/29iffk/film-form/international-competition-section"
+ },
+ {
+  "id": "flahertiana-idff",
+  "name": "Flahertiana IDFF",
+  "city": "Perm",
+  "country": "Russia",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": null,
+  "website": "https://filmfreeway.com/flahertiana"
+ },
+ {
+  "id": "kyiv-international-short-film-festival",
+  "name": "Kyiv International Short Film Festival",
+  "city": "Kyiv",
+  "country": "Ukraine",
+  "tier": "B",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/KISFF"
+ },
+ {
+  "id": "camden-iff",
+  "name": "Camden IFF",
+  "city": "Maine",
+  "country": "USA",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/CamdenIFF"
+ },
+ {
+  "id": "giffoni-film-festival-gff",
+  "name": "Giffoni Film Festival (GFF)",
+  "city": "Giffoni",
+  "country": "Italy",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "July",
+  "website": "https://filmfreeway.com/GiffoniFilmFestival"
+ },
+ {
+  "id": "rocky-mountain-womens-film-festival",
+  "name": "Rocky Mountain Women’s Film Festival",
+  "city": "Colorado",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers"
+  ],
+  "month": "October",
+  "website": "https://rmwfilm.org/festival/submit/"
+ },
+ {
+  "id": "hampton-iff",
+  "name": "Hampton IFF",
+  "city": "New York",
+  "country": "USA",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/HamptonsFilm"
+ },
+ {
+  "id": "philadelphia-film-festival",
+  "name": "Philadelphia Film Festival",
+  "city": "Philadelphia",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "July",
+  "website": "https://filmfreeway.com/PhiladelphiaFilmFestival"
+ },
+ {
+  "id": "vancouver-iff",
+  "name": "Vancouver IFF",
+  "city": "Vancouver",
+  "country": "Canada",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/VIFF"
+ },
+ {
+  "id": "hamptons-doc-fest",
+  "name": "Hamptons Doc Fest",
+  "city": "New York",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "December",
+  "website": "https://filmfreeway.com/Hamptonsdocfest"
+ },
+ {
+  "id": "flickers-rhode-island",
+  "name": "Flickers' Rhode Island",
+  "city": "Rhode Island",
+  "country": "USA",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "August",
+  "website": "https://filmfreeway.com/RIFilmFest"
+ },
+ {
+  "id": "odessa-iff",
+  "name": "Odessa IFF",
+  "city": "Odessa",
+  "country": "Ukraine",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "July",
+  "website": "https://oiff.com.ua/en/festival/film-entry.html"
+ },
+ {
+  "id": "heartland-international-film-festival",
+  "name": "Heartland International Film Festival",
+  "city": "Indianapolis",
+  "country": "USA",
+  "tier": "B+",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/HeartlandFilmFestival"
+ },
+ {
+  "id": "unaff",
+  "name": "UNAFF",
+  "city": "Stanford",
+  "country": "USA",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/UNAFF"
+ },
+ {
+  "id": "tirana-iff",
+  "name": "Tirana IFF",
+  "city": "Tirana",
+  "country": "Albania",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/TiranaInternationalFilmFestival"
+ },
+ {
+  "id": "jecheon-international-music-film-festival",
+  "name": "Jecheon International Music & Film Festival",
+  "city": "Jecheon",
+  "country": "South Korea",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "music"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/JIMFF"
+ },
+ {
+  "id": "bogota-iff-festival-de-cine-de-bogota",
+  "name": "Bogota IFF (Festival de Cine de Bogotá)",
+  "city": "Bogota",
+  "country": "Colombia",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmmakers.festhome.com/festival/festival-de-cine-de-bogota"
+ },
+ {
+  "id": "doclisboa",
+  "name": "Doclisboa",
+  "city": "Lisbon",
+  "country": "Portugal",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "October",
+  "website": "https://vp.eventival.com/doclisboa/2024"
+ },
+ {
+  "id": "afi-fest",
+  "name": "AFI FEST",
+  "city": "California",
+  "country": "USA",
+  "tier": "B+",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form",
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/AFIFEST"
+ },
+ {
+  "id": "centre-film-festival",
+  "name": "Centre Film Festival",
+  "city": "Pennsylvania",
+  "country": "USA",
+  "tier": "B",
+  "category": "Go2Friend IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/CentreFilmFestival2026"
+ },
+ {
+  "id": "camerimage-iff",
+  "name": "Camerimage IFF",
+  "city": "Toruń",
+  "country": "Poland",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://camerimage.pl/en/energacamerimage-2023/zglos-film/"
+ },
+ {
+  "id": "san-giovanni-international-film-festival",
+  "name": "San Giovanni International Film Festival",
+  "city": "Genova",
+  "country": "Italy",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "September",
+  "website": "https://filmmakers.festhome.com/festival/festival-internazionale-del-cinema-di-san-giovanni"
+ },
+ {
+  "id": "festcine",
+  "name": "Festcine",
+  "city": "Caruaru",
+  "country": "Brazil",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "July",
+  "website": "https://filmfreeway.com/festcineitauna"
+ },
+ {
+  "id": "festival-tous-courts",
+  "name": "Festival Tous Courts",
+  "city": "Provence",
+  "country": "France",
+  "tier": "C",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form",
+   "general"
+  ],
+  "month": "November",
+  "website": "https://festivaltouscourts.com/"
+ },
+ {
+  "id": "budapest-international-documentary-festival",
+  "name": "Budapest International Documentary Festival",
+  "city": "Budapest",
+  "country": "Hungary",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "January",
+  "website": "https://bidf.hu/"
+ },
+ {
+  "id": "dok-leipzig",
+  "name": "DOK Leipzig",
+  "city": "Leipzig",
+  "country": "Germany",
+  "tier": "A",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "October",
+  "website": "https://www.dok-leipzig.de/en/submission"
+ },
+ {
+  "id": "telluride-iff",
+  "name": "Telluride IFF",
+  "city": "Telluride",
+  "country": "USA",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "August",
+  "website": "https://passes.telluridefilmfestival.org/filmsubmission"
+ },
+ {
+  "id": "creteil-international-women-s-film-festival",
+  "name": "Créteil International Women's Film Festival",
+  "city": "Créteil",
+  "country": "France",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers"
+  ],
+  "month": "March",
+  "website": "https://filmsdefemmes.com/les-inscriptions-pour-la-47e-edition-sont-ouvertes/"
+ },
+ {
+  "id": "calgary-iff",
+  "name": "Calgary IFF",
+  "city": "Calgary",
+  "country": "Canada",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/CalgaryInternationalFilmFestival"
+ },
+ {
+  "id": "zagreb-film-festival",
+  "name": "Zagreb Film Festival",
+  "city": "Zagreb",
+  "country": "Croatia",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "first_feature"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/ZagrebFilmFestival"
+ },
+ {
+  "id": "busan-iff",
+  "name": "Busan IFF",
+  "city": "Busan",
+  "country": "Korea",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://www.biff.kr/eng/addon/10000001/page.asp?page_num=6945"
+ },
+ {
+  "id": "girona-film-festival",
+  "name": "Girona FIlm Festival",
+  "city": "Girona",
+  "country": "Spain",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [],
+  "month": "November",
+  "website": "https://filmfreeway.com/GironaFilmFestival"
+ },
+ {
+  "id": "international-documentary-historical-ff-dock-bulgaria",
+  "name": "International Documentary Historical FF (DOCK Bulgaria)",
+  "city": "Sofia",
+  "country": "Bulgaria",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "September",
+  "website": "https://filmfreeway.com/InternationalDocumentaryHistoricalFilmFestival"
+ },
+ {
+  "id": "doc-nyc",
+  "name": "Doc NYC",
+  "city": "New York",
+  "country": "USA",
+  "tier": "A",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/DOCNYC"
+ },
+ {
+  "id": "san-sabastian-iff",
+  "name": "San Sabastian IFF",
+  "city": "San Sabastian",
+  "country": "Spain",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "September",
+  "website": "https://www.sansebastianfestival.com/2021/news/1/18917/in"
+ },
+ {
+  "id": "filmfestival-kitzbuhel",
+  "name": "FilmFestival Kitzbuhel",
+  "city": "Vienna",
+  "country": "Austria",
+  "tier": "B",
+  "category": "Go2Friend IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "August",
+  "website": "https://filmfreeway.com/FFKB"
+ },
+ {
+  "id": "just-film-children-and-youth-film-festival",
+  "name": "Just Film Children and Youth Film Festival",
+  "city": "Tallinn",
+  "country": "Estonia",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/just"
+ },
+ {
+  "id": "ceylon-iff",
+  "name": "Ceylon IFF",
+  "city": "Santa Barbra",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/Ceyloninternationalfilmfestival"
+ },
+ {
+  "id": "tallinn-black-nights-iff",
+  "name": "Tallinn Black Nights IFF",
+  "city": "Tallinn",
+  "country": "Estonia",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/blacknightsfilmfestival"
+ },
+ {
+  "id": "festival-des-3-continents",
+  "name": "Festival des 3 Continents",
+  "city": "Nantes",
+  "country": "France",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "mediterranean"
+  ],
+  "month": "November",
+  "website": "https://www.3continents.com/en/presse-pros/inscrire-un-film/"
+ },
+ {
+  "id": "viennale-ff",
+  "name": "Viennale FF",
+  "city": "Vienna",
+  "country": "Austria",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://www.viennale.at/en/submission"
+ }
+]

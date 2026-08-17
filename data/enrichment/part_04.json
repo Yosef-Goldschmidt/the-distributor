@@ -1,0 +1,407 @@
+[
+  {
+    "id": "pordenone-docs-fest",
+    "focus": "Pordenone Docs Fest is a northeastern Italian documentary festival oriented toward contemporary nonfiction, civic inquiry, and accessible creative documentaries for a local cultural audience. It is a good fit for character-led social stories, European issue films, and formally clear work rather than highly niche experimental pieces.",
+    "award_patterns": "Juries are likely to favour documentaries with strong human stakes, clear social relevance, and polished storytelling over purely observational minimalism.",
+    "themes": ["documentary", "social_realism", "political", "european_cinema", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Useful as a regional Italian documentary launch or audience-building stop, but not usually a substitute for a top-tier world-premiere platform.",
+    "confidence": "medium"
+  },
+  {
+    "id": "annapolis-film-festival",
+    "focus": "Annapolis Film Festival programs audience-friendly independent features, documentaries, and shorts for a Mid-Atlantic U.S. community with an appetite for smart, accessible cinema. Its taste leans toward well-crafted stories, topical nonfiction, and filmmaker-facing events rather than radical festival formalism.",
+    "award_patterns": "Favoured films tend to be emotionally legible, professionally finished, and strong with live audiences or local juries.",
+    "themes": ["arthouse", "documentary", "social_realism", "comedy", "local_audience", "regional"],
+    "notable_past_selections": [],
+    "notes": "Worth targeting for U.S. regional exposure and audience awards, with competitiveness lower than major coastal premiere festivals.",
+    "confidence": "medium"
+  },
+  {
+    "id": "lisboeta",
+    "focus": "Lisboeta appears to be a small international festival platform with a broad general brief, best read as a venue for compact independent work and emerging filmmakers rather than a canon-making premiere festival. Given the limited public profile and cross-border identity, distributors should treat it as a flexible discovery-oriented event with local and online reach.",
+    "award_patterns": "Selections and awards are likely to favour concise, festival-ready independent films with clear craft and accessible themes.",
+    "themes": ["arthouse", "short_form", "first_feature", "regional", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Submit only when fees are modest or the film benefits from additional laurels, since market impact is likely limited.",
+    "confidence": "low"
+  },
+  {
+    "id": "jeonju-international-film-festival",
+    "focus": "JEONJU is one of Asia's key showcases for independent, formally adventurous, and emerging-auteur cinema, with a strong identity around first features, digital cinema, and Korean/Asian discovery. It suits films with a distinctive directorial voice, political or personal risk, and art-house credibility more than mainstream crowd-pleasers.",
+    "award_patterns": "Awards tend to favour bold new directors, formally confident debuts, and independent films that expand narrative or documentary language.",
+    "themes": ["auteur", "arthouse", "experimental", "first_feature", "asian_cinema", "premiere_platform", "industry_market"],
+    "notable_past_selections": [],
+    "notes": "A strong submission target for Asian premieres or early international positioning, but it is selective and expects a clear auteur profile.",
+    "confidence": "high"
+  },
+  {
+    "id": "sunscreen-film-festival",
+    "focus": "Sunscreen Film Festival is a Florida-based independent festival serving filmmakers and regional audiences with a broad mix of narrative features, documentaries, shorts, genre pieces, and workshops. Its programming is practical and accessible, often emphasizing craft, entertainment value, and filmmaker networking.",
+    "award_patterns": "Winning films usually combine professional execution with audience appeal, clear genre or emotional hooks, and strong independent production values.",
+    "themes": ["arthouse", "genre", "comedy", "documentary", "regional", "local_audience", "industry_market"],
+    "notable_past_selections": [],
+    "notes": "Best used for Southeast U.S. exposure, networking, and laurels rather than for international prestige strategy.",
+    "confidence": "medium"
+  },
+  {
+    "id": "beijing-iff",
+    "focus": "Beijing International Film Festival is a large, state-backed Chinese festival combining international prestige cinema, Chinese commercial and art-house titles, and a substantial industry market. It is strongest for polished features that can travel within China-facing cultural diplomacy, Asian cinema, or accessible global auteur contexts.",
+    "award_patterns": "The Tiantan-style award profile tends to favour accomplished, broadly legible feature filmmaking with strong production values and cultural respectability.",
+    "themes": ["arthouse", "asian_cinema", "european_cinema", "industry_market", "premiere_platform", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Valuable for China visibility and market access, but programming can be selective and sensitive to censorship and diplomatic context.",
+    "confidence": "medium"
+  },
+  {
+    "id": "international-short-film-festival-oberhausen",
+    "focus": "Oberhausen is a landmark short-film festival for experimental cinema, artists' moving image, political shorts, animation, and formally radical nonfiction. Its audience is cinephile, curatorial, and art-world adjacent, making it ideal for shorts that challenge conventional narrative language.",
+    "award_patterns": "Awards often favour uncompromising short works with conceptual precision, political urgency, and innovative use of image, sound, or archival form.",
+    "themes": ["short_form", "experimental", "auteur", "art", "political", "animation", "essay_film"],
+    "notable_past_selections": [],
+    "notes": "Highly competitive and prestige-heavy for shorts; submit only work with a strong formal or conceptual signature.",
+    "confidence": "high"
+  },
+  {
+    "id": "milwaukee-film-festival",
+    "focus": "Milwaukee Film Festival is a substantial Midwestern U.S. audience festival with broad independent programming across fiction, documentary, shorts, genre, and community-focused strands. It is especially useful for films that can connect with urban regional audiences while still carrying festival-quality craft.",
+    "award_patterns": "Audience resonance, topical relevance, and polished storytelling tend to matter more than extreme formal experimentation.",
+    "themes": ["arthouse", "documentary", "black_cinema", "latinx", "regional", "local_audience", "social_realism"],
+    "notable_past_selections": [],
+    "notes": "Good for U.S. regional momentum and community engagement, with lower premiere pressure than top-tier U.S. festivals.",
+    "confidence": "medium"
+  },
+  {
+    "id": "documentary-edge-iff",
+    "focus": "Doc Edge is New Zealand's leading documentary festival, programming international and Asia-Pacific nonfiction with a strong appetite for social issues, investigative stories, personal portraits, and impact campaigns. Its audience includes doc professionals, activists, educators, and general viewers looking for urgent real-world stories.",
+    "award_patterns": "Favoured films are usually issue-driven, emotionally engaging, and built around clear access, stakes, or social impact potential.",
+    "themes": ["documentary", "human_rights", "environmental", "asian_cinema", "indigenous", "social_realism", "industry_market"],
+    "notable_past_selections": [],
+    "notes": "A useful Oceania documentary platform, especially for films with impact partners or Asia-Pacific relevance.",
+    "confidence": "high"
+  },
+  {
+    "id": "sheffield-doc-fest",
+    "focus": "Sheffield DocFest is a major international documentary festival and industry hub, spanning cinematic nonfiction, hybrid forms, journalism, music docs, artist film, and politically urgent work. It serves both a public UK audience and a serious market of broadcasters, sales agents, funders, and documentary professionals.",
+    "award_patterns": "Awards tend to favour bold nonfiction with exceptional access, formal ambition, contemporary urgency, or a memorable authorial point of view.",
+    "themes": ["documentary", "human_rights", "political", "music", "experimental", "essay_film", "industry_market", "premiere_platform"],
+    "notable_past_selections": [],
+    "notes": "Highly competitive and strategically important for documentaries; premiere status, sales potential, and clear positioning matter.",
+    "confidence": "high"
+  },
+  {
+    "id": "virgin-spring-cinefest",
+    "focus": "Virgin Spring Cinefest appears to be a small Kolkata-based independent festival with a broad international remit, likely mixing features, shorts, documentaries, and low-budget indie work. Its identity is more laurels-and-discovery oriented than market-making, with a likely openness to emerging filmmakers.",
+    "award_patterns": "Awards are likely to reward accessible independent storytelling, clear craft, and films that stand out within a wide submission pool.",
+    "themes": ["arthouse", "first_feature", "regional", "asian_cinema", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Treat as a low-stakes submission for extra festival recognition, checking fee value and screening format carefully.",
+    "confidence": "low"
+  },
+  {
+    "id": "vienna-shorts",
+    "focus": "Vienna Shorts is Austria's major international short-film festival, with a curatorial identity spanning fiction, documentary, animation, experimental film, and music-video-adjacent forms. It is well suited to precise, contemporary shorts with a strong artistic concept and European festival sensibility.",
+    "award_patterns": "Juries tend to favour formally assured short works with a sharp cinematic idea, strong visual language, or innovative animation/nonfiction form.",
+    "themes": ["short_form", "experimental", "animation", "auteur", "arthouse", "music", "european_cinema"],
+    "notable_past_selections": [],
+    "notes": "A competitive and respected short-film stop, especially useful for European visibility and awards-qualification pathways.",
+    "confidence": "high"
+  },
+  {
+    "id": "reels-international-film-festival",
+    "focus": "Reels International Film Festival appears to be a small Maharashtra-based general festival for independent features, shorts, and documentaries from India and abroad. It likely values accessible storytelling, new filmmakers, and a wide genre mix over a sharply defined curatorial school.",
+    "award_patterns": "Favoured work is likely to be clearly made, emotionally direct, and easy for a general jury to evaluate across mixed categories.",
+    "themes": ["arthouse", "regional", "asian_cinema", "first_feature", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Use selectively for laurels or Indian regional exposure, and verify event scale, screening guarantees, and fee value before submitting.",
+    "confidence": "low"
+  },
+  {
+    "id": "inncontro-film-festival",
+    "focus": "Inncontro Film Festival in Innsbruck appears connected to a cross-cultural Austrian festival context, suited to independent international cinema with intercultural, social, and regional perspectives. It is likely more receptive to films from underrepresented regions and personal social narratives than to commercial genre fare.",
+    "award_patterns": "Awards are likely to favour humanist, socially aware films that offer a distinctive cultural perspective and connect with a thoughtful local audience.",
+    "themes": ["arthouse", "migration", "social_realism", "regional", "european_cinema", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "A reasonable target for culturally specific independent work, though distributors should verify the exact section and scale before relying on it strategically.",
+    "confidence": "low"
+  },
+  {
+    "id": "fidmarseille-iff",
+    "focus": "FIDMarseille is a highly curated festival for contemporary cinema that blurs fiction, documentary, essay, and experimental forms. Its taste is rigorous, auteur-driven, and often politically or aesthetically challenging, with a strong Mediterranean and international art-cinema identity.",
+    "award_patterns": "Awards tend to favour formally adventurous films that rethink documentary and narrative language through strong authorial construction.",
+    "themes": ["auteur", "experimental", "documentary", "essay_film", "arthouse", "political", "mediterranean", "premiere_platform"],
+    "notable_past_selections": [],
+    "notes": "Very selective and best for films with genuine formal ambition; a weak fit for conventional issue docs or audience-led dramas.",
+    "confidence": "high"
+  },
+  {
+    "id": "festival-curta-cinema-rio-de-janeiro-international-short-fil",
+    "focus": "Festival Curta Cinema in Rio de Janeiro is a significant short-film showcase for Brazilian, Latin American, and international fiction, documentary, animation, and experimental shorts. It fits concise work with festival polish, cultural specificity, and either strong audience energy or formal invention.",
+    "award_patterns": "Awards usually favour shorts with a clear cinematic idea, strong craft, and the ability to stand out across fiction, documentary, animation, or experimental categories.",
+    "themes": ["short_form", "latinx", "arthouse", "experimental", "animation", "documentary", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "A useful Latin American shorts platform, especially for Brazilian or Ibero-American positioning and awards-qualification routes.",
+    "confidence": "medium"
+  },
+  {
+    "id": "fest-new-directors-new-films-festival",
+    "focus": "FEST in Espinho is built around new directors, emerging talent, first features, shorts, training, and industry development. Its programming suits bold early-career filmmakers, youth-facing stories, and debut or sophomore work that can benefit from mentorship and networking.",
+    "award_patterns": "Favoured films tend to show a fresh directorial voice, strong promise, and enough craft to mark the filmmaker as a discovery.",
+    "themes": ["first_feature", "student", "youth", "arthouse", "short_form", "industry_market", "european_cinema"],
+    "notable_past_selections": [],
+    "notes": "Strong for emerging-director positioning and industry labs, but less useful for established auteurs seeking top-tier premiere status.",
+    "confidence": "high"
+  },
+  {
+    "id": "beldocs",
+    "focus": "Beldocs is a Belgrade documentary festival with an international nonfiction slate and a strong regional lens on the Balkans, social change, memory, and ethnographic observation. It suits creative documentaries that combine human stories with political, cultural, or anthropological texture.",
+    "award_patterns": "Awards tend to favour socially engaged documentaries with cinematic access, regional relevance, or a distinctive observational approach.",
+    "themes": ["documentary", "ethnographic", "political", "social_realism", "european_cinema", "war", "migration"],
+    "notable_past_selections": [],
+    "notes": "A good Balkan nonfiction platform, particularly for films with Southeast European, human-rights, or cultural-identity angles.",
+    "confidence": "high"
+  },
+  {
+    "id": "venice-iff",
+    "focus": "Venice is one of the world's most prestigious A-list festivals, programming major auteur cinema, high-profile awards contenders, politically resonant world cinema, and selected studio-backed prestige films. Its identity blends European art-house authority, red-carpet visibility, and serious critical discovery.",
+    "award_patterns": "The Golden Lion and major prizes often favour bold auteur statements with international critical heat, formal control, and strong political or emotional charge.",
+    "themes": ["auteur", "arthouse", "european_cinema", "political", "premiere_platform", "industry_market"],
+    "notable_past_selections": ["Roma (2018)", "Joker (2019)", "Nomadland (2020)", "Poor Things (2023)"],
+    "notes": "Extremely competitive with strict premiere expectations; submit only if the film can credibly carry an A-list launch.",
+    "confidence": "high"
+  },
+  {
+    "id": "dc-shorts-international-film-festival",
+    "focus": "DC Shorts is an audience-oriented international shorts festival in Washington, DC, programming compact fiction, documentary, animation, comedy, drama, and socially relevant work. Its audience rewards clarity, craft, and memorable storytelling across a broad short-form mix.",
+    "award_patterns": "Favoured shorts tend to be polished, emotionally immediate, and strong enough to connect quickly with a general audience or issue-aware jury.",
+    "themes": ["short_form", "documentary", "animation", "comedy", "human_rights", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Good for U.S. shorts exposure and audience response, with practical value higher for completed shorts than for prestige-only strategies.",
+    "confidence": "medium"
+  },
+  {
+    "id": "nafa-international-ethnographic-film-festival",
+    "focus": "NAFA is an ethnographic film festival associated with visual anthropology, programming observational, research-based, community-rooted, and culturally specific nonfiction. Its identity is academic and anthropological rather than commercial, with interest in cultural practice, fieldwork, Indigenous knowledge, and everyday life.",
+    "award_patterns": "Favoured works usually show ethical access, cultural specificity, observational patience, and strong anthropological value.",
+    "themes": ["ethnographic", "documentary", "indigenous", "rural", "essay_film", "regional"],
+    "notable_past_selections": [],
+    "notes": "Best for ethnographic and research-grounded documentaries; mainstream social-issue docs without anthropological depth may be a weak fit.",
+    "confidence": "medium"
+  },
+  {
+    "id": "addis-international-film-festival",
+    "focus": "Addis International Film Festival is best treated as an Ethiopian human-rights and social-issue festival context, suited to documentaries and independent films about justice, development, identity, conflict, and civic life. Its strongest fit is work that can speak to African audiences and NGOs as well as general festival viewers.",
+    "award_patterns": "Awards are likely to favour films with visible social impact, urgent human stories, and relevance to rights, democracy, or community resilience.",
+    "themes": ["human_rights", "documentary", "political", "social_realism", "migration", "regional", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Consider for impact-oriented African or global-south outreach, but verify current festival activity and submission terms before paying fees.",
+    "confidence": "low"
+  },
+  {
+    "id": "palm-springs-international-shortfest",
+    "focus": "Palm Springs ShortFest is one of North America's premier short-film festivals, programming a large international slate across fiction, documentary, animation, student work, genre, and comedy. It is highly industry-facing and especially valuable for shorts seeking awards qualification, sales attention, or talent discovery.",
+    "award_patterns": "Awards favour exceptionally polished shorts with clear directorial control, strong emotional or conceptual impact, and professional festival packaging.",
+    "themes": ["short_form", "auteur", "animation", "documentary", "comedy", "student", "industry_market", "premiere_platform"],
+    "notable_past_selections": [],
+    "notes": "Very competitive for shorts; strong fit for films that already look awards-ready or filmmaker-discovery-ready.",
+    "confidence": "high"
+  },
+  {
+    "id": "oslo-pix-filmfestival",
+    "focus": "Oslo Pix is a curated Norwegian audience festival for contemporary international and Nordic cinema, mixing art-house discoveries, accessible festival hits, documentaries, and urban cultural programming. It is a good fit for stylish, socially alert films that can reach younger and cinephile city audiences.",
+    "award_patterns": "Favoured films tend to combine festival credibility with audience accessibility, contemporary themes, and strong Nordic or European relevance.",
+    "themes": ["arthouse", "european_cinema", "documentary", "urban", "youth", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Useful for Nordic exposure after a larger premiere, but not usually a primary world-premiere target for international distributors.",
+    "confidence": "medium"
+  },
+  {
+    "id": "exground-filmfestival",
+    "focus": "Exground Filmfest in Wiesbaden is an independent festival with a taste for international discoveries, shorts, youth work, country focuses, and off-mainstream cinema. Its identity is cinephile but approachable, favoring films with cultural specificity, energy, and independent attitude.",
+    "award_patterns": "Awards often favour independent voices, strong shorts or debut work, and films that connect with young or adventurous local audiences.",
+    "themes": ["arthouse", "first_feature", "short_form", "youth", "european_cinema", "regional", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Good for German regional visibility and youth-oriented sections, with moderate prestige and limited premiere pressure.",
+    "confidence": "medium"
+  },
+  {
+    "id": "espoo-cine-international-film-festival",
+    "focus": "Espoo Ciné is a Finnish festival with a strong European-cinema identity, programming contemporary art-house, quality mainstream, youth-friendly, and genre-adjacent films for Greater Helsinki audiences. It suits films that are accessible but still carry festival taste, especially European work needing Nordic audience exposure.",
+    "award_patterns": "Favoured films tend to be audience-friendly European art-house titles with emotional clarity, craft, and contemporary social texture.",
+    "themes": ["european_cinema", "arthouse", "genre", "youth", "local_audience", "regional"],
+    "notable_past_selections": [],
+    "notes": "Best used as a Nordic regional festival after stronger premiere positioning, especially for European titles.",
+    "confidence": "medium"
+  },
+  {
+    "id": "mdoc-melgaco-idf",
+    "focus": "MDOC Melgaço is a Portuguese documentary festival associated with memory, identity, territory, border regions, and human communities. It is a strong match for intimate nonfiction about place, migration, rural life, cultural continuity, and the relationship between people and landscape.",
+    "award_patterns": "Favoured films are likely to be humanist, place-based documentaries with observational patience and clear social or cultural identity themes.",
+    "themes": ["documentary", "rural", "migration", "ethnographic", "regional", "social_realism", "european_cinema"],
+    "notable_past_selections": [],
+    "notes": "A focused regional doc festival worth targeting when the film's themes align with identity, border, or territory rather than generic nonfiction.",
+    "confidence": "medium"
+  },
+  {
+    "id": "docsmx",
+    "focus": "DocsMX is a major Mexico City documentary festival, programming international and Latin American nonfiction across social issues, creative documentary, youth education, and public screenings. It is well suited to films with strong civic relevance, Latin American resonance, or documentary craft that can travel beyond specialist audiences.",
+    "award_patterns": "Awards tend to favour documentaries with social urgency, cinematic access, and a clear relationship to contemporary public life.",
+    "themes": ["documentary", "latinx", "human_rights", "political", "social_realism", "urban", "industry_market"],
+    "notable_past_selections": [],
+    "notes": "A valuable Latin American documentary platform, particularly for Spanish-language outreach, impact campaigns, and regional networking.",
+    "confidence": "high"
+  },
+  {
+    "id": "international-ethnographic-film-festival-oko",
+    "focus": "OKO is an ethnographic documentary festival rooted in Ukrainian and regional cultural contexts, oriented toward films about traditions, communities, identity, memory, and cultural survival. It is especially relevant for observational nonfiction, minority cultures, rural life, and work shaped by displacement or war.",
+    "award_patterns": "Favoured films likely combine ethnographic specificity with emotional clarity and visible respect for the communities represented.",
+    "themes": ["documentary", "ethnographic", "war", "rural", "migration", "regional", "social_realism"],
+    "notable_past_selections": [],
+    "notes": "Best for culturally specific documentaries; verify current location, dates, and operational status because Ukrainian festivals may adapt during wartime.",
+    "confidence": "medium"
+  },
+  {
+    "id": "japan-prize",
+    "focus": "Japan Prize is an NHK-backed international competition for educational audiovisual media, closer to a public-service television and learning-media award than a conventional film festival. It suits documentaries, children's media, science, social-issue, and factual storytelling designed to inform, teach, or expand public understanding.",
+    "award_patterns": "Awards favour works with clear educational value, strong public-service purpose, credible research, and accessible storytelling for defined audiences.",
+    "themes": ["documentary", "science", "youth", "family", "medical", "human_rights", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Submit only if the film has an educational or broadcast-public-service profile; pure art-house fiction is unlikely to fit.",
+    "confidence": "high"
+  },
+  {
+    "id": "melbourne-international-film-festival",
+    "focus": "Melbourne International Film Festival is a major Australian festival programming global auteur cinema, documentaries, genre discoveries, local Australian work, First Nations stories, and Asia-Pacific cinema for a large cinephile public. It balances prestigious international festival titles with regional premieres and a strong national industry role.",
+    "award_patterns": "Favoured films tend to combine critical credibility, bold craft, cultural urgency, and strong resonance for Australian or Asia-Pacific audiences.",
+    "themes": ["auteur", "arthouse", "documentary", "genre", "indigenous", "asian_cinema", "industry_market", "premiere_platform"],
+    "notable_past_selections": [],
+    "notes": "Competitive and valuable for Australian launch strategy; premiere status and regional relevance can materially affect chances.",
+    "confidence": "high"
+  },
+  {
+    "id": "peloponnisos-international-documentary-festival",
+    "focus": "Peloponnisos International Documentary Festival is a regional Greek documentary event centered on social, cultural, historical, and human-interest nonfiction for audiences beyond Athens. It is a natural fit for accessible documentaries about communities, migration, memory, education, and Mediterranean life.",
+    "award_patterns": "Favoured films are likely to be clear, humane documentaries with social value and strong audience communication.",
+    "themes": ["documentary", "mediterranean", "social_realism", "migration", "historical", "regional", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "A practical Mediterranean regional platform, especially useful when Greek or Balkan audience engagement is strategically relevant.",
+    "confidence": "medium"
+  },
+  {
+    "id": "astra-iff",
+    "focus": "Astra Film Festival in Sibiu is a respected documentary and visual-anthropology festival with a long-standing focus on creative nonfiction, ethnographic cinema, Central and Eastern Europe, and social observation. It suits documentaries that combine cultural specificity with cinematic form and patient human access.",
+    "award_patterns": "Awards tend to favour observational, anthropological, and socially engaged documentaries with strong craft and ethical depth.",
+    "themes": ["documentary", "ethnographic", "european_cinema", "social_realism", "rural", "political", "regional"],
+    "notable_past_selections": [],
+    "notes": "A strong target for ethnographic or Eastern European nonfiction, but less suitable for slick advocacy docs without cultural depth.",
+    "confidence": "high"
+  },
+  {
+    "id": "ideal-international-film-festival",
+    "focus": "iDEAL International Film Festival appears to be a small Maharashtra-based broad international festival open to independent fiction, documentary, and short work. Its programming identity is likely generalist and filmmaker-friendly, with emphasis on participation, craft, and accessible stories.",
+    "award_patterns": "Awards are likely to favour clear storytelling, visible production effort, and films that stand out in a broad independent submission pool.",
+    "themes": ["arthouse", "regional", "asian_cinema", "first_feature", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Use only for low-cost laurels or Indian regional visibility, and confirm screening and judging practices before relying on it.",
+    "confidence": "low"
+  },
+  {
+    "id": "locarno-iff-semaine-de-la-critique",
+    "focus": "Locarno's Semaine de la critique is an independent critics' sidebar focused on creative documentary within the Locarno ecosystem. It favours rigorous, cinematic nonfiction with authorial vision, political or ethical complexity, and the festival pedigree expected around an A-list art-cinema event.",
+    "award_patterns": "Favoured works are typically formally strong documentaries with critical ambition, distinctive access, and international premiere value.",
+    "themes": ["documentary", "auteur", "arthouse", "essay_film", "political", "european_cinema", "premiere_platform"],
+    "notable_past_selections": [],
+    "notes": "Highly selective and premiere-sensitive; best for documentaries that can withstand serious critics' scrutiny and benefit from Locarno adjacency.",
+    "confidence": "high"
+  },
+  {
+    "id": "sarasota-iff",
+    "focus": "Sarasota Film Festival is a Florida-based independent festival with a broad program of U.S. and international narratives, documentaries, shorts, and community-facing events. It tends to suit polished independent films with adult-audience appeal, arts-community relevance, or topical documentary hooks.",
+    "award_patterns": "Awards tend to favour accessible, well-made independent films that play strongly for juries and regional audiences.",
+    "themes": ["arthouse", "documentary", "comedy", "social_realism", "regional", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "A useful U.S. regional festival for audience-building and laurels, with moderate competitiveness and limited premiere strictness compared with top-tier events.",
+    "confidence": "medium"
+  },
+  {
+    "id": "documenta-madrid",
+    "focus": "Documenta Madrid is a significant Spanish documentary festival devoted to contemporary nonfiction, essay film, observational work, and formally adventurous documentary. Its Madrid identity gives it a strong urban, Spanish, and Ibero-American audience while remaining international in curatorial taste.",
+    "award_patterns": "Awards often favour creative documentaries with a strong cinematic point of view, formal clarity, and social or philosophical depth.",
+    "themes": ["documentary", "essay_film", "experimental", "human_rights", "latinx", "european_cinema", "urban"],
+    "notable_past_selections": [],
+    "notes": "A strong fit for creative nonfiction and Spanish-language or Ibero-American positioning; conventional TV-style docs may be less competitive.",
+    "confidence": "high"
+  },
+  {
+    "id": "art-film-fest",
+    "focus": "Art Film Fest is a Slovak international festival oriented toward art-house cinema, European and Central European films, actor-driven features, and quality international selections for a regional public. It is appropriate for accessible auteur films, culturally serious dramas, and films with strong performance or visual-art values.",
+    "award_patterns": "Awards tend to favour polished art-house work with strong acting, directorial assurance, and clear cultural identity.",
+    "themes": ["art", "arthouse", "auteur", "european_cinema", "regional", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Worth considering for Central European visibility, but confirm current edition scale and location before assigning high strategic value.",
+    "confidence": "medium"
+  },
+  {
+    "id": "shanghai-tv-film-festival",
+    "focus": "Shanghai TV Festival is a major Chinese television and audiovisual festival rather than a conventional indie-film showcase, with programming and awards around series, documentaries, animation, factual programming, and broadcast industry activity. It suits polished audiovisual work with public-facing, educational, documentary, or mainstream appeal for a China-facing market.",
+    "award_patterns": "Awards favour high-production-value works with clear storytelling, broad audience readability, and relevance to television or public-service media categories.",
+    "themes": ["documentary", "animation", "asian_cinema", "industry_market", "local_audience", "science", "family"],
+    "notable_past_selections": [],
+    "notes": "Only target if the project fits television, documentary, or broadcast categories; independent theatrical fiction may not align with the event's core identity.",
+    "confidence": "high"
+  },
+  {
+    "id": "yerevan-international-short-film-festival",
+    "focus": "Yerevan International Short Film Festival appears to be a small Armenian short-form and independent cinema event with a broad international outlook. It is likely most relevant for concise fiction, documentary, and experimental works that can connect with Caucasus regional audiences and emerging filmmakers.",
+    "award_patterns": "Favoured work is likely to be compact, clearly authored, and culturally distinctive within a broad short-film selection.",
+    "themes": ["short_form", "arthouse", "regional", "asian_cinema", "european_cinema", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Use as a low-to-moderate-stakes regional short-film opportunity, checking fees and the festival's current public footprint.",
+    "confidence": "low"
+  },
+  {
+    "id": "durban-international-film-festival",
+    "focus": "Durban International Film Festival is one of Africa's key festivals, programming African cinema, global art-house films, documentaries, and politically engaged work with a strong Global South orientation. Its Durban FilmMart connection makes it especially relevant for African and diaspora projects seeking industry attention.",
+    "award_patterns": "Awards tend to favour socially urgent, cinematically strong films with African, postcolonial, or Global South resonance.",
+    "themes": ["arthouse", "documentary", "black_cinema", "human_rights", "political", "migration", "industry_market", "premiere_platform"],
+    "notable_past_selections": [],
+    "notes": "A strategic target for African, diaspora, and politically engaged films; regional relevance can significantly improve fit.",
+    "confidence": "high"
+  },
+  {
+    "id": "sydney-film-festival-sff",
+    "focus": "Sydney Film Festival is a major Australian public and industry festival, presenting international auteur cinema, documentaries, genre discoveries, Australian features, and Asia-Pacific work to a large urban audience. Its Official Competition emphasizes courageous, audacious, and cutting-edge cinema while the broader program rewards accessibility and event value.",
+    "award_patterns": "Prize contenders often combine critical heat, bold formal choices, social urgency, and the ability to excite a large cinephile audience.",
+    "themes": ["auteur", "arthouse", "documentary", "genre", "asian_cinema", "urban", "industry_market", "premiere_platform"],
+    "notable_past_selections": ["Parasite (2019)"],
+    "notes": "Competitive and valuable for Australian premieres; strong prior festival pedigree can help, but audience-facing clarity still matters.",
+    "confidence": "high"
+  },
+  {
+    "id": "social-film-festival-artelesia",
+    "focus": "Social Film Festival Artelesia is an Italian social-impact festival with a clear emphasis on disability, inclusion, education, and civic awareness. It is best suited to films that address accessibility, marginalization, youth, community care, or social barriers in an emotionally direct way.",
+    "award_patterns": "Awards are likely to favour empathetic, accessible films with clear social messages and visible commitment to inclusion.",
+    "themes": ["disability", "human_rights", "social_realism", "youth", "family", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "A strong niche fit for disability or inclusion stories, but less useful for films whose social angle is incidental.",
+    "confidence": "medium"
+  },
+  {
+    "id": "the-fine-arts-film-festival",
+    "focus": "The Fine Arts Film Festival targets films about artists, art history, visual culture, museums, dance, design, and the creative process. It suits documentaries and art-centered fiction or experimental work that can engage gallery, museum, and culturally literate audiences.",
+    "award_patterns": "Favoured films are likely to offer strong visual craft, credible insight into artistic practice, and an accessible bridge between cinema and fine art.",
+    "themes": ["art", "documentary", "biography", "experimental", "historical", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Submit when art is central to the film's subject or form; general dramas with only an artist character may be a weaker fit.",
+    "confidence": "medium"
+  },
+  {
+    "id": "religion-today-film-festival",
+    "focus": "Religion Today Film Festival in Trento programs cinema about faith, spirituality, interreligious dialogue, ethics, peace, and cultural coexistence. It is a natural fit for documentaries and fiction that treat religion as lived experience, social identity, or a bridge across communities rather than as simple advocacy.",
+    "award_patterns": "Awards tend to favour humanist films that explore belief with nuance, empathy, and a commitment to dialogue or reconciliation.",
+    "themes": ["religion", "human_rights", "migration", "political", "social_realism", "family", "local_audience"],
+    "notable_past_selections": [],
+    "notes": "Best for spiritually or interfaith-themed films; avoid submitting unless religion is a substantive part of the film's identity.",
+    "confidence": "high"
+  }
+]

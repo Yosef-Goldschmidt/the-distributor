@@ -1,0 +1,529 @@
+[
+ {
+  "id": "international-young-audience-film-festival-ale-kino",
+  "name": "International Young Audience Film Festival Ale Kino!",
+  "city": "Poznan",
+  "country": "Poland",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": null,
+  "website": "https://alekino.com/en/"
+ },
+ {
+  "id": "bergen-iff",
+  "name": "Bergen IFF",
+  "city": "Bergen",
+  "country": "Norway",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "human_rights"
+  ],
+  "month": "October",
+  "website": "https://www.biff.no/article/biff-2023-1826-oktober"
+ },
+ {
+  "id": "l-alternativa-barcelona-independent-ff",
+  "name": "L'Alternativa- Barcelona Independent FF",
+  "city": "Barcelona",
+  "country": "Spain",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://alternativa.cccb.org/"
+ },
+ {
+  "id": "kolkata-s-people-film-festival",
+  "name": "Kolkata's People Film Festival",
+  "city": "Kokata",
+  "country": "India",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": null
+ },
+ {
+  "id": "brussels-iff",
+  "name": "Brussels IFF",
+  "city": "Brussels",
+  "country": "Belgium",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/BrusselsInternationalFilmFestival"
+ },
+ {
+  "id": "edinburgh-film-festival",
+  "name": "Edinburgh Film Festival",
+  "city": "Edinburgh",
+  "country": "Scotland",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "February",
+  "website": "https://filmfreeway.com/FFIEDINBURGH"
+ },
+ {
+  "id": "teaneck-iff",
+  "name": "Teaneck IFF",
+  "city": "Teaneck",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/TeaneckInternationalFilmFestival"
+ },
+ {
+  "id": "the-molodist-kyiv-iff",
+  "name": "The Molodist Kyiv IFF",
+  "city": "Kyiv",
+  "country": "Ukraine",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general",
+   "first_feature"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/Molodist"
+ },
+ {
+  "id": "musical-ecran",
+  "name": "Musical Écran",
+  "city": "Bordeaux",
+  "country": "France",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "music"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/musicalecran"
+ },
+ {
+  "id": "medfilm-festival",
+  "name": "MedFilm Festival",
+  "city": "Rome",
+  "country": "Italy",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "mediterranean"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/MedFilmFestival"
+ },
+ {
+  "id": "middle-east-now",
+  "name": "Middle East Now",
+  "city": "Florence",
+  "country": "Italy",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "mediterranean"
+  ],
+  "month": "October",
+  "website": "https://middleastnow.it/en/film-submission-2/"
+ },
+ {
+  "id": "gaseback-iff",
+  "name": "Gaseback IFF",
+  "city": "Helsingborg",
+  "country": "Sweden",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "August",
+  "website": "https://filmfreeway.com/GasebackFilmFestival"
+ },
+ {
+  "id": "euroshorts-young-filmmakers",
+  "name": "Euroshorts Young Filmmakers",
+  "city": "Warsaw",
+  "country": "Poland",
+  "tier": "B",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form",
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmfreeway.com/euroshorts"
+ },
+ {
+  "id": "barcelona-human-rights-film-festival",
+  "name": "Barcelona Human Rights Film Festival",
+  "city": "Barcelona",
+  "country": "Spain",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": "December",
+  "website": "https://filmfreeway.com/HumanRightsFilmFestivalBARCELONAParisNYC"
+ },
+ {
+  "id": "sima-awards",
+  "name": "SIMA Awards",
+  "city": null,
+  "country": null,
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "human_rights"
+  ],
+  "month": null,
+  "website": "https://simaawards.org/submit/"
+ },
+ {
+  "id": "rose-d-or",
+  "name": "Rose D'or",
+  "city": "London",
+  "country": "UK",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": "https://www.rosedor.com/rules-and-regulations-2025/"
+ },
+ {
+  "id": "indiejunior",
+  "name": "IndieJunior",
+  "city": "Porto",
+  "country": "Portugal",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "January",
+  "website": "https://filmfreeway.com/indiejunior"
+ },
+ {
+  "id": "fipadoc-biarritz-iff",
+  "name": "FIPADOC Biarritz IFF",
+  "city": "Biarritz",
+  "country": "France",
+  "tier": "B",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": "January",
+  "website": "https://film-fipadoc.festicine.pro/en"
+ },
+ {
+  "id": "accessible-film-festival",
+  "name": "Accessible Film Festival",
+  "city": "Ankara",
+  "country": "Turkey",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "May",
+  "website": "https://filmfreeway.com/AccessibleFilmFestival"
+ },
+ {
+  "id": "cannes-iff",
+  "name": "Cannes IFF",
+  "city": "Cannes",
+  "country": "France",
+  "tier": "A",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": null
+ },
+ {
+  "id": "cine-por-mujeres",
+  "name": "Cine por mujeres",
+  "city": "Madrid",
+  "country": "Spain",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers"
+  ],
+  "month": "November",
+  "website": null
+ },
+ {
+  "id": "cinekid",
+  "name": "Cinekid",
+  "city": "Amsterdam",
+  "country": "Netherlands",
+  "tier": "B+",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": null,
+  "website": "https://cinekid.nl/en/professionals/entries"
+ },
+ {
+  "id": "doxs-documentaries-for-children-and-young-people",
+  "name": "Doxs! - Documentaries for Children and Young People",
+  "city": null,
+  "country": "Germany",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": null,
+  "website": "https://www.do-xs.de/"
+ },
+ {
+  "id": "femart",
+  "name": "FemArt",
+  "city": "Prishtina",
+  "country": "Kosovo",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers"
+  ],
+  "month": "May",
+  "website": "https://femart-ks.com/"
+ },
+ {
+  "id": "festival-mix-mexico",
+  "name": "Festival Mix Mexico",
+  "city": "Mexico City",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "lgbtq"
+  ],
+  "month": "June",
+  "website": "https://filmfreeway.com/FestivalMix"
+ },
+ {
+  "id": "helsinki-film-festival",
+  "name": "Helsinki Film Festival",
+  "city": "Helsinki",
+  "country": "Finland",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": null
+ },
+ {
+  "id": "in-the-palace-short-iff-oscar-qulified",
+  "name": "in the Palace Short IFF (Oscar Qulified)",
+  "city": null,
+  "country": "Bulgaria",
+  "tier": "B",
+  "category": "Short IFF",
+  "focus_tag": [
+   "short_form",
+   "general"
+  ],
+  "month": null,
+  "website": null
+ },
+ {
+  "id": "international-young-audience-film-festival-ale-kino-2",
+  "name": "International Young Audience Film Festival Ale Kino!",
+  "city": "Poznan",
+  "country": "Poland",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "November",
+  "website": "https://alekino.com/en/"
+ },
+ {
+  "id": "la-cabina-iff-international-medium-length-ff",
+  "name": "La Cabina IFF (International Medium-Length FF)",
+  "city": "Valencia",
+  "country": "Spain",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "November",
+  "website": "https://filmmakers.festhome.com/festival/la-cabina-international-medium-length-film-festival"
+ },
+ {
+  "id": "milano-international-film-festival",
+  "name": "Milano International Film Festival",
+  "city": "Milan",
+  "country": "Italy",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": null
+ },
+ {
+  "id": "nordic-filmdays-luebeck",
+  "name": "Nordic Filmdays Luebeck",
+  "city": "Luebeck",
+  "country": "Germany",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": null,
+  "website": "https://www.nordische-filmtage.de/en/"
+ },
+ {
+  "id": "olympia-international-film-festival-for-children-and-young-p",
+  "name": "Olympia International Film Festival for Children and Young People",
+  "city": "Olympia",
+  "country": "Greece",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": "December",
+  "website": "https://filmfreeway.com/olympiaintlfilmfest"
+ },
+ {
+  "id": "oulu-international-children-s-and-youth-ff",
+  "name": "Oulu International Children's and Youth FF",
+  "city": "Oulu",
+  "country": "Finland",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": null,
+  "website": "https://www.oulufilmfestival.fi/en/home/"
+ },
+ {
+  "id": "saga-adelaide",
+  "name": "SAGA Adelaide",
+  "city": "Adelaide",
+  "country": "Australia",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers"
+  ],
+  "month": null,
+  "website": "https://filmfreeway.com/SAGAAdelaideWIFF"
+ },
+ {
+  "id": "superfest-disability-film-festival",
+  "name": "Superfest Disability Film Festival",
+  "city": "San Francisco",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "disability"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/Superfest"
+ },
+ {
+  "id": "tartu-iff",
+  "name": "Tartu IFF",
+  "city": "Tartu",
+  "country": "Estonia",
+  "tier": "C",
+  "category": "Doc",
+  "focus_tag": [
+   "documentary",
+   "general"
+  ],
+  "month": null,
+  "website": "http://www.worldfilm.ee/team"
+ },
+ {
+  "id": "vermont-iff",
+  "name": "Vermont IFF",
+  "city": "Vermont",
+  "country": "USA",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "general"
+  ],
+  "month": "October",
+  "website": "https://vtiff.org/vtiff-festivals/"
+ },
+ {
+  "id": "vienna-international-children-s-ff",
+  "name": "Vienna International Children's FF",
+  "city": "Vienna",
+  "country": "Austria",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "youth"
+  ],
+  "month": null,
+  "website": "https://www.kinderfilmfestival.at/en/the-festival/"
+ },
+ {
+  "id": "noff-women-s-nights-film-festival",
+  "name": "NOFF Women's Nights Film Festival",
+  "city": "Tallin",
+  "country": "Estonia",
+  "tier": "B",
+  "category": "IFF",
+  "focus_tag": [
+   "women_filmmakers"
+  ],
+  "month": null,
+  "website": "https://filmfreeway.com/WomenFilmFestivalinRaplaEstonia"
+ },
+ {
+  "id": "alternative-film-festival",
+  "name": "Alternative Film Festival",
+  "city": "Medellin",
+  "country": "Colombia",
+  "tier": "C",
+  "category": "IFF",
+  "focus_tag": [
+   "ethnographic"
+  ],
+  "month": "October",
+  "website": "https://filmfreeway.com/alternativa_film_festival"
+ }
+]
