@@ -64,11 +64,11 @@ def main() -> None:
                 "id": festival["id"],
                 "values": vector,
                 "metadata": {
-                    "name": festival.get("name", ""),
-                    "country": festival.get("country", ""),
-                    "tier": festival.get("tier", ""),
-                    "category": festival.get("category", ""),
-                    "themes": festival.get("themes", []) or [],
+                    "name": festival.get("name") or "",
+                    "country": festival.get("country") or "",
+                    "tier": festival.get("tier") or "",
+                    "category": festival.get("category") or "",
+                    "themes": [theme for theme in (festival.get("themes") or []) if theme],
                 },
             }
             for festival, vector in zip(batch, embeddings.embed(texts, input_type="passage"))

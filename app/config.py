@@ -29,9 +29,16 @@ def _clean(value: str | None) -> str:
 LLM_BASE_URL = _clean(os.getenv("LLM_BASE_URL")) or "https://api.llmod.ai/v1"
 LLM_API_KEY = _clean(os.getenv("LLM_API_KEY"))
 LLM_MODEL = _clean(os.getenv("LLM_MODEL")) or "gpt-4o-mini"
-LLM_EMBED_MODEL = _clean(os.getenv("LLM_EMBED_MODEL"))
+LLM_EMBED_MODEL = _clean(os.getenv("LLM_EMBED_MODEL")) or _clean(os.getenv("LLM_EMBEDDING_MODEL"))
 LLM_TIMEOUT_SECONDS = float(_clean(os.getenv("LLM_TIMEOUT_SECONDS")) or 90)
+# Left unset by default: reasoning models such as gpt-5-mini only accept temperature=1.
+_temperature = _clean(os.getenv("LLM_TEMPERATURE"))
+LLM_TEMPERATURE = float(_temperature) if _temperature else None
 LLM_MAX_OUTPUT_TOKENS = int(_clean(os.getenv("LLM_MAX_OUTPUT_TOKENS")) or 2000)
+# Hard ceiling for the automatic retry when reasoning tokens exhaust the budget.
+LLM_MAX_OUTPUT_TOKENS_CEILING = int(_clean(os.getenv("LLM_MAX_OUTPUT_TOKENS_CEILING")) or 16000)
+# "minimal"/"low"/"medium"/"high" on reasoning models; empty to omit the parameter.
+LLM_REASONING_EFFORT = _clean(os.getenv("LLM_REASONING_EFFORT")) or "low"
 
 # ------------------------------------------------------------------- Pinecone
 PINECONE_API_KEY = _clean(os.getenv("PINECONE_API_KEY"))
