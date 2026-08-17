@@ -106,18 +106,6 @@ STRATEGIC_VALUE = {
 
 NOISE = {"", "none", "n/a", "#n/a", "--", "-", "?", "tbd", "no info"}
 
-REAL_COMPANY = {
-    "id": "go2films",
-    "name": "Go2Films",
-    "country": "Israel",
-    "profile": (
-        "Jerusalem-based international distributor and world sales agent for Israeli and "
-        "Jewish-interest cinema, handling documentary and fiction features plus shorts. "
-        "Runs a large recurring circuit of Jewish film festivals, cultural institutions and "
-        "embassies alongside international festival submissions."
-    ),
-}
-
 ANON_COMPANY = {
     "id": "meridian-films",
     "name": "Meridian Films",
@@ -129,6 +117,19 @@ ANON_COMPANY = {
         "embassies alongside international festival submissions."
     ),
 }
+
+# The real company's details live in an untracked local file so the published
+# repository never names the distributor. Same shape as ANON_COMPANY.
+REAL_COMPANY_PATH = ROOT / "data" / "real_company.json"
+
+
+def load_real_company() -> dict:
+    if not REAL_COMPANY_PATH.exists():
+        raise SystemExit(
+            f"--real-company needs {REAL_COMPANY_PATH}, an untracked file containing "
+            '{"id": ..., "name": ..., "country": ..., "profile": ...}.'
+        )
+    return json.loads(REAL_COMPANY_PATH.read_text(encoding="utf-8"))
 
 # Word pools for stable pseudonymous film titles.
 TITLE_A = [
@@ -528,7 +529,7 @@ def main() -> None:
         raise SystemExit(f"workbook not found: {path}")
 
     anonymiser = Anonymiser(enabled=not args.real_company)
-    company = REAL_COMPANY if args.real_company else ANON_COMPANY
+    company = load_real_company() if args.real_company else ANON_COMPANY
     print(
         f"company: {company['name']} "
         f"({'real data' if args.real_company else 'anonymised'})"

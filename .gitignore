@@ -5,3 +5,5 @@ __pycache__/
 .vercel
 .DS_Store
 data/anonymisation_map.json
+.ghconfig/
+data/real_company.json
