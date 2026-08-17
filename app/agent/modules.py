@@ -36,7 +36,7 @@ def _truncate(text: Any, limit: int) -> Any:
 def planner(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, Any]:
     system = prompts.PLANNER.format(catalog=", ".join(prompts.TASK_CATALOG))
     user = json.dumps({"user_request": user_prompt, "today": today()}, ensure_ascii=False)
-    plan = llm.complete_json(system, user, max_tokens=600)
+    plan = llm.complete_json(system, user, max_tokens=2500)
 
     tasks = [t for t in plan.get("tasks", []) if t.get("module") in prompts.TASK_CATALOG]
     ordered = [
@@ -57,7 +57,7 @@ def planner(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, Any]:
 # ---------------------------------------------------------------- FilmAnalyzer
 def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, Any]:
     user = json.dumps({"film_description": user_prompt}, ensure_ascii=False)
-    profile = llm.complete_json(prompts.FILM_ANALYZER, user, max_tokens=800)
+    profile = llm.complete_json(prompts.FILM_ANALYZER, user, max_tokens=3000)
     trace.add("FilmAnalyzer", {"system": prompts.FILM_ANALYZER, "user": user}, profile)
     return profile
 
@@ -203,7 +203,7 @@ def match_scorer(
         payload["revision_instructions"] = revision_instructions
 
     user = json.dumps(payload, ensure_ascii=False)
-    result = llm.complete_json(prompts.MATCH_SCORER, user, max_tokens=3000)
+    result = llm.complete_json(prompts.MATCH_SCORER, user, max_tokens=9000)
     trace.add("MatchScorer", {"system": prompts.MATCH_SCORER, "user": user}, result)
 
     return {row["id"]: row for row in result.get("scores", []) if row.get("id")}
@@ -241,7 +241,7 @@ def risk_checker(
         ],
     }
     user = json.dumps(payload, ensure_ascii=False)
-    result = llm.complete_json(prompts.RISK_CHECKER, user, max_tokens=2000)
+    result = llm.complete_json(prompts.RISK_CHECKER, user, max_tokens=5000)
     trace.add("RiskChecker", {"system": prompts.RISK_CHECKER, "user": user}, result)
 
     return {row["id"]: row for row in result.get("risks", []) if row.get("id")}
@@ -349,7 +349,7 @@ def roadmap_builder(
         payload["revision_instructions"] = revision_instructions
 
     user = json.dumps(payload, ensure_ascii=False)
-    roadmap = llm.complete_json(prompts.ROADMAP_BUILDER, user, max_tokens=2500)
+    roadmap = llm.complete_json(prompts.ROADMAP_BUILDER, user, max_tokens=7000)
     trace.add("RoadmapBuilder", {"system": prompts.ROADMAP_BUILDER, "user": user}, roadmap)
     return roadmap
 
@@ -375,6 +375,6 @@ def replanner(
         "open_questions": roadmap.get("open_questions"),
     }
     user = json.dumps(payload, ensure_ascii=False)
-    decision = llm.complete_json(prompts.REPLANNER, user, max_tokens=400)
+    decision = llm.complete_json(prompts.REPLANNER, user, max_tokens=2000)
     trace.add("Replanner", {"system": prompts.REPLANNER, "user": user}, decision)
     return decision
