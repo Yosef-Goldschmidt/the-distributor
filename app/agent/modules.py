@@ -293,6 +293,7 @@ def assemble(
             "evidence": evidence,
             "headline": scored.get("headline"),
             "premiere_risk": risk.get("premiere_risk", "none"),
+            "premiere_opportunity": bool(risk.get("premiere_opportunity")),
             "deadline_status": risk.get("deadline_status", "open"),
             "eligible": risk.get("eligible", True),
             "risk_note": risk.get("risk_note"),
@@ -319,6 +320,7 @@ def assemble(
                     "score": r["score"],
                     "base_score": r["base_score"],
                     "premiere_penalty": r["premiere_penalty"],
+                    "premiere_opportunity": r["premiere_opportunity"],
                     "bucket": r["bucket"],
                 }
                 for r in ranked
@@ -355,6 +357,7 @@ def roadmap_builder(
                 "deadline_month": r["deadline_month"],
                 "premiere_requirement": r["premiere_requirement"],
                 "premiere_risk": r["premiere_risk"],
+                "premiere_opportunity": r["premiere_opportunity"],
                 "deadline_status": r["deadline_status"],
                 "risk_note": _truncate(r.get("risk_note"), 160),
                 "evidence": r.get("evidence"),

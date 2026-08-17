@@ -119,15 +119,20 @@ def assign_bucket(candidate: dict[str, Any]) -> str:
     premiere_risk = (candidate.get("premiere_risk") or "none").lower()
     deadline_status = (candidate.get("deadline_status") or "open").lower()
     eligible = candidate.get("eligible", True)
+    opportunity = bool(candidate.get("premiere_opportunity"))
     relationship = _rating(candidate.get("ratings", {}).get("company_relationship"))
     tier = (candidate.get("tier") or "C").upper()
 
-    if not eligible or premiere_risk == "high" or score < 45:
+    if not eligible or score < 45:
+        return "hold_avoid"
+    # A festival the film can still world-premiere at is an opportunity, so it is
+    # never demoted for premiere risk alone.
+    if premiere_risk == "high" and not opportunity:
         return "hold_avoid"
     if deadline_status == "closed":
         # A real fit whose window has passed is a next-cycle target, not a reject.
         return "hold_avoid" if score < 70 else "prioritize_next"
-    if score >= 72 or tier in {"A", "B+"} and score >= 65:
+    if score >= 72 or (tier in {"A", "B+"} and score >= 65):
         return "submit_first"
     if relationship >= 4 and score >= 55:
         return "leverage"

@@ -56,6 +56,9 @@ COMPANY_ID = _clean(os.getenv("COMPANY_ID")) or "meridian-films"
 # ----------------------------------------------------------------- Agent knobs
 CANDIDATE_POOL_SIZE = int(_clean(os.getenv("CANDIDATE_POOL_SIZE")) or 16)
 MAX_REPLAN_ROUNDS = int(_clean(os.getenv("MAX_REPLAN_ROUNDS")) or 1)
+# A revision is skipped past this point so a run stays inside the 300s
+# serverless limit even in the worst case.
+REVISION_DEADLINE_SECONDS = float(_clean(os.getenv("REVISION_DEADLINE_SECONDS")) or 150)
 
 
 def llm_enabled() -> bool:

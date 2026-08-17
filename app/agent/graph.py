@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
@@ -28,6 +29,7 @@ def run(user_prompt: str) -> dict[str, Any]:
             "The festival corpus (data/festivals.json) is empty — seed it before running."
         )
 
+    started = time.monotonic()
     llm = LLMClient()
     trace = Trace()
 
@@ -92,6 +94,7 @@ def run(user_prompt: str) -> dict[str, Any]:
         decision.get("decision") == "revise"
         and revisions < config.MAX_REPLAN_ROUNDS
         and candidates
+        and time.monotonic() - started < config.REVISION_DEADLINE_SECONDS
     ):
         revisions += 1
         instructions = decision.get("revision_instructions") or decision.get("reason") or ""
@@ -104,6 +107,7 @@ def run(user_prompt: str) -> dict[str, Any]:
 
     by_id = {record["id"]: record for record in ranked}
     response = render_markdown(profile, roadmap, ranked, by_id)
+    elapsed = round(time.monotonic() - started, 1)
 
     return {
         "response": response,
@@ -113,6 +117,8 @@ def run(user_prompt: str) -> dict[str, Any]:
             "candidates_considered": len(candidates),
             "revision_rounds": revisions,
             "replanner_decision": decision.get("decision"),
+            "premiere_target": roadmap.get("premiere_target"),
+            "elapsed_seconds": elapsed,
             "llm_usage": llm.usage,
             "scoring_weights": scoring.weights_documentation(),
             "roadmap": {

@@ -148,9 +148,9 @@ def fake_complete_json(self, system, user, **kwargs):  # noqa: ANN001
     if system.startswith("You are RiskChecker"):
         CALLS.append("RiskChecker")
         risk = {
-            "idfa": ("none", "open", True, "World premiere is available."),
-            "docaviv": ("medium", "closing_soon", True, "Israeli premiere may conflict with IDFA timing."),
-            "sitges": ("none", "open", False, "Does not accept documentary."),
+            "idfa": ("none", "open", True, True, "World premiere is available."),
+            "docaviv": ("medium", "closing_soon", True, False, "Israeli premiere may conflict with IDFA timing."),
+            "sitges": ("none", "open", False, False, "Does not accept documentary."),
         }
         return {
             "risks": [
@@ -159,7 +159,8 @@ def fake_complete_json(self, system, user, **kwargs):  # noqa: ANN001
                     "premiere_risk": risk[candidate["id"]][0],
                     "deadline_status": risk[candidate["id"]][1],
                     "eligible": risk[candidate["id"]][2],
-                    "risk_note": risk[candidate["id"]][3],
+                    "premiere_opportunity": risk[candidate["id"]][3],
+                    "risk_note": risk[candidate["id"]][4],
                 }
                 for candidate in payload["candidates"]
             ]
@@ -227,6 +228,16 @@ def main() -> None:
 
     sitges = ranked["sitges"]
     assert sitges["bucket"] == "hold_avoid", sitges["bucket"]
+
+    # A world-premiere festival is an opportunity when the film still has its premiere.
+    premiere_case = {
+        "score": 85, "tier": "A", "deadline_status": "closing_soon", "eligible": True,
+        "premiere_risk": "high", "premiere_opportunity": True,
+        "ratings": {"company_relationship": 0},
+    }
+    assert scoring.assign_bucket(premiere_case) == "submit_first"
+    assert scoring.assign_bucket({**premiere_case, "premiere_opportunity": False}) == "hold_avoid"
+    assert scoring.assign_bucket({**premiere_case, "eligible": False}) == "hold_avoid"
 
     # Deadline urgency must be calendar-derived, never taken from the model.
     august_urgency, _ = scoring.deadline_urgency("August", date(2026, 8, 17))
