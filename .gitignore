@@ -7,3 +7,5 @@ __pycache__/
 data/anonymisation_map.json
 .ghconfig/
 data/real_company.json
+project.pdf
+AGENTS.md

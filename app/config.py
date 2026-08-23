@@ -31,6 +31,9 @@ LLM_API_KEY = _clean(os.getenv("LLM_API_KEY"))
 LLM_MODEL = _clean(os.getenv("LLM_MODEL")) or "gpt-4o-mini"
 LLM_EMBED_MODEL = _clean(os.getenv("LLM_EMBED_MODEL")) or _clean(os.getenv("LLM_EMBEDDING_MODEL"))
 LLM_TIMEOUT_SECONDS = float(_clean(os.getenv("LLM_TIMEOUT_SECONDS")) or 90)
+EMBED_TIMEOUT_SECONDS = float(_clean(os.getenv("EMBED_TIMEOUT_SECONDS")) or 20)
+PINECONE_TIMEOUT_SECONDS = float(_clean(os.getenv("PINECONE_TIMEOUT_SECONDS")) or 20)
+SUPABASE_TIMEOUT_SECONDS = float(_clean(os.getenv("SUPABASE_TIMEOUT_SECONDS")) or 15)
 # Left unset by default: reasoning models such as gpt-5-mini only accept temperature=1.
 _temperature = _clean(os.getenv("LLM_TEMPERATURE"))
 LLM_TEMPERATURE = float(_temperature) if _temperature else None
@@ -56,6 +59,10 @@ COMPANY_ID = _clean(os.getenv("COMPANY_ID")) or "meridian-films"
 # ----------------------------------------------------------------- Agent knobs
 CANDIDATE_POOL_SIZE = int(_clean(os.getenv("CANDIDATE_POOL_SIZE")) or 12)
 MAX_REPLAN_ROUNDS = int(_clean(os.getenv("MAX_REPLAN_ROUNDS")) or 1)
+MAX_PROMPT_CHARS = int(_clean(os.getenv("MAX_PROMPT_CHARS")) or 12000)
+# Leave headroom below Vercel's 300-second function ceiling for rendering and
+# returning a structured error instead of being terminated by the platform.
+RUN_DEADLINE_SECONDS = float(_clean(os.getenv("RUN_DEADLINE_SECONDS")) or 260)
 # A revision is skipped past this point so a run stays inside the 300s
 # serverless limit even in the worst case.
 REVISION_DEADLINE_SECONDS = float(_clean(os.getenv("REVISION_DEADLINE_SECONDS")) or 150)

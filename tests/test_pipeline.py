@@ -11,9 +11,10 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import tempfile
-from datetime import date, datetime, timezone
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,6 +39,8 @@ FESTIVALS = [
         "id": "docaviv", "name": "Docaviv", "country": "Israel", "city": "Tel Aviv",
         "region": "Middle East", "tier": "B", "month": "May", "typical_deadline_month": "January",
         "accepts": ["feature_doc", "short_doc"], "premiere_requirement": "national",
+        "premiere_requirement_raw": "World - Israel", "submission_open": "2026-09-01",
+        "final_deadline": "2027-01-15", "identity_confidence": "high",
         "competitive": True, "submission_fee_usd_range": "0-60",
         "focus": "Israel's leading documentary festival, strong on social and environmental subjects.",
         "themes": ["documentary", "israeli", "social_realism", "environmental"],
@@ -51,6 +54,8 @@ FESTIVALS = [
         "region": "Western Europe", "tier": "A", "month": "November",
         "typical_deadline_month": "August", "accepts": ["feature_doc", "short_doc"],
         "premiere_requirement": "world", "competitive": True, "submission_fee_usd_range": "40-100",
+        "premiere_requirement_raw": "World", "submission_open": "2026-04-01",
+        "final_deadline": "2026-08-30", "identity_confidence": "high",
         "focus": "The world's largest documentary festival; formally ambitious, politically engaged work.",
         "themes": ["documentary", "human_rights", "political", "environmental", "auteur"],
         "notable_past_selections": ["Children of the Mist (2021)", "The Etilaat Roz (2022)"],
@@ -64,6 +69,8 @@ FESTIVALS = [
         "region": "Western Europe", "tier": "B", "month": "October",
         "typical_deadline_month": "July", "accepts": ["feature_fiction", "short_fiction"],
         "premiere_requirement": "regional", "competitive": True,
+        "premiere_requirement_raw": "World - Spain", "submission_open": "2026-02-01",
+        "final_deadline": "2026-07-15", "identity_confidence": "high",
         "submission_fee_usd_range": "30-80",
         "focus": "The leading fantastic and genre film festival in Europe.",
         "themes": ["genre", "horror", "sci_fi", "thriller"],
@@ -96,107 +103,87 @@ for name in ("team_info.json", "prompt_examples.json"):
     if source.exists():
         (FIXTURE_DIR / name).write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
 
-from app.agent import graph, scoring  # noqa: E402
+from app.agent import graph, prompts, scoring  # noqa: E402
 from app.llm import LLMClient  # noqa: E402
 
 CALLS: list[str] = []
 
 
 def fake_complete_json(self, system, user, **kwargs):  # noqa: ANN001
-    self.usage["calls"] += 1
     payload = json.loads(user)
 
-    if system.startswith("You are the Planner"):
-        CALLS.append("Planner")
-        return {
-            "objective": "Build a festival strategy",
-            "tasks": [
-                {"module": module, "goal": "…"}
-                for module in [
-                    "FilmAnalyzer", "FestivalSearch", "CompanyMemory",
-                    "MatchScorer", "RiskChecker", "RoadmapBuilder",
-                ]
-            ],
-            "assumptions": [],
-        }
+    def complete(module, result):  # noqa: ANN001
+        CALLS.append(module)
+        self.usage["calls"] += 1
+        self.usage["attempts"] += 1
+        if self.trace_callback:
+            self.trace_callback(
+                kwargs.get("module", module),
+                {"system": system, "user": user, "provider": {"attempt": 1}},
+                result,
+            )
+        return result
 
     if system.startswith("You are FilmAnalyzer"):
-        CALLS.append("FilmAnalyzer")
-        return {
+        return complete("FilmAnalyzer", {
             "title": "Salt and Ash",
             "logline": "Three women fight to stay on collapsing salt flats.",
             "format": "feature_doc", "genres": ["documentary"],
             "themes": ["environmental", "women_filmmakers", "displacement"],
             "country": "Israel", "language": "Hebrew", "runtime_minutes": 89,
             "director_profile": "Second feature.", "premiere_status": "world_premiere_available",
+            "premiere_history": [],
             "target_audience": "Documentary and human-rights audiences",
             "festival_angles": ["environmental collapse"], "missing_info": [],
             "search_query": "Israeli environmental documentary about women resisting displacement",
-        }
+        })
 
     if system.startswith("You are MatchScorer"):
-        CALLS.append("MatchScorer")
         ratings = {
             "idfa": {"thematic_fit": 5, "genre_fit": 5, "lineup_similarity": 4,
-                     "company_relationship": 0, "strategic_value": 5},
+                     "strategic_value": 5},
             "docaviv": {"thematic_fit": 5, "genre_fit": 5, "lineup_similarity": 5,
-                        "company_relationship": 5, "strategic_value": 4},
+                        "strategic_value": 4},
             "sitges": {"thematic_fit": 0, "genre_fit": 0, "lineup_similarity": 0,
-                       "company_relationship": 0, "strategic_value": 1},
+                       "strategic_value": 1},
         }
-        return {
+        return complete("MatchScorer", {
             "scores": [
                 {
                     "id": candidate["id"],
                     "ratings": ratings.get(candidate["id"], {}),
-                    "evidence": {"thematic_fit": "stub"},
+                    "evidence": {
+                        "thematic_fit": "Theme overlap in supplied data",
+                        "genre_fit": "Accepted format and stated focus align",
+                        "lineup_similarity": "Past selections support the comparison",
+                        "strategic_value": "Tier and market role support the rating",
+                    },
                     "headline": f"stub headline for {candidate['id']}",
                 }
                 for candidate in payload["candidates"]
             ]
-        }
-
-    if system.startswith("You are RiskChecker"):
-        CALLS.append("RiskChecker")
-        risk = {
-            "idfa": ("none", "open", True, True, "World premiere is available."),
-            "docaviv": ("medium", "closing_soon", True, False, "Israeli premiere may conflict with IDFA timing."),
-            "sitges": ("none", "open", False, False, "Does not accept documentary."),
-        }
-        return {
-            "risks": [
-                {
-                    "id": candidate["id"],
-                    "premiere_risk": risk[candidate["id"]][0],
-                    "deadline_status": risk[candidate["id"]][1],
-                    "eligible": risk[candidate["id"]][2],
-                    "premiere_opportunity": risk[candidate["id"]][3],
-                    "risk_note": risk[candidate["id"]][4],
-                }
-                for candidate in payload["candidates"]
-            ]
-        }
+        })
 
     if system.startswith("You are RoadmapBuilder"):
-        CALLS.append("RoadmapBuilder")
         buckets: dict[str, list] = {
             "submit_first": [], "prioritize_next": [], "leverage": [], "hold_avoid": [],
         }
         for festival in payload["festivals"]:
             buckets[festival["bucket"]].append(
-                {"id": festival["id"], "why": "stub why", "action": "stub action"}
+                {
+                    "id": festival["id"],
+                    "evidence_dimensions": ["thematic_fit", "strategic_value"],
+                }
             )
-        return {
+        return complete("RoadmapBuilder", {
             "headline": "Launch at IDFA, then land the domestic premiere.",
-            "strategy_summary": "Stub summary.", "buckets": buckets,
+            "strategy_summary": "Stub summary.",
+            "premiere_target": payload.get("recommended_premiere_target"),
+            "buckets": buckets,
             "calendar": [{"month": "August", "action": "Submit to IDFA"}],
             "next_actions": ["Lock the world premiere plan"],
             "open_questions": ["Is the film finished by August?"],
-        }
-
-    if system.startswith("You are the Replanner"):
-        CALLS.append("Replanner")
-        return {"decision": "complete", "reason": "Roadmap is usable.", "revision_instructions": None}
+        })
 
     raise AssertionError(f"unexpected system prompt: {system[:60]}")
 
@@ -214,19 +201,17 @@ def main() -> None:
     result = graph.run("Salt and Ash, an Israeli environmental documentary.")
 
     modules_trace = [step["module"] for step in result["steps"]]
-    # MatchScorer and RiskChecker run concurrently, so their order is not fixed.
-    assert modules_trace[:3] == ["Planner", "FilmAnalyzer", "FestivalSearch"], modules_trace
-    assert modules_trace[3] == "CompanyMemory", modules_trace
-    assert set(modules_trace[4:6]) == {"MatchScorer", "RiskChecker"}, modules_trace
-    assert modules_trace[6:] == ["MatchScorer", "RoadmapBuilder", "Executor", "Replanner"], modules_trace
+    assert modules_trace == [
+        "Planner", "Executor", "FilmAnalyzer", "FilmAnalyzer", "CompanyMemory", "FestivalSearch",
+        "RiskChecker", "MatchScorer", "MatchScorer", "RoadmapBuilder", "Replanner",
+    ], modules_trace
     assert all({"module", "prompt", "response"} <= set(step) for step in result["steps"])
     modules_seen = set(modules_trace)
 
     ranked = {record["id"]: record for record in result["meta"]["ranked_festivals"]}
 
-    today = datetime.now(timezone.utc).date()
     idfa = ranked["idfa"]
-    urgency, _ = scoring.deadline_urgency("August", today)
+    urgency = idfa["deadline"]["urgency"]
     expected_idfa = round(
         (5 / 5) * scoring.WEIGHTS["thematic_fit"]
         + (5 / 5) * scoring.WEIGHTS["genre_fit"]
@@ -241,7 +226,8 @@ def main() -> None:
     assert idfa["evidence"].get("deadline_urgency"), "urgency evidence missing"
 
     docaviv = ranked["docaviv"]
-    assert docaviv["premiere_penalty"] == 7, docaviv["premiere_penalty"]
+    assert docaviv["premiere_penalty"] == 0, docaviv["premiere_penalty"]
+    assert docaviv["ratings"]["company_relationship"] == 2.5
     assert docaviv["bucket"] in {"submit_first", "leverage"}, docaviv["bucket"]
 
     sitges = ranked["sitges"]
@@ -270,7 +256,16 @@ def main() -> None:
     assert "IDFA" in result["response"]
     assert result["meta"]["revision_rounds"] == 0
     assert CALLS.count("MatchScorer") == 1 and CALLS.count("RoadmapBuilder") == 1
-    assert len(CALLS) == 6, f"expected 6 LLM calls, got {len(CALLS)}: {CALLS}"
+    assert len(CALLS) == 3, f"expected 3 LLM calls, got {len(CALLS)}: {CALLS}"
+    assert result["meta"]["premiere_target"]["id"] == "idfa"
+
+    bucket_ids = [
+        entry["id"]
+        for entries in result["meta"]["roadmap"]["buckets"].values()
+        for entry in entries
+    ]
+    assert sorted(bucket_ids) == sorted(ranked), bucket_ids
+    assert len(bucket_ids) == len(set(bucket_ids)), bucket_ids
 
     print("pipeline OK")
     print(f"  trace modules : {' -> '.join(modules_trace)}")
@@ -293,11 +288,11 @@ def main() -> None:
     assert body["status"] == "ok" and body["error"] is None and body["response"]
     assert isinstance(body["steps"], list) and body["steps"]
 
-    # Diagnostics are opt-in and must not leak into the default contract.
+    # Extra request fields can never add top-level response fields.
     with_meta = client.post(
         "/api/execute", json={"prompt": "Salt and Ash documentary", "include_meta": True}
     ).json()
-    assert set(with_meta) == {"status", "error", "response", "steps", "meta"}, set(with_meta)
+    assert set(with_meta) == {"status", "error", "response", "steps"}, set(with_meta)
 
     # A failure must still return the trace collected up to that point.
     def explode(self, system, user, **kwargs):  # noqa: ANN001
@@ -312,18 +307,46 @@ def main() -> None:
     assert failed["status"] == "error" and failed["response"] is None
     assert "simulated provider outage" in failed["error"], failed["error"]
     assert failed["steps"], "a partial trace must survive a mid-run failure"
-    assert [s["module"] for s in failed["steps"]][:2] == ["Planner", "FilmAnalyzer"]
+    assert [s["module"] for s in failed["steps"]][:2] == ["Planner", "Executor"]
 
     empty = client.post("/api/execute", json={"prompt": "  "}).json()
     assert empty["status"] == "error" and empty["response"] is None and empty["steps"] == []
 
+    oversized = client.post("/api/execute", json={"prompt": "x" * 12001}).json()
+    assert oversized["status"] == "error" and oversized["steps"] == []
+
+    malformed = client.post(
+        "/api/execute", content="{bad json", headers={"Content-Type": "application/json"}
+    ).json()
+    assert set(malformed) == {"status", "error", "response", "steps"}, malformed
+    assert malformed["status"] == "error" and malformed["steps"] == []
+
+    wrong_type = client.post("/api/execute", json={"prompt": {"title": "bad"}}).json()
+    assert set(wrong_type) == {"status", "error", "response", "steps"}, wrong_type
+    assert wrong_type["status"] == "error"
+
     team = client.get("/api/team_info").json()
     assert {"group_batch_order_number", "team_name", "students"} <= set(team)
+    assert re.fullmatch(r"\d+_\d+", team["group_batch_order_number"])
+    assert team["group_batch_order_number"] != "1_00"
+    assert all(
+        student.get("name")
+        and re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", student.get("email", ""))
+        and "REPLACE_ME" not in student["email"]
+        for student in team["students"]
+    )
 
     info = client.get("/api/agent_info").json()
     assert {"description", "purpose", "prompt_template", "prompt_examples"} <= set(info)
-    diagram_modules = {module["module"] for module in info["architecture"]["modules"]}
-    assert modules_seen <= diagram_modules, modules_seen - diagram_modules
+    architecture_modules = info["architecture"]["modules"]
+    canonical_modules = ["Planner", "Executor", *prompts.TASK_CATALOG, "Replanner"]
+    assert [module["module"] for module in architecture_modules] == canonical_modules
+    assert modules_seen == set(canonical_modules), set(canonical_modules) - modules_seen
+    architecture_types = {module["module"]: module["type"] for module in architecture_modules}
+    assert architecture_types["Planner"] == "deterministic control"
+    assert architecture_types["RiskChecker"] == "deterministic domain rules"
+    assert architecture_types["Replanner"] == "deterministic validator"
+    assert info["architecture"]["normal_chat_calls"] == 3
 
     png = client.get("/api/model_architecture")
     assert png.status_code == 200, png.text[:200]

@@ -14,8 +14,8 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from fastapi import FastAPI  # noqa: E402
-from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+from fastapi import FastAPI, Request  # noqa: E402
+from fastapi.exceptions import RequestValidationError  # noqa: E402
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
@@ -24,19 +24,26 @@ from app.agent import graph, prompts, scoring  # noqa: E402
 from app.stores import corpus, supabase_store  # noqa: E402
 
 app = FastAPI(title="The Distributor", description="AI agent for film festival strategy")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 class ExecuteRequest(BaseModel):
     prompt: str = Field(default="")
-    # Optional diagnostics for the GUI. Omitted by default so the response keeps
-    # exactly the four top-level fields required by the API contract.
-    include_meta: bool = Field(default=False)
+
+
+@app.exception_handler(RequestValidationError)
+async def request_validation_error(
+    _request: Request, _exc: RequestValidationError
+) -> JSONResponse:
+    """Keep malformed request bodies inside the course's exact error contract."""
+
+    return JSONResponse(
+        {
+            "status": "error",
+            "error": "The request body must be JSON with a string 'prompt' field.",
+            "response": None,
+            "steps": [],
+        }
+    )
 
 
 def _load_json(name: str, default: Any) -> Any:
@@ -66,6 +73,45 @@ def team_info() -> JSONResponse:
 @app.get("/api/agent_info")
 def agent_info() -> JSONResponse:
     examples = _load_json("prompt_examples.json", [])
+    module_details = {
+        "Planner": {
+            "type": "deterministic control",
+            "role": "Declares the complete domain evidence chain; required tasks cannot be omitted.",
+        },
+        "Executor": {
+            "type": "orchestrator",
+            "role": "Runs the evidence chain in dependency order under a serverless time budget.",
+        },
+        "FilmAnalyzer": {
+            "type": "llm",
+            "role": "Extracts supported film facts, premiere history, unknowns and a retrieval query.",
+        },
+        "CompanyMemory": {
+            "type": "retrieval tool",
+            "role": "Loads full company history before candidate generation and computes relationship strength.",
+        },
+        "FestivalSearch": {
+            "type": "hybrid retrieval tool",
+            "role": "Traces the embedding request, then combines Pinecone semantics, lexical relevance, company memory, Supabase facts and entity deduplication with explicit fallbacks.",
+        },
+        "RiskChecker": {
+            "type": "deterministic domain rules",
+            "role": "Validates exact/projected deadlines, format eligibility and premiere scope with confidence labels.",
+        },
+        "MatchScorer": {
+            "type": "llm + deterministic",
+            "role": "Rates four creative dimensions; code validates the schema, optionally requests one targeted repair, and adds company/deadline evidence, guardrails, weights and penalties.",
+        },
+        "RoadmapBuilder": {
+            "type": "llm",
+            "role": "Selects which supplied evidence to foreground and which facts remain open; code owns narrative, actions and sequencing.",
+        },
+        "Replanner": {
+            "type": "deterministic validator",
+            "role": "Checks completeness, uniqueness, evidence references, buckets and premiere-target invariants; revises only the roadmap if needed.",
+        },
+    }
+    module_order = ["Planner", "Executor", *prompts.TASK_CATALOG, "Replanner"]
     return JSONResponse(
         {
             "name": "The Distributor",
@@ -82,28 +128,28 @@ def agent_info() -> JSONResponse:
                 "existing relationships, and what to avoid because of premiere or deadline risk."
             ),
             "architecture": {
-                "pattern": "Plan-and-Execute (Planner -> Executor + tools -> Replanner)",
+                "pattern": "Plan-and-Execute with deterministic domain validation",
                 "modules": [
-                    {"module": "Planner", "type": "llm", "role": "Turns the request into an ordered task plan."},
-                    {"module": "Executor", "type": "orchestrator", "role": "Runs planned tasks through the tool modules."},
-                    {"module": "FilmAnalyzer", "type": "llm", "role": "Extracts the festival-relevant film profile."},
-                    {"module": "FestivalSearch", "type": "tool", "role": "Pinecone semantic retrieval over the festival corpus + Supabase facts."},
-                    {"module": "CompanyMemory", "type": "tool", "role": "Supabase lookup of the company's prior festival history."},
-                    {"module": "MatchScorer", "type": "llm + deterministic", "role": "Rates six dimensions 0-5; code applies the weights."},
-                    {"module": "RiskChecker", "type": "llm", "role": "Premiere, eligibility and deadline risk per festival."},
-                    {"module": "RoadmapBuilder", "type": "llm", "role": "Writes the bucketed strategic roadmap."},
-                    {"module": "Replanner", "type": "llm", "role": "Accepts the strategy or triggers one revision round."},
+                    {"module": module, **module_details[module]} for module in module_order
                 ],
                 "data_stores": {
-                    "pinecone": "Festival identity embeddings for semantic matching.",
-                    "supabase": "Festival facts, distribution-company memory, run logs.",
+                    "pinecone": "Festival identity embeddings for semantic retrieval; local TF-IDF is the offline fallback.",
+                    "supabase": "Festival facts, full company memory and run logs; bundled JSON is the offline fallback.",
                 },
+                "normal_chat_calls": 3,
+                "embedding_requests": "One when vector retrieval is configured; each attempt is traced and has a bounded fallback.",
+                "revision_policy": "Only the malformed stage is retried: MatchScorer can receive one structural repair and RoadmapBuilder one invariant-guided rewrite; analysis and retrieval are never repeated.",
             },
             "scoring": {
-                "method": "The LLM rates each dimension 0-5 with evidence; the weighted 0-100 total is computed in code, then a premiere-risk penalty is subtracted.",
+                "method": "The LLM rates four creative dimensions with evidence. Company relationship and deadline urgency come from structured data; code applies confidence guardrails, weights, arithmetic and the premiere-risk penalty.",
                 "weights": scoring.weights_documentation(),
                 "premiere_penalty": scoring.PREMIERE_PENALTY,
                 "buckets": list(graph.BUCKET_LABELS.values()),
+            },
+            "grounding": {
+                "deadline_policy": "Recorded final dates take precedence; stale cycles are projected explicitly and marked with confidence.",
+                "premiere_policy": "Territorial shorthand is not treated as a strict world-premiere rule; compatibility is evaluated across the whole sequence.",
+                "trace_policy": "Every actual chat or embedding model attempt, including retries, errors and rejected-parameter fallbacks, appears in steps.",
             },
             "prompt_template": {
                 "template": (
@@ -121,7 +167,7 @@ def agent_info() -> JSONResponse:
                 "notes": [
                     "Premiere status is the single most valuable field — it drives risk and priority.",
                     "Director career stage unlocks first-feature and emerging-talent sections.",
-                    "Anything omitted is returned in the roadmap's open questions.",
+                    "Missing film facts are preserved and surfaced in the roadmap's open questions.",
                 ],
             },
             "prompt_examples": examples,
@@ -129,7 +175,7 @@ def agent_info() -> JSONResponse:
                 "GET /api/team_info": "Student details.",
                 "GET /api/agent_info": "This document.",
                 "GET /api/model_architecture": "Architecture diagram (PNG).",
-                "POST /api/execute": "Run the agent. Returns exactly status, error, response and steps; add \"include_meta\": true for token usage, timing and the full ranking.",
+                "POST /api/execute": "Run the agent. Always returns exactly status, error, response and steps.",
             },
         }
     )
@@ -152,9 +198,8 @@ def model_architecture():
 def execute(request: ExecuteRequest) -> JSONResponse:
     """Main entry point.
 
-    The response carries exactly the four contract fields — status, error,
-    response, steps — unless the caller opts into diagnostics with
-    include_meta, which the bundled GUI does.
+    The response always carries exactly the four contract fields — status,
+    error, response and steps.
     """
 
     prompt = (request.prompt or "").strip()
@@ -163,6 +208,15 @@ def execute(request: ExecuteRequest) -> JSONResponse:
             {
                 "status": "error",
                 "error": "The 'prompt' field is required and must describe the film.",
+                "response": None,
+                "steps": [],
+            }
+        )
+    if len(prompt) > config.MAX_PROMPT_CHARS:
+        return JSONResponse(
+            {
+                "status": "error",
+                "error": f"The 'prompt' field must be at most {config.MAX_PROMPT_CHARS} characters.",
                 "response": None,
                 "steps": [],
             }
@@ -193,15 +247,14 @@ def execute(request: ExecuteRequest) -> JSONResponse:
         }
     )
 
-    body: dict[str, Any] = {
-        "status": "ok",
-        "error": None,
-        "response": result["response"],
-        "steps": result["steps"],
-    }
-    if request.include_meta:
-        body["meta"] = result["meta"]
-    return JSONResponse(body)
+    return JSONResponse(
+        {
+            "status": "ok",
+            "error": None,
+            "response": result["response"],
+            "steps": result["steps"],
+        }
+    )
 
 
 # -------------------------------------------------------------- diagnostics

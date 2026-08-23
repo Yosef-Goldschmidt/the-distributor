@@ -8,11 +8,16 @@ Usage:  python scripts/make_architecture.py   (requires Pillow: pip install pill
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from app.agent import prompts  # noqa: E402
+
 OUT = ROOT / "assets" / "architecture.png"
 
 W, H = 1680, 1010
@@ -117,28 +122,29 @@ def main() -> None:
     draw.text((60, 44), "The Distributor", font=font(40, bold=True), fill=TEXT)
     draw.text(
         (60, 96),
-        "Plan-and-Execute agent architecture  ·  Planner creates tasks → Executor uses tools → Replanner revises when needed",
+        "Plan-and-Execute with deterministic domain validation  ·  3 normal chat calls + 1 embedding  ·  complete model-attempt trace",
         font=font(19), fill=MUTED,
     )
     draw.line([60, 138, W - 60, 138], fill=LINE, width=2)
 
     # Top row: input → Planner → Executor container → Replanner → output
     box(draw, (60, 180, 300, 268), "User Prompt", "Film description", accent=LINE, title_size=22, sub_size=15)
-    box(draw, (360, 180, 640, 268), "Planner", "Builds the ordered task plan", accent=ACCENT, title_size=24)
+    box(draw, (360, 180, 640, 268), "Planner", "Deterministic complete evidence plan", accent=ACCENT, title_size=24)
 
     exec_box = (60, 330, 1120, 700)
     draw.rounded_rectangle(exec_box, radius=18, fill=(20, 25, 34), outline=ACCENT, width=3)
     draw.text((84, 348), "Executor", font=font(26, bold=True), fill=ACCENT)
     draw.text((84, 382), "Runs planned tasks through the tool modules", font=font(16), fill=MUTED)
 
-    tools = [
-        ("FilmAnalyzer", "Genre, themes, premiere status, audience", BLUE),
-        ("FestivalSearch", "Semantic retrieval over the festival index", GREEN),
-        ("CompanyMemory", "Prior submissions, acceptances, awards", GREEN),
-        ("MatchScorer", "LLM rates 5 dimensions 0-5 → weighted 0-100 in code", BLUE),
-        ("RiskChecker", "Premiere, eligibility and deadline risk", BLUE),
-        ("RoadmapBuilder", "Bucketed strategy: submit / delay / avoid", BLUE),
-    ]
+    descriptions = {
+        "FilmAnalyzer": ("LLM extracts supported film facts + unknowns", BLUE),
+        "CompanyMemory": ("Full prior relationships loaded before retrieval", GREEN),
+        "FestivalSearch": ("Traced embedding + Pinecone/lexical fallback + dedupe", GREEN),
+        "RiskChecker": ("Code: date cycles, format and premiere semantics", PURPLE),
+        "MatchScorer": ("LLM rates 4; code validates/repairs + rates 2 + totals", BLUE),
+        "RoadmapBuilder": ("LLM selects evidence focus + open questions", BLUE),
+    }
+    tools = [(name, *descriptions[name]) for name in prompts.TASK_CATALOG]
     left, top, bw, bh, gx, gy = 92, 420, 316, 118, 22, 22
     for index, (name, desc, color) in enumerate(tools):
         col, row = index % 3, index // 3
@@ -148,40 +154,40 @@ def main() -> None:
 
     box(draw, (1220, 420, 1620, 520), "Pinecone — Festival Index", "Festival identity embeddings (focus, themes, past lineups, winners)", accent=GREEN, title_size=20, sub_size=14)
     box(draw, (1220, 560, 1620, 660), "Supabase", "Festival facts, company memory, run logs", accent=GREEN, title_size=20, sub_size=14)
-    box(draw, (760, 180, 1120, 268), "Replanner", "Revise tasks or stop", accent=PURPLE, title_size=24)
-    box(draw, (1220, 180, 1620, 300), "Festival Strategy Roadmap", "Ranked plan · match scores · reasoning · risks · calendar", accent=ACCENT, title_size=21, sub_size=15)
+    box(draw, (760, 180, 1120, 268), "Replanner", "Deterministic invariant validator", accent=PURPLE, title_size=24)
+    box(draw, (1220, 180, 1620, 300), "Validated Festival Roadmap", "Unique buckets · premiere target · grounded scores · uncertainty · calendar", accent=ACCENT, title_size=21, sub_size=15)
 
     arrow(draw, (300, 224), (352, 224))
     arrow(draw, (500, 268), (500, 322), label="plan", label_offset=(38, 0))
     arrow(draw, (940, 322), (940, 268), label="results", label_offset=(52, 0))
     arrow(draw, (1120, 224), (1212, 224), label="ready", label_offset=(0, -20))
-    arrow(draw, (756, 224), (648, 224), color=PURPLE, dashed=True, label="replan", label_offset=(0, -20))
+    arrow(draw, (1080, 268), (1080, 552), color=PURPLE, dashed=True, label="rewrite roadmap only", label_offset=(-92, 0))
     arrow(draw, (1128, 470), (1212, 470), color=GREEN, dashed=True)
     arrow(draw, (1128, 610), (1212, 610), color=GREEN, dashed=True)
 
     draw.text(
         (60, 740),
-        "Data access  ·  FestivalSearch queries the Pinecone festival index and reads festival facts from Supabase  ·  CompanyMemory reads the distribution company's history from Supabase",
+        "Retrieval  ·  CompanyMemory loads first  →  FestivalSearch combines Pinecone semantics + local lexical evidence + relationship/prestige reserves  →  Supabase facts  →  entity dedupe",
         font=font(17), fill=MUTED,
     )
     draw.text(
         (60, 776),
-        "Scoring  ·  LLM-rated: thematic fit 25  ·  genre fit 15  ·  past lineup / winner similarity 20  ·  company relationship 15  ·  strategic value 15    Computed in code: deadline urgency 10  ·  premiere risk = penalty",
+        "Scoring  ·  LLM: thematic 25 + genre 15 + lineup 20 + strategic 15    Code: company history 15 + structured deadline urgency 10 + confidence/tier caps + premiere penalty",
         font=font(17), fill=MUTED,
     )
     draw.text(
         (60, 812),
-        "Roadmap buckets  ·  Submit First  ·  Prioritize Next  ·  Leverage  ·  Hold / Avoid",
+        "Domain policy  ·  exact dates beat month shorthand  ·  stale cycles are explicit projections  ·  uncertain rules stay labelled  ·  target is first public screening",
         font=font(17), fill=MUTED,
     )
     draw.line([60, 850, W - 60, 850], fill=LINE, width=2)
     draw.text(
         (60, 874),
-        "Every module above appears by the same name in the `steps` trace returned by POST /api/execute.  ·  A world-premiere requirement counts as an opportunity while the film still has its premiere available.",
+        "Roadmap invariants  ·  every festival appears once  ·  assigned bucket cannot change  ·  target/follow/alternative ordering  ·  retries are traced and bounded",
         font=font(17), fill=MUTED,
     )
 
-    legend = [("LLM reasoning module", BLUE), ("Data / retrieval tool", GREEN), ("Control flow", ACCENT), ("Replanning loop", PURPLE)]
+    legend = [("LLM reasoning", BLUE), ("Data / retrieval", GREEN), ("Control flow", ACCENT), ("Deterministic validation", PURPLE)]
     x = 60
     for label, color in legend:
         draw.rounded_rectangle((x, 926, x + 22, 948), radius=5, fill=color)

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import time
-from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 from app import config
@@ -38,8 +37,11 @@ def run(user_prompt: str) -> dict[str, Any]:
         )
 
     started = time.monotonic()
-    llm = LLMClient()
     trace = Trace()
+    llm = LLMClient(
+        trace_callback=trace.add,
+        deadline_monotonic=started + config.RUN_DEADLINE_SECONDS,
+    )
 
     try:
         return _run(user_prompt, llm, trace, started)
@@ -53,7 +55,7 @@ def _run(
     user_prompt: str, llm: LLMClient, trace: Trace, started: float
 ) -> dict[str, Any]:
 
-    plan = modules.planner(llm, trace, user_prompt)
+    plan = modules.planner(trace, user_prompt)
     task_modules = [task["module"] for task in plan["tasks"]]
 
     profile: dict[str, Any] = {}
@@ -63,53 +65,49 @@ def _run(
     risks: dict[str, dict[str, Any]] = {}
     roadmap: dict[str, Any] = {}
     ranked: list[dict[str, Any]] = []
+    recommended_target: dict[str, Any] | None = None
     execution_log: list[dict[str, Any]] = []
+
+    # The executor is visible before its children, while its response list is
+    # filled in as each planned task completes.
+    trace.add(
+        "Executor",
+        {"objective": plan.get("objective"), "tasks": plan["tasks"]},
+        {"mode": "sequential_evidence_chain", "executed": execution_log},
+    )
 
     for module_name in task_modules:
         if module_name == "FilmAnalyzer":
             profile = modules.film_analyzer(llm, trace, user_prompt)
             outcome = f"profile extracted ({profile.get('format')}, {len(profile.get('themes') or [])} themes)"
-        elif module_name == "FestivalSearch":
-            candidates = modules.festival_search(trace, profile)
-            outcome = f"{len(candidates)} candidate festivals retrieved"
         elif module_name == "CompanyMemory":
-            memory = modules.company_memory(trace, candidates)
-            outcome = f"{len(memory.get('history', []))} prior relationships matched"
-        elif module_name == "MatchScorer":
-            # MatchScorer and RiskChecker are independent, so they run concurrently
-            # to stay comfortably inside the 300s serverless limit.
-            with ThreadPoolExecutor(max_workers=2) as pool:
-                score_future = pool.submit(
-                    modules.match_scorer, llm, trace, profile, candidates, memory
-                )
-                risk_future = pool.submit(
-                    modules.risk_checker, llm, trace, profile, candidates
-                )
-                scores = score_future.result()
-                risks = risk_future.result()
-            outcome = f"{len(scores)} festivals rated, {len(risks)} risk assessments"
+            memory = modules.company_memory(trace)
+            outcome = f"{len(memory.get('history', []))} history rows loaded before retrieval"
+        elif module_name == "FestivalSearch":
+            candidates = modules.festival_search(trace, profile, memory)
+            outcome = f"{len(candidates)} deduplicated candidate festivals retrieved"
         elif module_name == "RiskChecker":
-            if not risks:
-                risks = modules.risk_checker(llm, trace, profile, candidates)
-            ranked = modules.assemble(candidates, scores, risks, trace)
-            outcome = f"{len(risks)} risk assessments, scores computed"
+            risks = modules.risk_checker(trace, profile, candidates)
+            outcome = f"{len(risks)} deterministic risk assessments"
+        elif module_name == "MatchScorer":
+            scores = modules.match_scorer(llm, trace, profile, candidates, memory)
+            ranked = modules.assemble(candidates, scores, risks, memory, trace)
+            recommended_target = modules.apply_premiere_strategy(profile, ranked)
+            outcome = f"{len(scores)} creative-fit ratings combined with deterministic scores"
         elif module_name == "RoadmapBuilder":
             if not ranked:
-                ranked = modules.assemble(candidates, scores, risks, trace)
-            roadmap = modules.roadmap_builder(llm, trace, profile, ranked, memory)
+                ranked = modules.assemble(candidates, scores, risks, memory, trace)
+                recommended_target = modules.apply_premiere_strategy(profile, ranked)
+            roadmap = modules.roadmap_builder(
+                llm, trace, profile, ranked, memory, recommended_target
+            )
             outcome = "roadmap drafted"
         else:
             continue
         execution_log.append({"module": module_name, "outcome": outcome})
 
-    trace.add(
-        "Executor",
-        {"objective": plan.get("objective"), "tasks": plan["tasks"]},
-        {"executed": execution_log},
-    )
-
     revisions = 0
-    decision = modules.replanner(llm, trace, plan.get("objective", user_prompt), ranked, roadmap)
+    decision = modules.replanner(trace, ranked, roadmap, recommended_target)
     while (
         decision.get("decision") == "revise"
         and revisions < config.MAX_REPLAN_ROUNDS
@@ -118,12 +116,14 @@ def _run(
     ):
         revisions += 1
         instructions = decision.get("revision_instructions") or decision.get("reason") or ""
-        scores = modules.match_scorer(llm, trace, profile, candidates, memory, instructions)
-        ranked = modules.assemble(candidates, scores, risks, trace)
-        roadmap = modules.roadmap_builder(llm, trace, profile, ranked, memory, instructions)
-        decision = modules.replanner(
-            llm, trace, plan.get("objective", user_prompt), ranked, roadmap
+        roadmap = modules.roadmap_builder(
+            llm, trace, profile, ranked, memory, recommended_target, instructions
         )
+        decision = modules.replanner(trace, ranked, roadmap, recommended_target)
+
+    roadmap = modules.normalise_roadmap(roadmap, ranked, recommended_target, profile)
+    if decision.get("decision") != "accept":
+        decision = modules.replanner(trace, ranked, roadmap, recommended_target)
 
     by_id = {record["id"]: record for record in ranked}
     response = render_markdown(profile, roadmap, ranked, by_id)
@@ -137,9 +137,16 @@ def _run(
             "candidates_considered": len(candidates),
             "revision_rounds": revisions,
             "replanner_decision": decision.get("decision"),
+            "roadmap_validation": decision.get("defects"),
             "premiere_target": roadmap.get("premiere_target"),
             "elapsed_seconds": elapsed,
             "llm_usage": llm.usage,
+            "execution_policy": {
+                "normal_chat_calls": 3,
+                "optional_match_scorer_repair_calls": 1,
+                "optional_roadmap_revision_calls": 1,
+                "deterministic_modules": ["Planner", "RiskChecker", "Replanner"],
+            },
             "scoring_weights": scoring.weights_documentation(),
             "roadmap": {
                 "headline": roadmap.get("headline"),
@@ -167,6 +174,14 @@ def render_markdown(
     if roadmap.get("strategy_summary"):
         lines.append(roadmap["strategy_summary"])
 
+    premiere_target = roadmap.get("premiere_target")
+    if premiere_target:
+        lines.append("\n## Premiere Strategy")
+        lines.append(
+            f"- **Target:** {premiere_target.get('name') or premiere_target.get('id')} — "
+            f"{premiere_target.get('reason')}"
+        )
+
     buckets = roadmap.get("buckets", {}) or {}
     for bucket in BUCKET_ORDER:
         entries = buckets.get(bucket) or []
@@ -182,10 +197,22 @@ def render_markdown(
             details = []
             if record.get("country"):
                 details.append(str(record["country"]))
-            if record.get("deadline_month"):
-                details.append(f"deadline ~{record['deadline_month']}")
-            if record.get("premiere_requirement"):
-                details.append(f"{record['premiere_requirement']} premiere")
+            deadline = record.get("deadline", {}) or {}
+            if deadline.get("next_deadline"):
+                label = f"deadline {deadline['next_deadline']}"
+                if deadline.get("is_projection"):
+                    label += " (projected)"
+                details.append(label)
+            elif record.get("deadline_month"):
+                details.append(f"deadline month ~{record['deadline_month']} (verify)")
+            constraint = record.get("premiere_constraint", {}) or {}
+            if constraint.get("scope") and constraint.get("scope") != "none":
+                premise = f"{constraint['scope']} premiere"
+                if constraint.get("territory"):
+                    premise += f" ({constraint['territory']})"
+                if constraint.get("confidence") != "high":
+                    premise += " (verify)"
+                details.append(premise)
             if details:
                 lines.append(f"*{' · '.join(details)}*")
             if entry.get("why"):
@@ -193,9 +220,37 @@ def render_markdown(
             if entry.get("action"):
                 lines.append(f"- **Action:** {entry['action']}")
             if record.get("risk_note"):
-                lines.append(
-                    f"- **Risk ({record.get('premiere_risk', 'none')}):** {record['risk_note']}"
+                label = (
+                    "Eligibility assessment"
+                    if record.get("eligibility_issue") or record.get("runtime_warning")
+                    else f"Risk ({record.get('premiere_risk', 'none')})"
                 )
+                lines.append(
+                    f"- **{label}:** {record['risk_note']}"
+                )
+            if record.get("eligibility_issue"):
+                lines.append(
+                    f"- **Eligibility:** ineligible ({record['eligibility_issue']}); verify the source rule before reconsidering."
+                )
+            sequence = record.get("premiere_sequence", {}) or {}
+            if sequence.get("status") not in {None, "flexible", "not_applicable"}:
+                lines.append(
+                    f"- **Premiere sequence ({sequence.get('status')}):** "
+                    f"{sequence.get('reason')}"
+                )
+            sources = record.get("retrieval_sources") or []
+            facts_source = record.get("facts_source") or "bundled corpus"
+            retrieval_backend = record.get("retrieval_backend") or "structured corpus"
+            lines.append(
+                f"- **Grounding:** retrieval={', '.join(sources) or 'structured corpus'}; "
+                f"vector_backend={retrieval_backend}; facts={facts_source}; "
+                "creative_identity=curated descriptive enrichment; "
+                f"identity confidence={record.get('identity_confidence', 'low')}; "
+                f"deadline confidence={deadline.get('confidence', 'low')}"
+            )
+            website = str(record.get("website") or "")
+            if website.startswith(("https://", "http://")):
+                lines.append(f"- **Source / submission page:** {website}")
             breakdown = record.get("breakdown") or {}
             if breakdown:
                 parts = [
@@ -203,6 +258,11 @@ def render_markdown(
                     for dim, vals in breakdown.items()
                 ]
                 lines.append(f"- **Score breakdown:** {', '.join(parts)}")
+                lines.append(
+                    f"- **Score calculation:** base {record.get('base_score', 0)}/100 "
+                    f"minus premiere penalty {record.get('premiere_penalty', 0)} = "
+                    f"{record.get('score', 0)}/100"
+                )
 
     calendar = roadmap.get("calendar") or []
     if calendar:

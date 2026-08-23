@@ -25,7 +25,6 @@ import hashlib
 import json
 import random
 import re
-import sys
 import unicodedata
 from datetime import date, datetime
 from pathlib import Path

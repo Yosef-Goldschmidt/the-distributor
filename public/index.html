@@ -51,6 +51,7 @@
   }
   .idx { color: var(--muted); font-variant-numeric: tabular-nums; }
   .mod { font-weight: 600; color: var(--accent-2); }
+  .kind { margin-left: auto; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
   .step-body { padding: 0 14px 14px; }
   .step-body h4 { margin: 12px 0 6px; font-size: 12px; text-transform: uppercase; color: var(--muted); letter-spacing: .5px; }
   pre {
@@ -60,6 +61,11 @@
   }
   .chips { display: flex; gap: 8px; flex-wrap: wrap; }
   .chip { background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; font-size: 12px; color: var(--muted); }
+  .table-wrap { overflow-x: auto; margin-top: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+  th { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .35px; }
+  td.score { color: var(--accent); font-weight: 700; }
   .hidden { display: none; }
   .turn { border-left: 2px solid var(--line); padding-left: 14px; margin-bottom: 26px; }
   .turn .q { color: var(--muted); font-size: 13px; margin-bottom: 10px; white-space: pre-wrap; }
@@ -143,34 +149,90 @@ function pretty(value) {
 
 function stepsHtml(steps) {
   if (!steps || !steps.length) return '<p class="status">No steps returned.</p>';
-  return steps.map((step, i) => `
+  return steps.map((step, i) => {
+    const provider = step.prompt && step.prompt.provider;
+    const kind = provider ? `${provider.kind || 'model'} attempt` : 'deterministic / tool';
+    return `
     <details class="step">
-      <summary><span class="idx">${String(i + 1).padStart(2, '0')}</span><span class="mod">${escapeHtml(step.module || 'unknown')}</span></summary>
+      <summary><span class="idx">${String(i + 1).padStart(2, '0')}</span><span class="mod">${escapeHtml(step.module || 'unknown')}</span><span class="kind">${kind}</span></summary>
       <div class="step-body">
         <h4>Prompt</h4><pre>${escapeHtml(pretty(step.prompt))}</pre>
         <h4>Response</h4><pre>${escapeHtml(pretty(step.response))}</pre>
       </div>
-    </details>`).join('');
+    </details>`;
+  }).join('');
 }
 
 function metaHtml(meta) {
   if (!meta) return '';
-  const usage = meta.llm_usage || {};
   const chips = [
     meta.film_title ? `Film: ${meta.film_title}` : null,
     `Candidates: ${meta.candidates_considered ?? '—'}`,
-    `LLM calls: ${usage.calls ?? '—'}`,
-    `Tokens in/out: ${usage.prompt_tokens ?? 0}/${usage.completion_tokens ?? 0}`,
-    `Revisions: ${meta.revision_rounds ?? 0}`,
+    `Chat attempts: ${meta.chat_attempts}`,
+    `Embedding attempts: ${meta.embedding_attempts}`,
     meta.replanner_decision ? `Replanner: ${meta.replanner_decision}` : null,
   ].filter(Boolean);
   return `<div class="chips">${chips.map((c) => `<span class="chip">${escapeHtml(c)}</span>`).join('')}</div>`;
+}
+
+function traceMeta(steps) {
+  const list = steps || [];
+  const providerSteps = list.filter((step) => step.prompt && step.prompt.provider);
+  const film = providerSteps.find((step) => step.module === 'FilmAnalyzer');
+  const search = [...list].reverse().find((step) => step.module === 'FestivalSearch'
+    && step.response && Array.isArray(step.response.festivals));
+  const risk = [...list].reverse().find((step) => step.module === 'RiskChecker');
+  const score = [...list].reverse().find((step) => step.module === 'MatchScorer'
+    && step.prompt && step.prompt.operation === 'deterministic_weighted_score');
+  const replanner = [...list].reverse().find((step) => step.module === 'Replanner');
+  const names = new Map(((search && search.response.festivals) || []).map((row) => [row.id, row]));
+  const risks = new Map((((risk && risk.response.risks) || [])).map((row) => [row.id, row]));
+  const ranked = (((score && score.response.ranking) || [])).map((row) => {
+    const riskRow = risks.get(row.id) || {};
+    return {
+      ...row,
+      name: row.name || (names.get(row.id) || {}).name,
+      deadline: riskRow.deadline || {},
+      uncertainties: riskRow.uncertainties || [],
+    };
+  });
+  return {
+    film_title: film && film.response && film.response.title,
+    candidates_considered: search && search.response.returned,
+    chat_attempts: providerSteps.filter((step) => step.prompt.provider.kind === 'chat').length,
+    embedding_attempts: providerSteps.filter((step) => step.prompt.provider.kind === 'embedding').length,
+    replanner_decision: replanner && replanner.response && replanner.response.decision,
+    ranked_festivals: ranked,
+  };
+}
+
+function rankingHtml(meta) {
+  const rows = meta && meta.ranked_festivals;
+  if (!rows || !rows.length) return '';
+  return `<div class="table-wrap"><table>
+    <thead><tr><th>Festival</th><th>Score</th><th>Bucket</th><th>Next deadline</th><th>Confidence</th><th>Uncertainty</th></tr></thead>
+    <tbody>${rows.map((row) => {
+      const deadline = row.deadline || {};
+      const deadlineLabel = deadline.next_deadline
+        ? `${deadline.next_deadline}${deadline.is_projection ? ' (projected)' : ''}`
+        : 'verify';
+      return `<tr>
+        <td>${escapeHtml(row.name || row.id)}</td>
+        <td class="score">${escapeHtml(row.score ?? '—')}</td>
+        <td>${escapeHtml(row.bucket || '—')}</td>
+        <td>${escapeHtml(deadlineLabel)}</td>
+        <td>${escapeHtml(deadline.confidence || 'low')}</td>
+        <td>${escapeHtml((row.uncertainties || []).length)}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`;
 }
 
 function addTurn(prompt, data) {
   const turn = document.createElement('div');
   turn.className = 'turn';
   const ok = data.status === 'ok';
+  const meta = traceMeta(data.steps);
   turn.innerHTML = `
     <div class="q">${escapeHtml(prompt)}</div>
     <div class="card">
@@ -178,7 +240,8 @@ function addTurn(prompt, data) {
       ${ok
         ? `<div class="response">${renderMarkdown(data.response)}</div>`
         : `<p class="status err">${escapeHtml(data.error || 'Unknown error')}</p>`}
-      ${ok ? metaHtml(data.meta) : ''}
+      ${ok ? metaHtml(meta) : ''}
+      ${ok ? rankingHtml(meta) : ''}
     </div>
     <div class="card">
       <h2>Execution Trace (${(data.steps || []).length} steps)</h2>
@@ -198,7 +261,7 @@ async function run() {
     const res = await fetch('/api/execute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, include_meta: true }),
+      body: JSON.stringify({ prompt }),
     });
     const data = await res.json();
     addTurn(prompt, data);

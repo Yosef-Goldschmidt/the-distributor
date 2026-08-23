@@ -40,15 +40,18 @@ def main() -> None:
         "search_query": args.query,
     }
 
-    candidates = modules.festival_search(trace, profile)
-    memory = modules.company_memory(trace, candidates)
-    history = {row["festival_id"]: row for row in memory.get("history", [])}
+    memory = modules.company_memory(trace)
+    candidates = modules.festival_search(trace, profile, memory)
+    history: dict[str, list[dict]] = {}
+    for row in memory.get("history", []):
+        history.setdefault(row["festival_id"], []).append(row)
 
     print(f"corpus: {len(corpus.load_festivals())} festivals\n")
     print(f"{'#':>2}  {'score':>6}  {'tier':<3} {'name':<48} {'country':<16} history")
     for index, candidate in enumerate(candidates, 1):
-        record = history.get(candidate["id"])
-        note = f"{record['screenings']} screening(s)" if record else "-"
+        rows = history.get(candidate["id"], [])
+        screenings = sum(int(row.get("screenings") or 0) for row in rows)
+        note = f"{screenings} screening(s)" if rows else "-"
         print(
             f"{index:>2}  {candidate['retrieval_score']:>6.3f}  {candidate.get('tier',''):<3} "
             f"{(candidate.get('name') or '')[:48]:<48} {(candidate.get('country') or '')[:16]:<16} {note}"

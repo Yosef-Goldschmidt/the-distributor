@@ -18,16 +18,18 @@ WEIGHTS: dict[str, int] = {
     "deadline_urgency": 10,
 }
 
-# Rated by the LLM; deadline_urgency is computed in code from the calendar.
+# Rated by the LLM. Company relationship and deadline urgency are computed from
+# source data in code.
 LLM_DIMENSIONS = [
     "thematic_fit",
     "genre_fit",
     "lineup_similarity",
-    "company_relationship",
     "strategic_value",
 ]
 
 PREMIERE_PENALTY: dict[str, int] = {"high": 15, "medium": 7, "low": 0, "none": 0}
+
+TIER_STRATEGIC_CAP: dict[str, float] = {"A": 5.0, "B+": 4.5, "B": 4.0, "C": 3.0}
 
 DIMENSION_LABELS: dict[str, str] = {
     "thematic_fit": "Thematic fit",
@@ -83,6 +85,120 @@ def _rating(value: Any) -> float:
         return 0.0
 
 
+def company_relationship_rating(
+    history_rows: list[dict[str, Any]], current_year: int
+) -> tuple[float, str, dict[str, Any]]:
+    """Compute relationship strength from observed screenings, recency and awards.
+
+    This dimension is factual company memory, so it is more defensible and less
+    expensive to compute it in code than to ask the LLM to estimate it.
+    """
+
+    if not history_rows:
+        return 0.0, "No prior company relationship is recorded.", {
+            "screenings": 0, "latest_year": None, "award_count": 0,
+        }
+
+    screenings = 0
+    years: list[int] = []
+    award_count = 0
+    for row in history_rows:
+        row_screenings = row.get("screenings")
+        if row_screenings is None and row.get("film_title"):
+            row_screenings = 1
+        try:
+            screenings += max(0, int(row_screenings or 0))
+        except (TypeError, ValueError):
+            pass
+        row_years = row.get("years") or ([row.get("year")] if row.get("year") else [])
+        for value in row_years:
+            try:
+                years.append(int(value))
+            except (TypeError, ValueError):
+                continue
+        awards = row.get("awards") or []
+        award_count += len(awards)
+        if not awards and (row.get("result") == "awarded" or row.get("award")):
+            award_count += 1
+
+    if screenings <= 0:
+        base = 1.0
+    elif screenings == 1:
+        base = 1.5
+    elif screenings <= 3:
+        base = 2.5
+    elif screenings <= 7:
+        base = 3.5
+    else:
+        base = 4.0
+
+    latest_year = max(years) if years else None
+    recency_bonus = 0.0
+    if latest_year is not None:
+        if latest_year >= current_year - 3:
+            recency_bonus = 0.5
+        elif latest_year >= current_year - 6:
+            recency_bonus = 0.25
+    award_bonus = 0.75 if award_count else 0.0
+    rating = round(min(5.0, base + recency_bonus + award_bonus), 1)
+
+    parts = [f"{screenings} recorded screening(s)"]
+    if latest_year:
+        parts.append(f"latest in {latest_year}")
+    if award_count:
+        parts.append(f"{award_count} recorded award(s)")
+    return rating, ", ".join(parts) + ".", {
+        "screenings": screenings,
+        "latest_year": latest_year,
+        "award_count": award_count,
+    }
+
+
+def apply_rating_guardrails(
+    ratings: dict[str, Any],
+    evidence: dict[str, Any],
+    candidate: dict[str, Any],
+    relationship: tuple[float, str, dict[str, Any]],
+) -> tuple[dict[str, float], dict[str, str], dict[str, Any]]:
+    """Clamp LLM judgements to constraints established by source confidence."""
+
+    guarded = {dimension: _rating(ratings.get(dimension)) for dimension in LLM_DIMENSIONS}
+    grounded = {key: str(value) for key, value in evidence.items() if value is not None}
+    adjustments: list[str] = []
+
+    for dimension in LLM_DIMENSIONS:
+        if not grounded.get(dimension, "").strip():
+            guarded[dimension] = 0.0
+            grounded[dimension] = "No grounded evidence was supplied; the rating was set to 0/5."
+            adjustments.append(f"{dimension} reset because evidence was missing")
+
+    confidence = (candidate.get("identity_confidence") or "low").lower()
+    if confidence == "low" and guarded["lineup_similarity"] > 2.0:
+        guarded["lineup_similarity"] = 2.0
+        grounded["lineup_similarity"] = (
+            "Capped at 2/5 because the festival identity is low-confidence and no verified "
+            "selection history supports a stronger claim."
+        )
+        adjustments.append("lineup_similarity capped for low-confidence identity")
+
+    tier = (candidate.get("tier") or "C").upper()
+    cap = TIER_STRATEGIC_CAP.get(tier, 3.0)
+    if guarded["strategic_value"] > cap:
+        guarded["strategic_value"] = cap
+        grounded["strategic_value"] = (
+            f"Capped at {cap}/5 by the deterministic strategic ceiling for tier {tier}."
+        )
+        adjustments.append(f"strategic_value capped for tier {tier}")
+
+    relation_rating, relation_evidence, relation_facts = relationship
+    guarded["company_relationship"] = relation_rating
+    grounded["company_relationship"] = relation_evidence
+    return guarded, grounded, {
+        "adjustments": adjustments,
+        "company_relationship_facts": relation_facts,
+    }
+
+
 def compute_score(ratings: dict[str, Any], premiere_risk: str | None) -> dict[str, Any]:
     """Weighted 0-100 score from 0-5 dimension ratings, minus a premiere penalty."""
 
@@ -129,6 +245,10 @@ def assign_bucket(candidate: dict[str, Any]) -> str:
     # never demoted for premiere risk alone.
     if premiere_risk == "high" and not opportunity:
         return "hold_avoid"
+    if deadline_status == "upcoming":
+        days_until_open = (candidate.get("deadline") or {}).get("days_until_open")
+        if days_until_open is None or days_until_open > 42:
+            return "prioritize_next"
     if deadline_status == "closed":
         # A real fit whose window has passed is a next-cycle target, not a reject.
         return "hold_avoid" if score < 70 else "prioritize_next"

@@ -11,6 +11,8 @@ from __future__ import annotations
 import json
 import re
 import threading
+import time
+from collections.abc import Callable
 from typing import Any
 
 import httpx
@@ -39,15 +41,23 @@ class LLMClient:
     Tracks token usage per run so the GUI can surface budget consumption.
     """
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        *,
+        trace_callback: Callable[[str, Any, Any], None] | None = None,
+        deadline_monotonic: float | None = None,
+    ) -> None:
         self.enabled = config.llm_enabled()
         self.usage = {
             "calls": 0,
+            "attempts": 0,
             "prompt_tokens": 0,
             "completion_tokens": 0,
             "reasoning_tokens": 0,
         }
-        # Modules may run concurrently, so usage accounting needs a lock.
+        self.trace_callback = trace_callback
+        self.deadline_monotonic = deadline_monotonic
+        # Keep accounting safe if a caller ever shares this client across worker threads.
         self._lock = threading.Lock()
 
     def complete(
@@ -58,6 +68,7 @@ class LLMClient:
         temperature: float | None = None,
         max_tokens: int | None = None,
         json_mode: bool = True,
+        module: str = "LLM",
     ) -> str:
         if not self.enabled:
             raise LLMError(
@@ -92,30 +103,112 @@ class LLMClient:
         # Optional params some deployments reject; dropped one at a time on 400.
         fallbacks = ["temperature", "reasoning_effort", "response_format", "max_completion_tokens"]
 
-        def call() -> dict[str, Any]:
+        attempt_number = 0
+
+        def trace_prompt() -> dict[str, Any]:
+            token_parameter = (
+                "max_completion_tokens"
+                if "max_completion_tokens" in payload
+                else "max_tokens"
+            )
+            return {
+                "system": system,
+                "user": user,
+                "provider": {
+                    "kind": "chat",
+                    "model": config.LLM_MODEL,
+                    "attempt": attempt_number,
+                    "token_parameter": token_parameter,
+                    "max_output_tokens": payload.get(token_parameter),
+                    "temperature_sent": "temperature" in payload,
+                    "reasoning_effort_sent": payload.get("reasoning_effort"),
+                    "response_format_sent": payload.get("response_format"),
+                },
+            }
+
+        def emit(response: Any) -> None:
+            if self.trace_callback:
+                self.trace_callback(module, trace_prompt(), response)
+
+        def traced_response(body: dict[str, Any]) -> Any:
             try:
-                with httpx.Client(timeout=config.LLM_TIMEOUT_SECONDS) as client:
+                content, finish_reason = _extract(body)
+            except LLMError as exc:
+                return {"error": str(exc)}
+            if not content.strip():
+                return {"error": "empty_content", "finish_reason": finish_reason}
+            if not json_mode:
+                return content
+            try:
+                return parse_json_object(content)
+            except LLMError:
+                return {"raw_response": content, "finish_reason": finish_reason}
+
+        def timeout_seconds() -> float:
+            timeout = config.LLM_TIMEOUT_SECONDS
+            if self.deadline_monotonic is not None:
+                remaining = self.deadline_monotonic - time.monotonic()
+                if remaining <= 1:
+                    raise LLMError("The run time budget was exhausted before the next LLM call.")
+                timeout = min(timeout, max(1.0, remaining))
+            return timeout
+
+        def send() -> tuple[httpx.Response, Any]:
+            nonlocal attempt_number
+            request_timeout = timeout_seconds()
+            attempt_number += 1
+            with self._lock:
+                self.usage["attempts"] += 1
+            try:
+                with httpx.Client(timeout=request_timeout) as client:
                     response = client.post(url, headers=headers, json=payload)
-                    while response.status_code == 400 and fallbacks:
-                        param = fallbacks.pop(0)
-                        if param == "max_completion_tokens" and param in payload:
-                            payload["max_tokens"] = payload.pop(param)
-                        elif param in payload:
-                            del payload[param]
-                        else:
-                            continue
-                        response = client.post(url, headers=headers, json=payload)
-                    response.raise_for_status()
-                    return response.json()
+            except httpx.HTTPError as exc:
+                emit({"error": f"Could not reach the LLM provider: {exc}"})
+                raise LLMError(f"Could not reach the LLM provider: {exc}") from exc
+
+            try:
+                body = response.json()
+            except ValueError:
+                body = None
+
+            if response.is_success and isinstance(body, dict):
+                emit(traced_response(body))
+                self._record(body)
+            elif response.is_success:
+                emit({"error": "LLM provider returned JSON that is not an object."})
+            else:
+                emit(
+                    {
+                        "error": f"LLM provider returned {response.status_code}",
+                        "body": response.text[:400],
+                    }
+                )
+            return response, body
+
+        def call() -> dict[str, Any]:
+            response, body = send()
+            while response.status_code == 400 and fallbacks:
+                param = fallbacks.pop(0)
+                if param == "max_completion_tokens" and param in payload:
+                    payload["max_tokens"] = payload.pop(param)
+                elif param in payload:
+                    del payload[param]
+                else:
+                    continue
+                response, body = send()
+            try:
+                response.raise_for_status()
             except httpx.HTTPStatusError as exc:
                 raise LLMError(
                     f"LLM provider returned {exc.response.status_code}: {exc.response.text[:400]}"
                 ) from exc
-            except httpx.HTTPError as exc:
-                raise LLMError(f"Could not reach the LLM provider: {exc}") from exc
+            if body is None:
+                raise LLMError(f"LLM provider returned non-JSON content: {response.text[:300]}")
+            if not isinstance(body, dict):
+                raise LLMError("LLM provider returned JSON that is not an object.")
+            return body
 
         body = call()
-        self._record(body)
         content, finish_reason = _extract(body)
 
         # A reasoning model can burn the whole budget on hidden reasoning tokens and
@@ -126,7 +219,6 @@ class LLMClient:
             if raised > int(payload.get(key) or budget):
                 payload[key] = raised
                 body = call()
-                self._record(body)
                 content, finish_reason = _extract(body)
 
         if not content.strip():
@@ -139,12 +231,23 @@ class LLMClient:
 
     def _record(self, body: dict[str, Any]) -> None:
         usage = body.get("usage") or {}
+        if not isinstance(usage, dict):
+            usage = {}
         details = usage.get("completion_tokens_details") or {}
+        if not isinstance(details, dict):
+            details = {}
+
+        def token_count(value: Any) -> int:
+            try:
+                return int(value or 0)
+            except (TypeError, ValueError):
+                return 0
+
         with self._lock:
             self.usage["calls"] += 1
-            self.usage["prompt_tokens"] += int(usage.get("prompt_tokens") or 0)
-            self.usage["completion_tokens"] += int(usage.get("completion_tokens") or 0)
-            self.usage["reasoning_tokens"] += int(details.get("reasoning_tokens") or 0)
+            self.usage["prompt_tokens"] += token_count(usage.get("prompt_tokens"))
+            self.usage["completion_tokens"] += token_count(usage.get("completion_tokens"))
+            self.usage["reasoning_tokens"] += token_count(details.get("reasoning_tokens"))
 
     def complete_json(self, system: str, user: str, **kwargs: Any) -> dict[str, Any]:
         raw = self.complete(system, user, **kwargs)
