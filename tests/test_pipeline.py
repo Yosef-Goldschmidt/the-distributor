@@ -198,7 +198,9 @@ def main() -> None:
     LLMClient.complete_json = fake_complete_json  # type: ignore[method-assign]
     LLMClient.enabled = True  # type: ignore[assignment]
 
-    result = graph.run("Salt and Ash, an Israeli environmental documentary.")
+    result = graph.run(
+        "Salt and Ash, an Israeli environmental documentary that has never been publicly screened."
+    )
 
     modules_trace = [step["module"] for step in result["steps"]]
     assert modules_trace == [

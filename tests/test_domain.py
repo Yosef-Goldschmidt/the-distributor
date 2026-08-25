@@ -296,11 +296,194 @@ class PremiereSemanticsTest(unittest.TestCase):
                     "missing_info": None,
                 }
 
-        profile = modules.film_analyzer(StubLLM(), modules.Trace(), "test")
+        profile = modules.film_analyzer(
+            StubLLM(),
+            modules.Trace(),
+            "The film premiered publicly at Prior Festival in France.",
+        )
         self.assertIsNone(profile["format"])
         self.assertEqual(profile["premiere_status"], "already_premiered")
         self.assertIn("format", profile["missing_info"])
         self.assertFalse(profile["_validation"]["valid"])
+
+    def test_absent_premiere_evidence_overrides_model_world_premiere_inference(self) -> None:
+        class HallucinatingLLM:
+            def complete_json(self, *args, **kwargs):  # noqa: ANN002, ANN003, ANN201
+                return {
+                    "title": None,
+                    "logline": "A father rebuilds his relationship with his daughter.",
+                    "format": "feature_doc",
+                    "genres": ["documentary"],
+                    "themes": ["family", "parenthood"],
+                    "country": "Israel",
+                    "language": None,
+                    "runtime_minutes": 75,
+                    "director_profile": None,
+                    "premiere_status": "world_premiere_available",
+                    "premiere_history": [{"festival": "Invented", "country": "Israel"}],
+                    "target_audience": "Youth and family audiences",
+                    "festival_angles": ["family"],
+                    "missing_info": ["premiere status"],
+                    "search_query": "family documentary youth audience",
+                }
+
+        prompt = (
+            "I have a 75-minute documentary from Israel about a divorced father rebuilding "
+            "his relationship with his teenage daughter. The film is nearly finished. I want "
+            "to know which festivals I should target."
+        )
+        profile = modules.film_analyzer(HallucinatingLLM(), modules.Trace(), prompt)
+        ranked = [{
+            "id": "fixture-world",
+            "name": "Fixture World Festival",
+            "country": "France",
+            "region": "Western Europe",
+            "tier": "A",
+            "score": 90,
+            "bucket": "submit_first",
+            "eligible": True,
+            "deadline_status": "open",
+            "premiere_opportunity": True,
+            "premiere_constraint": {"scope": "world"},
+            "ratings": {"strategic_value": 5},
+        }]
+        target = modules.apply_premiere_strategy(profile, ranked)
+        roadmap = modules.normalise_roadmap(
+            {"buckets": {}, "open_questions": []}, ranked, target, profile
+        )
+
+        self.assertEqual(profile["premiere_status"], "unknown")
+        self.assertEqual(profile["premiere_history"], [])
+        self.assertIn("Not established", profile["target_audience"])
+        self.assertTrue(any("high-impact" in item for item in profile["missing_info"]))
+        self.assertIsNone(target)
+        self.assertIn("No premiere target is selected", roadmap["strategy_summary"])
+        self.assertTrue(any(
+            question.startswith("High-impact:") for question in roadmap["open_questions"]
+        ))
+        self.assertEqual(
+            sum("premiere status" in item for item in profile["missing_info"]),
+            1,
+        )
+
+    def test_critical_input_contradictions_force_uncertainty(self) -> None:
+        class ResolvingLLM:
+            def complete_json(self, *args, **kwargs):  # noqa: ANN002, ANN003, ANN201
+                return {
+                    "title": "Contradictory Film",
+                    "logline": "Test",
+                    "format": "feature_doc",
+                    "genres": ["documentary"],
+                    "themes": [],
+                    "country": "Israel",
+                    "language": None,
+                    "runtime_minutes": 96,
+                    "director_profile": None,
+                    "premiere_status": "already_premiered",
+                    "premiere_history": [
+                        {"festival": None, "country": "Israel", "date": "last month"}
+                    ],
+                    "target_audience": "Adult audiences",
+                    "festival_angles": [],
+                    "missing_info": [],
+                    "search_query": "documentary",
+                }
+
+        prompt = (
+            "Runtime: 82 minutes. Never publicly screened. Final runtime: 96 minutes. "
+            "Premiered last month in Jerusalem."
+        )
+        profile = modules.film_analyzer(ResolvingLLM(), modules.Trace(), prompt)
+        contradictions = profile["_validation"]["contradictions"]
+
+        self.assertIsNone(profile["runtime_minutes"])
+        self.assertEqual(profile["premiere_status"], "unknown")
+        self.assertEqual(
+            {item["field"] for item in contradictions},
+            {"runtime_minutes", "premiere_status"},
+        )
+        self.assertTrue(any("conflicting values" in item for item in profile["missing_info"]))
+        self.assertTrue(any("conflicting statements" in item for item in profile["missing_info"]))
+        self.assertIsNone(modules.apply_premiere_strategy(profile, []))
+
+    def test_private_screening_language_does_not_consume_public_premiere(self) -> None:
+        evidence = domain.analyse_critical_input(
+            "The film has not premiered publicly but was screened privately for investors."
+        )["premiere"]
+
+        self.assertTrue(evidence["explicitly_unscreened"])
+        self.assertFalse(evidence["positive_screening"])
+        self.assertFalse(evidence["contradictory"])
+
+    def test_explicit_international_premiere_status_is_preserved(self) -> None:
+        class ResolvingLLM:
+            def complete_json(self, *args, **kwargs):  # noqa: ANN002, ANN003, ANN201
+                return {
+                    "format": "feature_doc",
+                    "premiere_status": "unknown",
+                    "premiere_history": [],
+                    "genres": ["documentary"],
+                    "themes": [],
+                    "festival_angles": [],
+                    "missing_info": [],
+                }
+
+        profile = modules.film_analyzer(
+            ResolvingLLM(),
+            modules.Trace(),
+            "The film screened domestically, but its international premiere remains available.",
+        )
+
+        self.assertEqual(profile["premiere_status"], "international_premiere_available")
+
+    def test_premiere_question_is_prioritized_over_noncritical_missing_information(self) -> None:
+        profile = {
+            "premiere_status": "unknown",
+            "missing_info": [
+                "language",
+                "director biography",
+                "production company",
+                "subtitles",
+                "premiere status (high-impact: confirm public screening history)",
+            ],
+        }
+        roadmap = modules.normalise_roadmap(
+            {"buckets": {}, "open_questions": []}, [], None, profile
+        )
+
+        self.assertTrue(roadmap["open_questions"][0].startswith("High-impact:"))
+        self.assertTrue(any("premiere status" in item for item in roadmap["open_questions"]))
+
+    def test_format_and_completion_contradictions_are_not_silently_resolved(self) -> None:
+        class ResolvingLLM:
+            def complete_json(self, *args, **kwargs):  # noqa: ANN002, ANN003, ANN201
+                return {
+                    "format": "short_fiction",
+                    "premiere_status": "unknown",
+                    "premiere_history": [],
+                    "genres": [],
+                    "themes": [],
+                    "festival_angles": [],
+                    "missing_info": [],
+                }
+
+        profile = modules.film_analyzer(
+            ResolvingLLM(),
+            modules.Trace(),
+            (
+                "Format: feature documentary. Format: short fiction. The film is a rough cut, "
+                "but the final cut is completed. Premiere status is unknown."
+            ),
+        )
+        contradictions = profile["_validation"]["contradictions"]
+
+        self.assertIsNone(profile["format"])
+        self.assertEqual(profile["premiere_status"], "unknown")
+        self.assertEqual(
+            {item["field"] for item in contradictions},
+            {"format", "completion_release_state"},
+        )
+        self.assertTrue(any("completion/release" in item for item in profile["missing_info"]))
 
 
 class ExplainableScoringTest(unittest.TestCase):
@@ -354,6 +537,122 @@ class ExplainableScoringTest(unittest.TestCase):
         self.assertEqual(ratings["strategic_value"], 0.0)
         self.assertIn("No grounded evidence", evidence["genre_fit"])
         self.assertEqual(len(meta["adjustments"]), 3)
+
+    def test_youth_specialist_fit_is_capped_without_youth_audience_evidence(self) -> None:
+        high = {dimension: 5 for dimension in scoring.LLM_DIMENSIONS}
+        evidence = {
+            dimension: "A teenage protagonist was treated as youth-audience evidence."
+            for dimension in scoring.LLM_DIMENSIONS
+        }
+        candidate = {
+            "name": "Fixture Children and Youth Festival",
+            "focus": "Programming for children and youth audiences.",
+            "themes": ["youth", "family"],
+            "identity_confidence": "high",
+            "tier": "B+",
+        }
+        adult_profile = {
+            "_audience_evidence": {"established": False, "basis": "not established"}
+        }
+        ratings, grounded, meta = scoring.apply_rating_guardrails(
+            high,
+            evidence,
+            candidate,
+            (0.0, "No prior company relationship is recorded.", {}),
+            adult_profile,
+        )
+
+        self.assertTrue(meta["audience_guardrail"]["cap_applied"])
+        self.assertTrue(all(ratings[dimension] <= 2 for dimension in scoring.LLM_DIMENSIONS))
+        self.assertIn("young protagonist", grounded["thematic_fit"])
+        ratings["deadline_urgency"] = 5
+        self.assertLessEqual(scoring.compute_score(ratings, "none")["score"], 55)
+
+    def test_explicit_youth_audience_preserves_strong_youth_specialist_fit(self) -> None:
+        high = {dimension: 5 for dimension in scoring.LLM_DIMENSIONS}
+        evidence = {
+            dimension: "The film is explicitly made for children and family audiences."
+            for dimension in scoring.LLM_DIMENSIONS
+        }
+        candidate = {
+            "name": "Fixture Children and Youth Festival",
+            "focus": "Programming for children and youth audiences.",
+            "themes": ["youth", "family", "animation"],
+            "identity_confidence": "high",
+            "tier": "A",
+        }
+        youth_profile = {
+            "_audience_evidence": {
+                "established": True,
+                "basis": "explicit youth-audience language",
+            }
+        }
+        ratings, _, meta = scoring.apply_rating_guardrails(
+            high,
+            evidence,
+            candidate,
+            (0.0, "No prior company relationship is recorded.", {}),
+            youth_profile,
+        )
+
+        self.assertFalse(meta["audience_guardrail"]["cap_applied"])
+        self.assertEqual(ratings["thematic_fit"], 5)
+        self.assertEqual(ratings["genre_fit"], 5)
+        self.assertTrue(
+            domain.analyse_critical_input(
+                "An animated feature made for children and family audiences."
+            )["youth_audience"]["established"]
+        )
+        self.assertTrue(
+            domain.analyse_critical_input(
+                "A family animation for viewers aged 8 to 12."
+            )["youth_audience"]["established"]
+        )
+        self.assertFalse(
+            domain.analyse_critical_input(
+                "An adult documentary about a father and his teenage daughter."
+            )["youth_audience"]["established"]
+        )
+
+    def test_score_assembly_applies_youth_guardrail_from_film_profile(self) -> None:
+        profile = {
+            "format": "feature_doc",
+            "premiere_status": "unknown",
+            "_audience_evidence": {"established": False, "basis": "not established"},
+        }
+        candidate = {
+            "id": "fixture-youth",
+            "name": "Fixture Youth Festival",
+            "focus": "Films for children and youth audiences.",
+            "themes": ["youth", "family"],
+            "tier": "B+",
+            "identity_confidence": "high",
+            "accepts": ["feature_doc"],
+        }
+        score_row = {
+            "ratings": {dimension: 5 for dimension in scoring.LLM_DIMENSIONS},
+            "evidence": {
+                dimension: "Teenage protagonist." for dimension in scoring.LLM_DIMENSIONS
+            },
+        }
+        risk = {
+            "premiere_risk": "none",
+            "premiere_opportunity": False,
+            "eligible": True,
+            "deadline_status": "open",
+            "deadline": {"urgency": 5, "reason": "Deadline is soon."},
+        }
+        ranked = modules.assemble(
+            [candidate],
+            {"fixture-youth": score_row, "_validation": {}},
+            {"fixture-youth": risk},
+            profile,
+            {"company": {}, "history": []},
+            modules.Trace(),
+        )
+
+        self.assertLessEqual(ranked[0]["score"], 55)
+        self.assertTrue(ranked[0]["validation"]["audience_guardrail"]["cap_applied"])
 
     def test_company_memory_changes_the_computed_decision_score(self) -> None:
         creative = {

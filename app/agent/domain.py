@@ -47,6 +47,164 @@ FESTIVAL_NAME_CORRECTIONS = {
 }
 
 
+YOUTH_AUDIENCE_PATTERNS = [
+    r"\b(?:target|intended|primary|core)\s+audience\s*(?::|is|are|includes?)?\s*(?:children|kids|teens?|teenagers|youth|young\s+(?:people|audiences?)|families)\b",
+    r"\b(?:made|intended|designed|created|suitable)\s+for\s+(?:children|kids|teens?|teenagers|youth|young\s+(?:people|audiences?)|family\s+audiences?)\b",
+    r"\b(?:made|intended|designed|created|suitable)\s+for\s+(?:schools?|classrooms?|students?)\b",
+    r"\b(?:children(?:'s)?|kids?|youth|young\s+audience|teen)\s+(?:film|cinema|documentary|animation|audience|programming)\b",
+    r"\b(?:family[- ]friendly|family\s+audience|youth[- ]facing|child[- ]friendly|school\s+audience)\b",
+    r"\b(?:family|children(?:'s)?|kids?|youth)\s+(?:film|animation|documentary|programming)\b",
+    r"\b(?:viewers?|audiences?)\s+(?:aged?|ages?)\s+\d{1,2}(?:\s*(?:-|–|—|to)\s*\d{1,2})?\b",
+    r"\b(?:for\s+)?ages?\s+\d{1,2}(?:\s*(?:-|–|—|to)\s*\d{1,2})\b",
+]
+
+
+def analyse_critical_input(text: str) -> dict[str, Any]:
+    """Extract only evidence needed to stop critical LLM over-inference.
+
+    This is intentionally conservative. It does not replace FilmAnalyzer; it
+    records whether the original request supplies evidence for strategically
+    irreversible states and whether explicit statements conflict.
+    """
+
+    normalized = re.sub(r"[’‘]", "'", text or "").lower()
+    runtimes = sorted({
+        int(value)
+        for value in re.findall(
+            r"(?<!\d)(\d{1,3})\s*(?:-|–|—)?\s*(?:minutes?|mins?\b)",
+            normalized,
+        )
+        if 1 <= int(value) <= 600
+    })
+
+    premiere_positive_patterns = [
+        r"\b(?:has|had|was)\s+(?:already\s+)?premiered\b",
+        r"(?<!not\s)(?<!never\s)\bpremiered\s+(?:publicly|at|in|on|last|already)\b",
+        r"\b(?:was|has\s+been|had\s+been)\s+publicly\s+screened\b",
+        r"(?<!not\s)(?<!never\s)\b(?:publicly\s+)?screened\s+(?:at|in|on|last|before|already)\b",
+        r"\bpublic\s+(?:festival\s+)?screening\s+(?:at|in|occurred|took\s+place)\b",
+        r"\breleased\s+(?:theatrically|online|publicly|on\s+(?:television|tv|streaming))\b",
+    ]
+    premiere_negative_patterns = [
+        r"\bnever\s+(?:publicly\s+)?(?:screened|premiered|shown|released)\b",
+        r"\b(?:has|have|had)\s+never\s+been\s+(?:publicly\s+)?(?:screened|premiered|shown|released)\b",
+        r"\b(?:has|have|had)\s+not\s+(?:been\s+)?(?:screened|premiered|shown|released)\b",
+        r"\bnot\s+(?:yet\s+)?(?:been\s+)?(?:screened|premiered|shown|released)\b",
+        r"\bno\s+(?:public\s+)?(?:screening|screenings|premiere)\s+(?:yet|to\s+date)\b",
+        r"\b(?:world[- ]premiere(?:\s+(?:status|rights))?\s+(?:(?:is|remains?)\s+)?available|unpremiered|unscreened)\b",
+    ]
+    premiere_unknown_patterns = [
+        r"\bpremiere\s+status\s+(?:is\s+)?(?:unknown|uncertain|not\s+known)\b",
+        r"\b(?:do\s+not|don't)\s+know\s+(?:whether|if).{0,40}\b(?:screened|premiered)\b",
+        r"\bnot\s+sure\s+(?:whether|if).{0,40}\b(?:screened|premiered)\b",
+    ]
+    premiere_negative = any(re.search(pattern, normalized) for pattern in premiere_negative_patterns)
+    premiere_international = bool(
+        re.search(
+            r"\binternational\s+premiere(?:\s+(?:status|rights))?\s+"
+            r"(?:(?:is|remains?)\s+)?available\b",
+            normalized,
+        )
+    )
+    positive_source = normalized
+    for pattern in premiere_negative_patterns:
+        positive_source = re.sub(pattern, "", positive_source)
+    premiere_positive = any(
+        re.search(pattern, positive_source) for pattern in premiere_positive_patterns
+    )
+    premiere_unknown = any(re.search(pattern, normalized) for pattern in premiere_unknown_patterns)
+
+    format_labels: list[str] = []
+    format_value = (
+        r"feature\s+documentary|feature\s+doc|short\s+documentary|short\s+doc|"
+        r"feature\s+fiction|fiction\s+feature|narrative\s+feature|short\s+fiction|"
+        r"fiction\s+short|narrative\s+short|animation|animated\s+(?:feature|short|film)|"
+        r"experimental(?:\s+film)?"
+    )
+    format_pattern = re.compile(
+        rf"\b(?:format\s*(?::|is)|(?:the\s+)?(?:film|movie)\s+is|this\s+is|it(?:'s|\s+is))"
+        rf"\s+(?:an?\s+)?({format_value})\b"
+    )
+    format_mapping = {
+        "feature documentary": "feature_doc",
+        "feature doc": "feature_doc",
+        "short documentary": "short_doc",
+        "short doc": "short_doc",
+        "feature fiction": "feature_fiction",
+        "fiction feature": "feature_fiction",
+        "narrative feature": "feature_fiction",
+        "short fiction": "short_fiction",
+        "fiction short": "short_fiction",
+        "narrative short": "short_fiction",
+        "animation": "animation",
+        "animated feature": "animation",
+        "animated short": "animation",
+        "animated film": "animation",
+        "experimental": "experimental",
+        "experimental film": "experimental",
+    }
+    for match in format_pattern.finditer(normalized):
+        format_labels.append(format_mapping[match.group(1)])
+
+    incomplete_patterns = [
+        r"\b(?:rough\s+cut|work\s+in\s+progress|in\s+post[- ]production|unfinished)\b",
+        r"\b(?:nearly|almost)\s+(?:finished|complete|completed)\b",
+        r"\bnot\s+(?:yet\s+)?(?:finished|complete|completed|picture[- ]locked)\b",
+    ]
+    complete_patterns = [
+        r"\b(?:picture[- ]locked|sound[- ]locked|ready\s+for\s+delivery)\b",
+        r"(?<!nearly\s)(?<!almost\s)(?<!not\s)\b(?:finished|completed)\b",
+    ]
+    unreleased_patterns = [
+        r"\b(?:unreleased|not\s+(?:yet\s+)?released|no\s+release\s+yet)\b",
+    ]
+    released_patterns = [
+        r"\b(?:already\s+released|released\s+(?:theatrically|online|publicly|on\s+(?:television|tv|streaming)))\b",
+    ]
+    incomplete = any(re.search(pattern, normalized) for pattern in incomplete_patterns)
+    complete = any(re.search(pattern, normalized) for pattern in complete_patterns)
+    unreleased = any(re.search(pattern, normalized) for pattern in unreleased_patterns)
+    released = any(re.search(pattern, normalized) for pattern in released_patterns)
+
+    youth_matches = [
+        pattern for pattern in YOUTH_AUDIENCE_PATTERNS if re.search(pattern, normalized)
+    ]
+    return {
+        "runtime": {"values": runtimes, "contradictory": len(runtimes) > 1},
+        "premiere": {
+            "positive_screening": premiere_positive,
+            "explicitly_unscreened": premiere_negative,
+            "international_premiere_available": premiere_international,
+            "explicitly_unknown": premiere_unknown,
+            "evidence_present": (
+                premiere_positive
+                or premiere_negative
+                or premiere_international
+                or premiere_unknown
+            ),
+            "contradictory": (
+                (premiere_positive and premiere_negative)
+                or (premiere_unknown and (premiere_positive or premiere_negative))
+            ),
+        },
+        "format": {
+            "explicit_labels": sorted(set(format_labels)),
+            "contradictory": len(set(format_labels)) > 1,
+        },
+        "completion_release": {
+            "incomplete": incomplete,
+            "complete": complete,
+            "unreleased": unreleased,
+            "released": released,
+            "contradictory": (incomplete and complete) or (unreleased and released),
+        },
+        "youth_audience": {
+            "established": bool(youth_matches),
+            "basis": "explicit youth-audience language" if youth_matches else "not established",
+        },
+    }
+
+
 def normalise_festival_facts(festival: dict[str, Any]) -> dict[str, Any]:
     """Apply small, auditable display corrections without mutating source stores."""
 

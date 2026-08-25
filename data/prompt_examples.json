@@ -1207,7 +1207,8 @@
           "guardrails": [
             "rating_clamp",
             "identity_confidence_cap",
-            "tier_strategic_cap"
+            "tier_strategic_cap",
+            "youth_audience_evidence_cap"
           ]
         },
         "response": {
@@ -2709,7 +2710,8 @@
           "guardrails": [
             "rating_clamp",
             "identity_confidence_cap",
-            "tier_strategic_cap"
+            "tier_strategic_cap",
+            "youth_audience_evidence_cap"
           ]
         },
         "response": {

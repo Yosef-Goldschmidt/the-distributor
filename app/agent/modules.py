@@ -83,6 +83,8 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         "world_premiere_available", "international_premiere_available", "already_premiered", "unknown",
     }
     adjustments = []
+    contradictions = []
+    input_evidence = domain.analyse_critical_input(user_prompt)
     missing_info = profile.get("missing_info")
     if not isinstance(missing_info, list):
         missing_info = []
@@ -115,8 +117,138 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         if screened_abroad:
             profile["premiere_status"] = "already_premiered"
             adjustments.append("international screening history overrides international_premiere_available")
+
+    def add_missing(value: str) -> None:
+        normalized = re.sub(r"[^a-z0-9]+", " ", value.lower()).strip()
+
+        def category(item: str) -> str:
+            if re.search(r"\b(?:premiere|screening)\b", item):
+                return "premiere"
+            if re.search(r"\bruntime\b", item):
+                return "runtime"
+            if re.search(r"\bformat\b", item):
+                return "format"
+            if re.search(r"\b(?:completion|release|picture lock|final cut)\b", item):
+                return "completion_release"
+            return item
+
+        new_category = category(normalized)
+        for index, item in enumerate(missing_info):
+            existing = re.sub(r"[^a-z0-9]+", " ", str(item).lower()).strip()
+            if category(existing) == new_category:
+                if len(value) > len(str(item)):
+                    missing_info[index] = value
+                return
+        missing_info.append(value)
+
+    runtime_evidence = input_evidence["runtime"]
+    if runtime_evidence["contradictory"]:
+        profile["runtime_minutes"] = None
+        add_missing(
+            "runtime (conflicting values in the request; clarification required)"
+        )
+        contradictions.append(
+            {"field": "runtime_minutes", "values": runtime_evidence["values"]}
+        )
+        adjustments.append("conflicting runtime values replaced with null")
+
+    format_evidence = input_evidence["format"]
+    if format_evidence["contradictory"]:
+        profile["format"] = None
+        add_missing(
+            "format (conflicting explicit labels in the request; clarification required)"
+        )
+        contradictions.append(
+            {"field": "format", "values": format_evidence["explicit_labels"]}
+        )
+        adjustments.append("conflicting explicit format labels replaced with null")
+
+    completion_evidence = input_evidence["completion_release"]
+    if completion_evidence["contradictory"]:
+        add_missing(
+            "completion/release state (conflicting statements; clarification required)"
+        )
+        contradictions.append(
+            {
+                "field": "completion_release_state",
+                "states": {
+                    key: completion_evidence[key]
+                    for key in ("incomplete", "complete", "unreleased", "released")
+                },
+            }
+        )
+        adjustments.append("conflicting completion/release statements surfaced")
+
+    premiere_evidence = input_evidence["premiere"]
+    if premiere_evidence["contradictory"]:
+        profile["premiere_status"] = "unknown"
+        add_missing(
+            "premiere/screening status (conflicting statements; clarification required)"
+        )
+        contradictions.append(
+            {
+                "field": "premiere_status",
+                "states": ["explicitly_unscreened", "screening_or_premiere_reported"],
+            }
+        )
+        adjustments.append(
+            "conflicting premiere/screening statements forced premiere_status to unknown"
+        )
+    elif not premiere_evidence["evidence_present"] or premiere_evidence["explicitly_unknown"]:
+        if profile.get("premiere_status") != "unknown":
+            adjustments.append(
+                "premiere_status forced to unknown because the request supplied no positive premiere evidence"
+            )
+        if profile["premiere_history"]:
+            profile["premiere_history"] = []
+            adjustments.append(
+                "unsupported premiere_history removed because the request supplied no screening evidence"
+            )
+        profile["premiere_status"] = "unknown"
+        add_missing(
+            "premiere status (high-impact: confirm whether and where the film has screened publicly)"
+        )
+    elif premiere_evidence["international_premiere_available"]:
+        if profile.get("premiere_status") != "international_premiere_available":
+            profile["premiere_status"] = "international_premiere_available"
+            adjustments.append(
+                "explicit international-premiere evidence established international_premiere_available"
+            )
+    elif premiere_evidence["positive_screening"]:
+        if profile.get("premiere_status") != "already_premiered":
+            profile["premiere_status"] = "already_premiered"
+            adjustments.append(
+                "explicit screening/premiere evidence forced premiere_status to already_premiered"
+            )
+    elif premiere_evidence["explicitly_unscreened"]:
+        if profile.get("premiere_status") != "world_premiere_available":
+            profile["premiere_status"] = "world_premiere_available"
+            adjustments.append(
+                "explicit no-screening evidence established world_premiere_available"
+            )
+        if profile["premiere_history"]:
+            profile["premiere_history"] = []
+            adjustments.append(
+                "premiere_history removed because the request explicitly says the film is unscreened"
+            )
+
+    profile["_audience_evidence"] = input_evidence["youth_audience"]
+    if (
+        not input_evidence["youth_audience"]["established"]
+        and re.search(
+            r"\b(?:children|kids|teens?|teenagers|youth|young audiences?|family audiences?)\b",
+            str(profile.get("target_audience") or ""),
+            flags=re.I,
+        )
+    ):
+        profile["target_audience"] = "Not established from the supplied information."
+        adjustments.append(
+            "unsupported youth target-audience inference removed; protagonist age and family theme are insufficient"
+        )
     profile["missing_info"] = missing_info
     profile["_validation"] = {"valid": not adjustments, "adjustments": adjustments}
+    if contradictions:
+        profile["_validation"]["contradictions"] = contradictions
     trace.add(
         "FilmAnalyzer",
         {
@@ -477,6 +609,7 @@ def assemble(
     candidates: list[dict[str, Any]],
     scores: dict[str, dict[str, Any]],
     risks: dict[str, dict[str, Any]],
+    profile: dict[str, Any],
     memory: dict[str, Any],
     trace: Trace,
 ) -> list[dict[str, Any]]:
@@ -498,6 +631,7 @@ def assemble(
             dict(scored.get("evidence", {}) or {}),
             candidate,
             relationship,
+            profile,
         )
         deadline = risk.get("deadline", {}) or {}
         ratings["deadline_urgency"] = deadline.get("urgency", 2.0)
@@ -563,7 +697,12 @@ def assemble(
             "weights": scoring.WEIGHTS,
             "premiere_penalty_table": scoring.PREMIERE_PENALTY,
             "deadline_urgency": f"computed from structured dates against {now.isoformat()}",
-            "guardrails": ["rating_clamp", "identity_confidence_cap", "tier_strategic_cap"],
+            "guardrails": [
+                "rating_clamp",
+                "identity_confidence_cap",
+                "tier_strategic_cap",
+                "youth_audience_evidence_cap",
+            ],
         },
         {
             "scored": len(ranked),
@@ -1083,8 +1222,24 @@ def normalise_roadmap(
     llm_questions = [str(value) for value in raw_questions if value] if isinstance(raw_questions, list) else []
     open_questions = []
     missing_items = (profile or {}).get("missing_info", []) or []
+    critical_pattern = re.compile(
+        r"\b(?:premiere|screening|runtime|format|completion|release|picture lock|final cut)\b",
+        flags=re.I,
+    )
+    missing_items = sorted(
+        enumerate(missing_items),
+        key=lambda item: (not bool(critical_pattern.search(str(item[1]))), item[0]),
+    )
+    missing_items = [item for _, item in missing_items]
     for missing in missing_items[:4]:
-        question = f"Provide or confirm the missing film information: {str(missing).strip()}."
+        missing_text = str(missing).strip()
+        if re.search(r"\b(?:premiere|screening)\b", missing_text, flags=re.I):
+            question = (
+                "High-impact: confirm every prior public screening and the film's remaining "
+                f"premiere status ({missing_text})."
+            )
+        else:
+            question = f"Provide or confirm the missing film information: {missing_text}."
         if question not in open_questions:
             open_questions.append(question)
     if len(missing_items) > 4:

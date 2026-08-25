@@ -6,6 +6,7 @@ the arithmetic so scores stay reproducible and auditable.
 
 from __future__ import annotations
 
+import re
 from datetime import date
 from typing import Any
 
@@ -161,6 +162,7 @@ def apply_rating_guardrails(
     evidence: dict[str, Any],
     candidate: dict[str, Any],
     relationship: tuple[float, str, dict[str, Any]],
+    profile: dict[str, Any] | None = None,
 ) -> tuple[dict[str, float], dict[str, str], dict[str, Any]]:
     """Clamp LLM judgements to constraints established by source confidence."""
 
@@ -192,12 +194,43 @@ def apply_rating_guardrails(
         )
         adjustments.append(f"strategic_value capped for tier {tier}")
 
+    identity_text = " ".join(
+        str(candidate.get(field) or "") for field in ("name", "focus", "notes")
+    ).lower()
+    youth_specialist = bool(
+        re.search(
+            r"\b(?:children(?:'s)?|kids?|youth)\b|\byoung\s+(?:audience|audiences|people)\b",
+            identity_text,
+        )
+    )
+    youth_audience_established = bool(
+        (profile or {}).get("_audience_evidence", {}).get("established")
+    )
+    youth_cap_applied = bool(profile is not None and youth_specialist and not youth_audience_established)
+    if youth_cap_applied:
+        for dimension in LLM_DIMENSIONS:
+            if guarded[dimension] > 2.0:
+                guarded[dimension] = 2.0
+                grounded[dimension] = (
+                    "Capped at 2/5 because the festival is youth-specialized but the supplied "
+                    "film information does not establish a children, teen, youth or family audience; "
+                    "a young protagonist or family theme alone is insufficient."
+                )
+                adjustments.append(
+                    f"{dimension} capped because youth-audience evidence was not established"
+                )
+
     relation_rating, relation_evidence, relation_facts = relationship
     guarded["company_relationship"] = relation_rating
     grounded["company_relationship"] = relation_evidence
     return guarded, grounded, {
         "adjustments": adjustments,
         "company_relationship_facts": relation_facts,
+        "audience_guardrail": {
+            "youth_specialist": youth_specialist,
+            "youth_audience_established": youth_audience_established,
+            "cap_applied": youth_cap_applied,
+        },
     }
 
 
