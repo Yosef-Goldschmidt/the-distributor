@@ -1,0 +1,57 @@
+{
+  "bootstrap": {
+    "request": {},
+    "response": {"workspace_id": "workspace-golden", "capability_in_body": false}
+  },
+  "campaign_creation": {
+    "request": {"free_text": "Salt Road is an Israeli feature documentary with no prior public screening."},
+    "response": {"campaign_id": "campaign-golden", "campaign_version": 0, "strategy_status": "ready"}
+  },
+  "campaign_get_aggregate": {
+    "request": {"campaign_id": "campaign-golden"},
+    "response_fixture_refs": {
+      "snapshot": "boundary_models.json#/CampaignSnapshot",
+      "active_plan": "boundary_models.json#/CampaignPlan",
+      "latest_diff": "boundary_models.json#/StrategyDiff"
+    }
+  },
+  "command": {
+    "request": {
+      "type": "record_rejection",
+      "payload": {"festival_id": "hot-docs", "source_refs": ["human:email-2026-08-25"]},
+      "expected_version": 3,
+      "idempotency_key": "command-reject-hot-docs-0001",
+      "actor": {"kind": "human", "actor_ref": "human:distributor"},
+      "invalidation_class": "C"
+    },
+    "response": {"campaign_id": "campaign-golden", "campaign_version": 4, "strategy_status": "ready", "idempotent_replay": false}
+  },
+  "replan": {
+    "request": {"expected_version": 4},
+    "response": {"campaign_id": "campaign-golden", "campaign_version": 4, "strategy_status": "ready", "state_event_created": false}
+  },
+  "simulate": {
+    "request": {
+      "commands": [{
+        "type": "schedule_screening",
+        "payload": {"screening_id": "screening-hypothetical", "festival_id": "docaviv", "venue": "Demo venue", "country": "Israel", "region": "Middle East", "scheduled_at": "2026-09-01T19:00:00Z", "access": "unknown", "source_refs": []},
+        "expected_version": 4,
+        "idempotency_key": "simulate-screening-0001",
+        "actor": {"kind": "human", "actor_ref": "human:distributor"},
+        "invalidation_class": "C"
+      }]
+    },
+    "response": {"base_campaign_version": 4, "hypothetical_plan": null, "mutated_campaign": false, "requires_provider_refresh": false}
+  },
+  "strategy_history_get": {
+    "response": {"campaign_id": "campaign-golden", "strategy_no": 4, "based_on_campaign_version": 4, "input_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "plan": null, "diff": null, "reuse_manifest": null}
+  },
+  "conflict_409": {
+    "status": 409,
+    "response": {"code": "version_conflict", "message": "Campaign version is stale.", "current_version": 4, "details": []}
+  },
+  "validation_error": {
+    "status": 422,
+    "response": {"code": "validation_error", "message": "The command payload is invalid.", "current_version": null, "details": ["payload.festival_id is required"]}
+  }
+}

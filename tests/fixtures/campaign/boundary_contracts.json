@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-08-25T10:00:00+03:00",
+  "as_of_date": "2026-08-25",
+  "campaign_id": "campaign-golden",
+  "workspace_id": "workspace-golden",
+  "hash_seeds": {
+    "profile": "identity:film-golden:v1",
+    "festival_hot_docs": "festival:hot-docs:v1",
+    "festival_idfa": "festival:idfa:v1",
+    "retrieval": "retrieval:film-golden:v1",
+    "creative_hot_docs": "creative:hot-docs:v1",
+    "creative_idfa": "creative:idfa:v1",
+    "risk_hot_docs": "risk:hot-docs:v1",
+    "risk_idfa": "risk:idfa:v1",
+    "ledger": "ledger:film-golden:v1",
+    "graph": "graph:film-golden:v1",
+    "plan": "plan:film-golden:v1"
+  },
+  "profile": {
+    "title": "Salt Road",
+    "synopsis": "An Israeli documentary about women defending a disappearing salt landscape.",
+    "format": "feature_doc",
+    "country": "Israel",
+    "themes": ["environment", "women", "displacement"],
+    "runtime_minutes": 89,
+    "premiere_assertion": "No prior public screening",
+    "target_regions": ["North America", "Europe"]
+  },
+  "festivals": [
+    {
+      "festival_id": "hot-docs",
+      "festival_name": "Hot Docs",
+      "country": "Canada",
+      "region": "North America",
+      "tier": "A",
+      "accepts": ["feature_doc"],
+      "retrieval_rank": 1,
+      "semantic_score": "0.92",
+      "lexical_score": "0.75",
+      "score": 90,
+      "base_score": "90",
+      "decision_grade": "submit_first",
+      "future_quality": "88",
+      "fee_amount": "75",
+      "premiere_scope": "world"
+    },
+    {
+      "festival_id": "idfa",
+      "festival_name": "IDFA",
+      "country": "Netherlands",
+      "region": "Europe",
+      "tier": "A",
+      "accepts": ["feature_doc"],
+      "retrieval_rank": 2,
+      "semantic_score": "0.90",
+      "lexical_score": "0.72",
+      "score": 82,
+      "base_score": "82",
+      "decision_grade": "submit_first",
+      "future_quality": "92",
+      "fee_amount": "65",
+      "premiere_scope": "world"
+    }
+  ],
+  "edge_statuses": {
+    "hot-docs->idfa": "incompatible",
+    "idfa->hot-docs": "compatible"
+  },
+  "expected_boundary_models": [
+    "CampaignProfile",
+    "RetrievalInput",
+    "RetrievedFestivalEvidence",
+    "CandidateCreativeEvidence",
+    "CandidateRiskEvidence",
+    "FrozenCandidateEvidence",
+    "CampaignSnapshot",
+    "CompatibilityEdge",
+    "PlanningInput",
+    "CampaignPlan",
+    "ReuseManifest",
+    "StrategyDiff"
+  ]
+}

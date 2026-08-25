@@ -1,0 +1,88 @@
+{
+  "cases": [
+    {
+      "case_id": "premiere-contradiction",
+      "clarification_id": "clarify-premiere-contradiction",
+      "fact_key": "premiere.world",
+      "question": "Has the film had any confirmed public screening?",
+      "impact": "blocking_hard_decision",
+      "affected_decisions": ["primary_launch"],
+      "blocking": true,
+      "contradiction": true,
+      "tested_states": ["available", "consumed"],
+      "candidate_set_lower_bound": false,
+      "suppressed": false,
+      "suppression_reason": null
+    },
+    {
+      "case_id": "composer-suppressed",
+      "clarification_id": "clarify-composer",
+      "fact_key": "credits.composer",
+      "question": null,
+      "impact": "non_decision_changing",
+      "affected_decisions": [],
+      "blocking": false,
+      "contradiction": false,
+      "tested_states": [],
+      "candidate_set_lower_bound": false,
+      "suppressed": true,
+      "suppression_reason": "no_current_plan_dependency"
+    },
+    {
+      "case_id": "missing-premiere-changes-primary",
+      "clarification_id": "clarify-premiere-primary",
+      "fact_key": "premiere.world",
+      "question": "Is the world premiere still available?",
+      "impact": "changes_primary",
+      "affected_decisions": ["primary_launch:hot-docs"],
+      "blocking": true,
+      "contradiction": false,
+      "tested_states": ["available", "consumed"],
+      "candidate_set_lower_bound": false,
+      "suppressed": false,
+      "suppression_reason": null
+    },
+    {
+      "case_id": "later-gate-does-not-block-campaign",
+      "clarification_id": "clarify-later-access",
+      "fact_key": "screening.future.access",
+      "question": "Will the later industry screening be public?",
+      "impact": "changes_verification_or_order",
+      "affected_decisions": ["post_premiere_gate"],
+      "blocking": false,
+      "contradiction": false,
+      "tested_states": ["public", "private"],
+      "candidate_set_lower_bound": false,
+      "suppressed": false,
+      "suppression_reason": null
+    },
+    {
+      "case_id": "unknown-required-fee-blocks",
+      "clarification_id": "clarify-required-fee",
+      "fact_key": "fee.hot-docs",
+      "question": "What is the exact current Hot Docs submission fee in USD?",
+      "impact": "blocking_hard_decision",
+      "affected_decisions": ["budget:primary_launch"],
+      "blocking": true,
+      "contradiction": false,
+      "tested_states": ["known_within_budget", "known_over_budget"],
+      "candidate_set_lower_bound": false,
+      "suppressed": false,
+      "suppression_reason": null
+    },
+    {
+      "case_id": "format-country-lower-bound",
+      "clarification_id": "clarify-format-country",
+      "fact_key": "identity.format_country",
+      "question": "Confirm the film format and origin country before refreshing candidates.",
+      "impact": "changes_primary",
+      "affected_decisions": ["current_candidate_eligibility", "territorial_compatibility"],
+      "blocking": false,
+      "contradiction": false,
+      "tested_states": ["current_candidates_only"],
+      "candidate_set_lower_bound": true,
+      "suppressed": false,
+      "suppression_reason": null
+    }
+  ]
+}

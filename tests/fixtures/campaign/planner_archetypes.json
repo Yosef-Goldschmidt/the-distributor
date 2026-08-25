@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "case_id": "A-option-destruction",
+      "candidates": [
+        {"festival_id": "hot-docs", "score": 90, "grade": "submit_first", "known_preserved_pct": 10, "possible_pct": 0, "destroyed_pct": 90, "preserved_ids": [], "verify_ids": [], "destroyed_ids": ["idfa"], "blocking_gates": 0, "verify_quality_pct": 0, "total_gates": 0, "frontier": true, "rU": 1, "rP": 2},
+        {"festival_id": "idfa", "score": 82, "grade": "submit_first", "known_preserved_pct": 100, "possible_pct": 0, "destroyed_pct": 0, "preserved_ids": ["hot-docs"], "verify_ids": [], "destroyed_ids": [], "blocking_gates": 0, "verify_quality_pct": 0, "total_gates": 0, "frontier": true, "rU": 2, "rP": 1}
+      ],
+      "expected_frontier": ["hot-docs", "idfa"],
+      "naive": "hot-docs",
+      "balanced": "idfa",
+      "strict": "idfa",
+      "opportunistic": "hot-docs",
+      "budget_state": "KNOWN_FEASIBLE"
+    },
+    {
+      "case_id": "B-immediate-dominates",
+      "candidates": [
+        {"festival_id": "hot-docs", "score": 94, "grade": "submit_first", "known_preserved_pct": 20, "possible_pct": 0, "destroyed_pct": 80, "preserved_ids": [], "verify_ids": [], "destroyed_ids": ["sheffield-docfest"], "blocking_gates": 0, "verify_quality_pct": 0, "total_gates": 0, "frontier": true, "rU": 1, "rP": 2},
+        {"festival_id": "sheffield-docfest", "score": 55, "grade": "prioritize_next", "known_preserved_pct": 100, "possible_pct": 0, "destroyed_pct": 0, "preserved_ids": ["hot-docs"], "verify_ids": [], "destroyed_ids": [], "blocking_gates": 0, "verify_quality_pct": 0, "total_gates": 0, "frontier": true, "rU": 2, "rP": 1}
+      ],
+      "expected_frontier": ["hot-docs", "sheffield-docfest"],
+      "naive": "hot-docs",
+      "balanced": "hot-docs",
+      "strict": "sheffield-docfest",
+      "opportunistic": "hot-docs",
+      "budget_state": "KNOWN_FEASIBLE"
+    },
+    {
+      "case_id": "C-verification-burden",
+      "candidates": [
+        {"festival_id": "hot-docs", "score": 85, "grade": "submit_first", "known_preserved_pct": 60, "possible_pct": 40, "destroyed_pct": 0, "preserved_ids": [], "verify_ids": ["idfa"], "destroyed_ids": [], "blocking_gates": 1, "verify_quality_pct": 40, "total_gates": 1, "frontier": false, "rU": null, "rP": null},
+        {"festival_id": "idfa", "score": 85, "grade": "submit_first", "known_preserved_pct": 60, "possible_pct": 0, "destroyed_pct": 40, "preserved_ids": [], "verify_ids": [], "destroyed_ids": ["hot-docs"], "blocking_gates": 0, "verify_quality_pct": 0, "total_gates": 0, "frontier": true, "rU": 1, "rP": 1}
+      ],
+      "expected_frontier": ["idfa"],
+      "naive": "hot-docs",
+      "balanced": "idfa",
+      "strict": "idfa",
+      "opportunistic": "idfa",
+      "budget_state": "KNOWN_FEASIBLE"
+    },
+    {
+      "case_id": "D-hard-preservation",
+      "candidates": [
+        {"festival_id": "hot-docs", "score": 95, "grade": "submit_first", "known_preserved_pct": 0, "possible_pct": 0, "destroyed_pct": 100, "preserved_ids": [], "verify_ids": [], "destroyed_ids": ["idfa"], "blocking_gates": 0, "verify_quality_pct": 0, "total_gates": 0, "frontier": false, "filtered": true, "filter_reason": "violates_preserve_world_premiere", "rU": null, "rP": null},
+        {"festival_id": "idfa", "score": 80, "grade": "submit_first", "known_preserved_pct": 100, "possible_pct": 0, "destroyed_pct": 0, "preserved_ids": ["hot-docs"], "verify_ids": [], "destroyed_ids": [], "blocking_gates": 0, "verify_quality_pct": 0, "total_gates": 0, "frontier": true, "rU": 1, "rP": 1}
+      ],
+      "expected_frontier": ["idfa"],
+      "naive": "hot-docs",
+      "balanced": "idfa",
+      "strict": "idfa",
+      "opportunistic": "idfa",
+      "budget_state": "KNOWN_FEASIBLE"
+    },
+    {
+      "case_id": "E-no-tradeoff",
+      "candidates": [
+        {"festival_id": "hot-docs", "score": 88, "grade": "submit_first", "known_preserved_pct": 100, "possible_pct": 0, "destroyed_pct": 0, "preserved_ids": ["idfa"], "verify_ids": [], "destroyed_ids": [], "blocking_gates": 0, "verify_quality_pct": 0, "total_gates": 0, "frontier": true, "rU": 1, "rP": 1},
+        {"festival_id": "idfa", "score": 80, "grade": "submit_first", "known_preserved_pct": 100, "possible_pct": 0, "destroyed_pct": 0, "preserved_ids": ["hot-docs"], "verify_ids": [], "destroyed_ids": [], "blocking_gates": 0, "verify_quality_pct": 0, "total_gates": 0, "frontier": false, "rU": null, "rP": null}
+      ],
+      "expected_frontier": ["hot-docs"],
+      "naive": "hot-docs",
+      "balanced": "hot-docs",
+      "strict": "hot-docs",
+      "opportunistic": "hot-docs",
+      "budget_state": "KNOWN_FEASIBLE"
+    }
+  ],
+  "invariants": [
+    "equal preservation and verification preserves immediate ordering",
+    "no destructive difference means preservation cannot reverse immediate ranking without a hard human constraint",
+    "a Pareto-dominated root is never selected",
+    "verify edges are never treated as compatible",
+    "mode changes use only the documented ordinal policy",
+    "identical PlanningInput produces identical result and hash"
+  ]
+}

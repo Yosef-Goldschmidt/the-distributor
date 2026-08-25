@@ -1,0 +1,14 @@
+{
+  "entropy_bits": 256,
+  "encoding": "base64url",
+  "cookie_only_after_bootstrap": true,
+  "secure": true,
+  "http_only": true,
+  "same_site": "Lax",
+  "persisted_digest": "SHA-256(raw_capability)",
+  "extra_hmac_secret": false,
+  "mutations_json_only": true,
+  "exact_origin_allowlist": ["https://distributor.example", "http://localhost:8000", "http://127.0.0.1:8000"],
+  "forbidden_trace_values": ["capability", "cookie", "digest"],
+  "campaign_id_authorizes_access": false
+}

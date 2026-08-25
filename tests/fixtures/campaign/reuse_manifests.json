@@ -1,0 +1,60 @@
+{
+  "cases": [
+    {
+      "case_id": "hot-docs-rejection",
+      "before": {"festival_id": "hot-docs", "submission_state": "submitted", "current": true},
+      "command": {
+        "type": "record_rejection",
+        "payload": {"festival_id": "hot-docs", "source_refs": ["human:rejection-email"]},
+        "expected_version": 3,
+        "idempotency_key": "reuse-rejection-0001",
+        "actor": {"kind": "human", "actor_ref": "human:distributor"},
+        "invalidation_class": "C"
+      },
+      "after": {"festival_id": "hot-docs", "submission_state": "rejected", "current": false},
+      "invalidation_class": "C",
+      "reused_artifacts": ["retrieval", "creative_evidence", "risk", "premiere_ledger", "compatibility_graph"],
+      "rerun_artifacts": ["planner", "clarification"],
+      "invalidated_artifacts": [],
+      "reasons": ["record_rejection_changes_operational_availability"],
+      "chat_attempts": 0,
+      "embedding_attempts": 0
+    },
+    {
+      "case_id": "confirmed-public-screening",
+      "command": {
+        "type": "confirm_screening",
+        "payload": {"screening_id": "screening-hot-docs", "occurred_at": "2026-08-25T19:00:00Z", "access": "public", "country": "Canada", "region": "North America", "source_refs": ["human:screening-proof"]},
+        "expected_version": 4,
+        "idempotency_key": "reuse-screening-0001",
+        "actor": {"kind": "human", "actor_ref": "human:distributor"},
+        "invalidation_class": "B"
+      },
+      "invalidation_class": "B",
+      "reused_artifacts": ["company_memory", "retrieval", "creative_evidence"],
+      "rerun_artifacts": ["premiere_ledger", "risk", "compatibility_graph", "planner", "clarification"],
+      "invalidated_artifacts": ["premiere_ledger", "risk", "compatibility_graph", "planner", "clarification"],
+      "reasons": ["confirmed_public_screening_changes_premiere_evidence"],
+      "chat_attempts": 0,
+      "embedding_attempts": 0
+    },
+    {
+      "case_id": "identity-change",
+      "command": {
+        "type": "update_profile_fact",
+        "payload": {"fact_key": "format", "fact": {"value": "short_doc", "status": "asserted", "source_refs": ["human:profile-correction"], "observed_at": "2026-08-25T07:00:00Z"}},
+        "expected_version": 5,
+        "idempotency_key": "reuse-identity-0001",
+        "actor": {"kind": "human", "actor_ref": "human:distributor"},
+        "invalidation_class": "A"
+      },
+      "invalidation_class": "A",
+      "reused_artifacts": ["company_memory"],
+      "rerun_artifacts": ["retrieval", "creative_evidence", "risk", "premiere_ledger", "compatibility_graph", "planner", "clarification"],
+      "invalidated_artifacts": ["retrieval", "creative_evidence", "risk", "compatibility_graph"],
+      "reasons": ["identity_hash_changed"],
+      "chat_attempts": 1,
+      "embedding_attempts": 1
+    }
+  ]
+}

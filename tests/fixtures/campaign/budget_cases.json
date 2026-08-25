@@ -1,0 +1,12 @@
+{
+  "hard_limit": {"amount": "100", "currency": "USD"},
+  "cases": [
+    {"case_id": "known-infeasible", "known_total": "110", "unknown_fee_ids": [], "state": "KNOWN_INFEASIBLE"},
+    {"case_id": "known-feasible", "known_total": "100", "unknown_fee_ids": [], "state": "KNOWN_FEASIBLE"},
+    {"case_id": "verify", "known_total": "80", "unknown_fee_ids": ["fee-unknown"], "state": "VERIFY"}
+  ],
+  "required_now": {
+    "included": ["current_root", "locked_concurrent"],
+    "excluded": ["rejection_alternative", "screening_branch", "post_premiere", "hypothetical_later"]
+  }
+}

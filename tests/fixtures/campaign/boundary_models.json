@@ -1,0 +1,2121 @@
+{
+  "CampaignPlan": {
+    "alternative_launches": [
+      {
+        "activates_on": "primary_rejected_or_withdrawn",
+        "festival_id": "idfa"
+      }
+    ],
+    "budget": {
+      "hard_limit": {
+        "amount": "200",
+        "currency": "USD"
+      },
+      "included_fee_ids": [
+        "fee-hot-docs"
+      ],
+      "known_total": {
+        "amount": "50",
+        "currency": "USD"
+      },
+      "required_action_ids": [
+        "submit-hot-docs"
+      ],
+      "state": "KNOWN_FEASIBLE",
+      "unknown_fee_ids": []
+    },
+    "clarifications": [],
+    "next_actions": [
+      {
+        "action_id": "submit-hot-docs",
+        "description": "Submit after confirming the fee.",
+        "festival_id": "hot-docs",
+        "gated_by": null,
+        "required_now": true
+      }
+    ],
+    "option_preservation": {
+      "destroyed_ids": [
+        "idfa"
+      ],
+      "known_destroyed_pct": "100",
+      "known_preserved_pct": "0",
+      "mode": "balanced",
+      "possible_additional_pct": "0",
+      "preserved_ids": [],
+      "verify_ids": []
+    },
+    "plan_hash": "23abbda78e1fbbde27b66625c549c975ec2859f98a7f3a6666ab3a40ca71fbec",
+    "post_premiere_opportunities": [],
+    "primary_launch": {
+      "festival_id": "hot-docs",
+      "reason_refs": [
+        "score:hot-docs",
+        "edge:hot-docs:idfa"
+      ],
+      "screening_gate": "screening-confirmed-public",
+      "submission_action": "Submit the current application."
+    },
+    "rejection_branch": {
+      "of_festival_id": "hot-docs",
+      "promote_festival_id": "idfa"
+    },
+    "schema_version": 2,
+    "screened_branch": {
+      "at_festival_id": "hot-docs",
+      "post_premiere_opportunity_ids": [],
+      "premiere_effect": {
+        "international": "consumed",
+        "world": "consumed"
+      }
+    },
+    "selection_diagnostics": [
+      {
+        "budget_assessment": {
+          "hard_limit": {
+            "amount": "200",
+            "currency": "USD"
+          },
+          "included_fee_ids": [
+            "fee-hot-docs"
+          ],
+          "known_total": {
+            "amount": "50",
+            "currency": "USD"
+          },
+          "required_action_ids": [
+            "submit-hot-docs"
+          ],
+          "state": "KNOWN_FEASIBLE",
+          "unknown_fee_ids": []
+        },
+        "decision_grade": "submit_first",
+        "decision_grade_group": "launch_ready",
+        "deterministic_tie_break_id": "hot-docs",
+        "festival_id": "hot-docs",
+        "hard_filter": {
+          "constraint_refs": [],
+          "feasible": true,
+          "reason_codes": []
+        },
+        "immediate_rank": 1,
+        "immediate_utility": 90,
+        "on_pareto_frontier": true,
+        "preservation": {
+          "destroyed_ids": [
+            "idfa"
+          ],
+          "known_destroyed_pct": "100",
+          "known_preserved_pct": "0",
+          "mode": "balanced",
+          "possible_additional_pct": "0",
+          "preserved_ids": [],
+          "verify_ids": []
+        },
+        "preservation_rank": 2,
+        "soft_budget_preference_rank": 0,
+        "verification_burden": {
+          "blocking_gate_count": 0,
+          "total_gate_count": 0,
+          "verify_edge_quality_pct": "0"
+        }
+      }
+    ],
+    "verification_gates": []
+  },
+  "CampaignProfile": {
+    "country": {
+      "observed_at": "2026-08-25T07:00:00Z",
+      "source_refs": [
+        "fixture:source"
+      ],
+      "status": "confirmed",
+      "value": "Israel"
+    },
+    "format": {
+      "observed_at": "2026-08-25T07:00:00Z",
+      "source_refs": [
+        "fixture:source"
+      ],
+      "status": "confirmed",
+      "value": "feature_doc"
+    },
+    "premiere_assertions": [
+      {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "No prior public screening"
+      }
+    ],
+    "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+    "runtime_minutes": {
+      "observed_at": "2026-08-25T07:00:00Z",
+      "source_refs": [
+        "fixture:source"
+      ],
+      "status": "confirmed",
+      "value": 89
+    },
+    "schema_version": 1,
+    "synopsis": {
+      "observed_at": "2026-08-25T07:00:00Z",
+      "source_refs": [
+        "fixture:source"
+      ],
+      "status": "confirmed",
+      "value": "An Israeli documentary about women defending a disappearing salt landscape."
+    },
+    "target_regions": [
+      "North America",
+      "Europe"
+    ],
+    "themes": {
+      "observed_at": "2026-08-25T07:00:00Z",
+      "source_refs": [
+        "fixture:source"
+      ],
+      "status": "confirmed",
+      "value": [
+        "environment",
+        "women",
+        "displacement"
+      ]
+    },
+    "title": {
+      "observed_at": "2026-08-25T07:00:00Z",
+      "source_refs": [
+        "fixture:source"
+      ],
+      "status": "confirmed",
+      "value": "Salt Road"
+    }
+  },
+  "CampaignSnapshot": {
+    "active_strategy_ref": "strategy-3",
+    "aggregate_hash": "4294ba66d6084e67155b77ba40cdcdef4c515acab45cd30a9d5fbaa45c6ec9a6",
+    "campaign_id": "campaign-golden",
+    "campaign_version": 3,
+    "candidates": [
+      {
+        "component_hash": "059cc665d07786dade20338c7c0056c14e8f1e20f43c80daea8369ab1ef5d806",
+        "creative": {
+          "company_relationship": {
+            "award_count": 0,
+            "evidence_refs": [],
+            "latest_year": null,
+            "rating": "0",
+            "screenings": 0
+          },
+          "creative_key": "8b96d75ef7eeb5b7a342448ef7d67aff23797ae8e3e946617be6725a16cd8e10",
+          "dimensions": [
+            {
+              "dimension": "thematic_fit",
+              "evidence_refs": [
+                "fixture:dimension:thematic_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "genre_fit",
+              "evidence_refs": [
+                "fixture:dimension:genre_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "lineup_similarity",
+              "evidence_refs": [
+                "fixture:dimension:lineup_similarity"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "company_relationship",
+              "evidence_refs": [
+                "fixture:dimension:company_relationship"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "strategic_value",
+              "evidence_refs": [
+                "fixture:dimension:strategic_value"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "deadline_urgency",
+              "evidence_refs": [
+                "fixture:dimension:deadline_urgency"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            }
+          ],
+          "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+          "festival_id": "hot-docs",
+          "guardrail_adjustments": [],
+          "guardrail_version": "guardrail-v1",
+          "model_version": "fixture-model-v1",
+          "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+          "prompt_version": "match-prompt-v1",
+          "schema_version": 1
+        },
+        "decision_grade": "submit_first",
+        "festival_id": "hot-docs",
+        "future_quality": "88",
+        "retrieved": {
+          "deadline_fact": {
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:source"
+            ],
+            "status": "confirmed",
+            "value": "2026-10-01"
+          },
+          "fee_fact": {
+            "amount": "50",
+            "currency": "USD",
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:fee:hot-docs"
+            ],
+            "status": "confirmed"
+          },
+          "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+          "festival_id": "hot-docs",
+          "identity": {
+            "accepts": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": [
+                "feature_doc"
+              ]
+            },
+            "country": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "Canada"
+            },
+            "festival_name": "Hot Docs",
+            "region": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "North America"
+            },
+            "tier": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "A"
+            }
+          },
+          "lexical_score": "0.70",
+          "premiere_rule": {
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:source"
+            ],
+            "status": "confirmed",
+            "value": "World premiere required"
+          },
+          "retrieval_backend": "frozen-fixture",
+          "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+          "retrieval_rank": 1,
+          "retrieval_sources": [
+            "semantic",
+            "lexical"
+          ],
+          "schema_version": 1,
+          "semantic_score": "0.90",
+          "source_confidence": "confirmed"
+        },
+        "risk": {
+          "as_of_date": "2026-08-25",
+          "deadline": {
+            "confidence": "confirmed",
+            "evidence_refs": [
+              "fixture:deadline:hot-docs"
+            ],
+            "material_eligible": true,
+            "next_deadline": "2026-10-01",
+            "status": "open"
+          },
+          "eligible": true,
+          "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+          "festival_id": "hot-docs",
+          "hard_eligibility_reason": null,
+          "premiere_constraint": {
+            "evidence_refs": [
+              "fixture:premiere:hot-docs"
+            ],
+            "rule_status": "confirmed",
+            "scope": "world",
+            "territory": null
+          },
+          "premiere_risk": "none",
+          "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+          "risk_input_hash": "b6aa3278af948e4abf970d82f2e223c02a83f59bd7a1cf48733f3b1164ff7cfd",
+          "risk_key": "d7eb0a0685f240b7acfafd27656880632e2a168af120909eb555b7e9f736d2ae",
+          "risk_policy_version": "risk-v1",
+          "runtime_eligible": true,
+          "schema_version": 1,
+          "uncertainties": []
+        },
+        "schema_version": 1,
+        "score_breakdown": {
+          "base_score": "90",
+          "dimensions": [
+            {
+              "dimension": "thematic_fit",
+              "evidence_refs": [
+                "fixture:dimension:thematic_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "genre_fit",
+              "evidence_refs": [
+                "fixture:dimension:genre_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "lineup_similarity",
+              "evidence_refs": [
+                "fixture:dimension:lineup_similarity"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "company_relationship",
+              "evidence_refs": [
+                "fixture:dimension:company_relationship"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "strategic_value",
+              "evidence_refs": [
+                "fixture:dimension:strategic_value"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "deadline_urgency",
+              "evidence_refs": [
+                "fixture:dimension:deadline_urgency"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            }
+          ],
+          "premiere_penalty": "0",
+          "score": 90
+        }
+      },
+      {
+        "component_hash": "85b307e65ebbfdb8f35dfa4e635d0b49a9bb949a5e6bbea71b87c546717df2d3",
+        "creative": {
+          "company_relationship": {
+            "award_count": 0,
+            "evidence_refs": [],
+            "latest_year": null,
+            "rating": "0",
+            "screenings": 0
+          },
+          "creative_key": "3820de3736317cac18bd7c79e98f9c3d305433fe5e9a3ab88cbf4c4aa25cdc77",
+          "dimensions": [
+            {
+              "dimension": "thematic_fit",
+              "evidence_refs": [
+                "fixture:dimension:thematic_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "genre_fit",
+              "evidence_refs": [
+                "fixture:dimension:genre_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "lineup_similarity",
+              "evidence_refs": [
+                "fixture:dimension:lineup_similarity"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "company_relationship",
+              "evidence_refs": [
+                "fixture:dimension:company_relationship"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "strategic_value",
+              "evidence_refs": [
+                "fixture:dimension:strategic_value"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "deadline_urgency",
+              "evidence_refs": [
+                "fixture:dimension:deadline_urgency"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            }
+          ],
+          "festival_facts_hash": "7be6b7939a074b00b5793684313179d5fbde549bcf7e27cbd3ef9f287a6790d6",
+          "festival_id": "idfa",
+          "guardrail_adjustments": [],
+          "guardrail_version": "guardrail-v1",
+          "model_version": "fixture-model-v1",
+          "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+          "prompt_version": "match-prompt-v1",
+          "schema_version": 1
+        },
+        "decision_grade": "submit_first",
+        "festival_id": "idfa",
+        "future_quality": "92",
+        "retrieved": {
+          "deadline_fact": {
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:source"
+            ],
+            "status": "confirmed",
+            "value": "2026-10-01"
+          },
+          "fee_fact": {
+            "amount": "50",
+            "currency": "USD",
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:fee:idfa"
+            ],
+            "status": "confirmed"
+          },
+          "festival_facts_hash": "7be6b7939a074b00b5793684313179d5fbde549bcf7e27cbd3ef9f287a6790d6",
+          "festival_id": "idfa",
+          "identity": {
+            "accepts": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": [
+                "feature_doc"
+              ]
+            },
+            "country": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "Netherlands"
+            },
+            "festival_name": "IDFA",
+            "region": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "Europe"
+            },
+            "tier": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "A"
+            }
+          },
+          "lexical_score": "0.70",
+          "premiere_rule": {
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:source"
+            ],
+            "status": "confirmed",
+            "value": "World premiere required"
+          },
+          "retrieval_backend": "frozen-fixture",
+          "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+          "retrieval_rank": 2,
+          "retrieval_sources": [
+            "semantic",
+            "lexical"
+          ],
+          "schema_version": 1,
+          "semantic_score": "0.90",
+          "source_confidence": "confirmed"
+        },
+        "risk": {
+          "as_of_date": "2026-08-25",
+          "deadline": {
+            "confidence": "confirmed",
+            "evidence_refs": [
+              "fixture:deadline:idfa"
+            ],
+            "material_eligible": true,
+            "next_deadline": "2026-10-01",
+            "status": "open"
+          },
+          "eligible": true,
+          "festival_facts_hash": "7be6b7939a074b00b5793684313179d5fbde549bcf7e27cbd3ef9f287a6790d6",
+          "festival_id": "idfa",
+          "hard_eligibility_reason": null,
+          "premiere_constraint": {
+            "evidence_refs": [
+              "fixture:premiere:idfa"
+            ],
+            "rule_status": "confirmed",
+            "scope": "world",
+            "territory": null
+          },
+          "premiere_risk": "none",
+          "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+          "risk_input_hash": "4d19369a3c3860ef24572e5fbe8becc5de813c739514ab27bde07f9af0c52a3d",
+          "risk_key": "745730de17e0166cdac106faeb919554a334ebe73106a91edadb91d495cbb023",
+          "risk_policy_version": "risk-v1",
+          "runtime_eligible": true,
+          "schema_version": 1,
+          "uncertainties": []
+        },
+        "schema_version": 1,
+        "score_breakdown": {
+          "base_score": "82",
+          "dimensions": [
+            {
+              "dimension": "thematic_fit",
+              "evidence_refs": [
+                "fixture:dimension:thematic_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "genre_fit",
+              "evidence_refs": [
+                "fixture:dimension:genre_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "lineup_similarity",
+              "evidence_refs": [
+                "fixture:dimension:lineup_similarity"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "company_relationship",
+              "evidence_refs": [
+                "fixture:dimension:company_relationship"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "strategic_value",
+              "evidence_refs": [
+                "fixture:dimension:strategic_value"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "deadline_urgency",
+              "evidence_refs": [
+                "fixture:dimension:deadline_urgency"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            }
+          ],
+          "premiere_penalty": "0",
+          "score": 82
+        }
+      }
+    ],
+    "constraints": [],
+    "lifecycle": "active",
+    "opportunities": [
+      {
+        "festival_id": "hot-docs",
+        "offer_state": "none",
+        "opportunity_id": "opportunity-hot-docs",
+        "policy_state": "normal",
+        "submission_state": "submitted",
+        "verification_items": []
+      },
+      {
+        "festival_id": "idfa",
+        "offer_state": "none",
+        "opportunity_id": "opportunity-idfa",
+        "policy_state": "normal",
+        "submission_state": "not_submitted",
+        "verification_items": []
+      }
+    ],
+    "premiere_ledger": {
+      "derivation_policy_version": "premiere-ledger-v1",
+      "input_hash": "3c4767248c4bceab359ac7a90f4b2c544828a66eb84fb0aaf3a27f8c0bde76f6",
+      "ledger_hash": "f620f61be359963dea332c22cefd84587eba5cfd52a383bca7a5e7d53c970b0c",
+      "schema_version": 1,
+      "scopes": [
+        {
+          "availability": "available",
+          "contradiction": false,
+          "evidence_refs": [
+            "fixture:unscreened"
+          ],
+          "reason_code": "sourced-unscreened-assertion",
+          "scope": "world",
+          "territory": null
+        },
+        {
+          "availability": "available",
+          "contradiction": false,
+          "evidence_refs": [
+            "fixture:unscreened"
+          ],
+          "reason_code": "sourced-unscreened-assertion",
+          "scope": "international",
+          "territory": null
+        }
+      ]
+    },
+    "profile": {
+      "country": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "Israel"
+      },
+      "format": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "feature_doc"
+      },
+      "premiere_assertions": [
+        {
+          "observed_at": "2026-08-25T07:00:00Z",
+          "source_refs": [
+            "fixture:source"
+          ],
+          "status": "confirmed",
+          "value": "No prior public screening"
+        }
+      ],
+      "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+      "runtime_minutes": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": 89
+      },
+      "schema_version": 1,
+      "synopsis": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "An Israeli documentary about women defending a disappearing salt landscape."
+      },
+      "target_regions": [
+        "North America",
+        "Europe"
+      ],
+      "themes": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": [
+          "environment",
+          "women",
+          "displacement"
+        ]
+      },
+      "title": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "Salt Road"
+      }
+    },
+    "readiness": "ready",
+    "schema_version": 1,
+    "screenings": [],
+    "workspace_id": "workspace-golden"
+  },
+  "CandidateCreativeEvidence": {
+    "company_relationship": {
+      "award_count": 0,
+      "evidence_refs": [],
+      "latest_year": null,
+      "rating": "0",
+      "screenings": 0
+    },
+    "creative_key": "8b96d75ef7eeb5b7a342448ef7d67aff23797ae8e3e946617be6725a16cd8e10",
+    "dimensions": [
+      {
+        "dimension": "thematic_fit",
+        "evidence_refs": [
+          "fixture:dimension:thematic_fit"
+        ],
+        "guarded_rating": "4",
+        "points": "15",
+        "raw_rating": "4"
+      },
+      {
+        "dimension": "genre_fit",
+        "evidence_refs": [
+          "fixture:dimension:genre_fit"
+        ],
+        "guarded_rating": "4",
+        "points": "15",
+        "raw_rating": "4"
+      },
+      {
+        "dimension": "lineup_similarity",
+        "evidence_refs": [
+          "fixture:dimension:lineup_similarity"
+        ],
+        "guarded_rating": "4",
+        "points": "15",
+        "raw_rating": "4"
+      },
+      {
+        "dimension": "company_relationship",
+        "evidence_refs": [
+          "fixture:dimension:company_relationship"
+        ],
+        "guarded_rating": "4",
+        "points": "15",
+        "raw_rating": "4"
+      },
+      {
+        "dimension": "strategic_value",
+        "evidence_refs": [
+          "fixture:dimension:strategic_value"
+        ],
+        "guarded_rating": "4",
+        "points": "15",
+        "raw_rating": "4"
+      },
+      {
+        "dimension": "deadline_urgency",
+        "evidence_refs": [
+          "fixture:dimension:deadline_urgency"
+        ],
+        "guarded_rating": "4",
+        "points": "15",
+        "raw_rating": "4"
+      }
+    ],
+    "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+    "festival_id": "hot-docs",
+    "guardrail_adjustments": [],
+    "guardrail_version": "guardrail-v1",
+    "model_version": "fixture-model-v1",
+    "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+    "prompt_version": "match-prompt-v1",
+    "schema_version": 1
+  },
+  "CandidateRiskEvidence": {
+    "as_of_date": "2026-08-25",
+    "deadline": {
+      "confidence": "confirmed",
+      "evidence_refs": [
+        "fixture:deadline:hot-docs"
+      ],
+      "material_eligible": true,
+      "next_deadline": "2026-10-01",
+      "status": "open"
+    },
+    "eligible": true,
+    "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+    "festival_id": "hot-docs",
+    "hard_eligibility_reason": null,
+    "premiere_constraint": {
+      "evidence_refs": [
+        "fixture:premiere:hot-docs"
+      ],
+      "rule_status": "confirmed",
+      "scope": "world",
+      "territory": null
+    },
+    "premiere_risk": "none",
+    "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+    "risk_input_hash": "b6aa3278af948e4abf970d82f2e223c02a83f59bd7a1cf48733f3b1164ff7cfd",
+    "risk_key": "d7eb0a0685f240b7acfafd27656880632e2a168af120909eb555b7e9f736d2ae",
+    "risk_policy_version": "risk-v1",
+    "runtime_eligible": true,
+    "schema_version": 1,
+    "uncertainties": []
+  },
+  "CompatibilityEdge": {
+    "edge_hash": "1dbc2d2057ec0350365d74b0decf1f9af500c469018b3177cadea90dbb2049ab",
+    "evidence_refs": [
+      "fixture:ledger",
+      "fixture:rule"
+    ],
+    "from_festival_id": "hot-docs",
+    "graph_policy_version": "graph-v1",
+    "reason_code": "fixture-incompatible",
+    "schema_version": 1,
+    "scope": "world",
+    "source_confidence": "confirmed",
+    "status": "incompatible",
+    "territory": null,
+    "to_festival_id": "idfa"
+  },
+  "FrozenCandidateEvidence": {
+    "component_hash": "059cc665d07786dade20338c7c0056c14e8f1e20f43c80daea8369ab1ef5d806",
+    "creative": {
+      "company_relationship": {
+        "award_count": 0,
+        "evidence_refs": [],
+        "latest_year": null,
+        "rating": "0",
+        "screenings": 0
+      },
+      "creative_key": "8b96d75ef7eeb5b7a342448ef7d67aff23797ae8e3e946617be6725a16cd8e10",
+      "dimensions": [
+        {
+          "dimension": "thematic_fit",
+          "evidence_refs": [
+            "fixture:dimension:thematic_fit"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        },
+        {
+          "dimension": "genre_fit",
+          "evidence_refs": [
+            "fixture:dimension:genre_fit"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        },
+        {
+          "dimension": "lineup_similarity",
+          "evidence_refs": [
+            "fixture:dimension:lineup_similarity"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        },
+        {
+          "dimension": "company_relationship",
+          "evidence_refs": [
+            "fixture:dimension:company_relationship"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        },
+        {
+          "dimension": "strategic_value",
+          "evidence_refs": [
+            "fixture:dimension:strategic_value"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        },
+        {
+          "dimension": "deadline_urgency",
+          "evidence_refs": [
+            "fixture:dimension:deadline_urgency"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        }
+      ],
+      "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+      "festival_id": "hot-docs",
+      "guardrail_adjustments": [],
+      "guardrail_version": "guardrail-v1",
+      "model_version": "fixture-model-v1",
+      "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+      "prompt_version": "match-prompt-v1",
+      "schema_version": 1
+    },
+    "decision_grade": "submit_first",
+    "festival_id": "hot-docs",
+    "future_quality": "88",
+    "retrieved": {
+      "deadline_fact": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "2026-10-01"
+      },
+      "fee_fact": {
+        "amount": "50",
+        "currency": "USD",
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:fee:hot-docs"
+        ],
+        "status": "confirmed"
+      },
+      "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+      "festival_id": "hot-docs",
+      "identity": {
+        "accepts": {
+          "observed_at": "2026-08-25T07:00:00Z",
+          "source_refs": [
+            "fixture:source"
+          ],
+          "status": "confirmed",
+          "value": [
+            "feature_doc"
+          ]
+        },
+        "country": {
+          "observed_at": "2026-08-25T07:00:00Z",
+          "source_refs": [
+            "fixture:source"
+          ],
+          "status": "confirmed",
+          "value": "Canada"
+        },
+        "festival_name": "Hot Docs",
+        "region": {
+          "observed_at": "2026-08-25T07:00:00Z",
+          "source_refs": [
+            "fixture:source"
+          ],
+          "status": "confirmed",
+          "value": "North America"
+        },
+        "tier": {
+          "observed_at": "2026-08-25T07:00:00Z",
+          "source_refs": [
+            "fixture:source"
+          ],
+          "status": "confirmed",
+          "value": "A"
+        }
+      },
+      "lexical_score": "0.70",
+      "premiere_rule": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "World premiere required"
+      },
+      "retrieval_backend": "frozen-fixture",
+      "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+      "retrieval_rank": 1,
+      "retrieval_sources": [
+        "semantic",
+        "lexical"
+      ],
+      "schema_version": 1,
+      "semantic_score": "0.90",
+      "source_confidence": "confirmed"
+    },
+    "risk": {
+      "as_of_date": "2026-08-25",
+      "deadline": {
+        "confidence": "confirmed",
+        "evidence_refs": [
+          "fixture:deadline:hot-docs"
+        ],
+        "material_eligible": true,
+        "next_deadline": "2026-10-01",
+        "status": "open"
+      },
+      "eligible": true,
+      "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+      "festival_id": "hot-docs",
+      "hard_eligibility_reason": null,
+      "premiere_constraint": {
+        "evidence_refs": [
+          "fixture:premiere:hot-docs"
+        ],
+        "rule_status": "confirmed",
+        "scope": "world",
+        "territory": null
+      },
+      "premiere_risk": "none",
+      "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+      "risk_input_hash": "b6aa3278af948e4abf970d82f2e223c02a83f59bd7a1cf48733f3b1164ff7cfd",
+      "risk_key": "d7eb0a0685f240b7acfafd27656880632e2a168af120909eb555b7e9f736d2ae",
+      "risk_policy_version": "risk-v1",
+      "runtime_eligible": true,
+      "schema_version": 1,
+      "uncertainties": []
+    },
+    "schema_version": 1,
+    "score_breakdown": {
+      "base_score": "90",
+      "dimensions": [
+        {
+          "dimension": "thematic_fit",
+          "evidence_refs": [
+            "fixture:dimension:thematic_fit"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        },
+        {
+          "dimension": "genre_fit",
+          "evidence_refs": [
+            "fixture:dimension:genre_fit"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        },
+        {
+          "dimension": "lineup_similarity",
+          "evidence_refs": [
+            "fixture:dimension:lineup_similarity"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        },
+        {
+          "dimension": "company_relationship",
+          "evidence_refs": [
+            "fixture:dimension:company_relationship"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        },
+        {
+          "dimension": "strategic_value",
+          "evidence_refs": [
+            "fixture:dimension:strategic_value"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        },
+        {
+          "dimension": "deadline_urgency",
+          "evidence_refs": [
+            "fixture:dimension:deadline_urgency"
+          ],
+          "guarded_rating": "4",
+          "points": "15",
+          "raw_rating": "4"
+        }
+      ],
+      "premiere_penalty": "0",
+      "score": 90
+    }
+  },
+  "PlanningInput": {
+    "artifact_keys": {
+      "creative_key": "c5644052b96eca757e6ffd8170345596e23a43fb5caa54971373b0afee49e699",
+      "graph_key": "439db5c7e7d3028960a056dfa4e9f2c1e709e284ed652c342c19039ec97da99a",
+      "identity_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+      "plan_key": "0d66d3ad2bc3653b9433b49d41ea4c803a5c6e199bb471e3ca2d9a587816a459",
+      "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+      "risk_key": "4421a25974b85caf29f709862636ff631115da037d8b24f5af50794fe8059c19"
+    },
+    "as_of_date": "2026-08-25",
+    "budget_constraint": {
+      "constraint_id": "hard-budget",
+      "hard": true,
+      "limit": {
+        "amount": "200",
+        "currency": "USD"
+      }
+    },
+    "campaign_id": "campaign-golden",
+    "campaign_version": 3,
+    "candidates": [
+      {
+        "component_hash": "059cc665d07786dade20338c7c0056c14e8f1e20f43c80daea8369ab1ef5d806",
+        "creative": {
+          "company_relationship": {
+            "award_count": 0,
+            "evidence_refs": [],
+            "latest_year": null,
+            "rating": "0",
+            "screenings": 0
+          },
+          "creative_key": "8b96d75ef7eeb5b7a342448ef7d67aff23797ae8e3e946617be6725a16cd8e10",
+          "dimensions": [
+            {
+              "dimension": "thematic_fit",
+              "evidence_refs": [
+                "fixture:dimension:thematic_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "genre_fit",
+              "evidence_refs": [
+                "fixture:dimension:genre_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "lineup_similarity",
+              "evidence_refs": [
+                "fixture:dimension:lineup_similarity"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "company_relationship",
+              "evidence_refs": [
+                "fixture:dimension:company_relationship"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "strategic_value",
+              "evidence_refs": [
+                "fixture:dimension:strategic_value"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "deadline_urgency",
+              "evidence_refs": [
+                "fixture:dimension:deadline_urgency"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            }
+          ],
+          "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+          "festival_id": "hot-docs",
+          "guardrail_adjustments": [],
+          "guardrail_version": "guardrail-v1",
+          "model_version": "fixture-model-v1",
+          "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+          "prompt_version": "match-prompt-v1",
+          "schema_version": 1
+        },
+        "decision_grade": "submit_first",
+        "festival_id": "hot-docs",
+        "future_quality": "88",
+        "retrieved": {
+          "deadline_fact": {
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:source"
+            ],
+            "status": "confirmed",
+            "value": "2026-10-01"
+          },
+          "fee_fact": {
+            "amount": "50",
+            "currency": "USD",
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:fee:hot-docs"
+            ],
+            "status": "confirmed"
+          },
+          "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+          "festival_id": "hot-docs",
+          "identity": {
+            "accepts": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": [
+                "feature_doc"
+              ]
+            },
+            "country": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "Canada"
+            },
+            "festival_name": "Hot Docs",
+            "region": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "North America"
+            },
+            "tier": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "A"
+            }
+          },
+          "lexical_score": "0.70",
+          "premiere_rule": {
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:source"
+            ],
+            "status": "confirmed",
+            "value": "World premiere required"
+          },
+          "retrieval_backend": "frozen-fixture",
+          "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+          "retrieval_rank": 1,
+          "retrieval_sources": [
+            "semantic",
+            "lexical"
+          ],
+          "schema_version": 1,
+          "semantic_score": "0.90",
+          "source_confidence": "confirmed"
+        },
+        "risk": {
+          "as_of_date": "2026-08-25",
+          "deadline": {
+            "confidence": "confirmed",
+            "evidence_refs": [
+              "fixture:deadline:hot-docs"
+            ],
+            "material_eligible": true,
+            "next_deadline": "2026-10-01",
+            "status": "open"
+          },
+          "eligible": true,
+          "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+          "festival_id": "hot-docs",
+          "hard_eligibility_reason": null,
+          "premiere_constraint": {
+            "evidence_refs": [
+              "fixture:premiere:hot-docs"
+            ],
+            "rule_status": "confirmed",
+            "scope": "world",
+            "territory": null
+          },
+          "premiere_risk": "none",
+          "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+          "risk_input_hash": "b6aa3278af948e4abf970d82f2e223c02a83f59bd7a1cf48733f3b1164ff7cfd",
+          "risk_key": "d7eb0a0685f240b7acfafd27656880632e2a168af120909eb555b7e9f736d2ae",
+          "risk_policy_version": "risk-v1",
+          "runtime_eligible": true,
+          "schema_version": 1,
+          "uncertainties": []
+        },
+        "schema_version": 1,
+        "score_breakdown": {
+          "base_score": "90",
+          "dimensions": [
+            {
+              "dimension": "thematic_fit",
+              "evidence_refs": [
+                "fixture:dimension:thematic_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "genre_fit",
+              "evidence_refs": [
+                "fixture:dimension:genre_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "lineup_similarity",
+              "evidence_refs": [
+                "fixture:dimension:lineup_similarity"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "company_relationship",
+              "evidence_refs": [
+                "fixture:dimension:company_relationship"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "strategic_value",
+              "evidence_refs": [
+                "fixture:dimension:strategic_value"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "deadline_urgency",
+              "evidence_refs": [
+                "fixture:dimension:deadline_urgency"
+              ],
+              "guarded_rating": "4",
+              "points": "15",
+              "raw_rating": "4"
+            }
+          ],
+          "premiere_penalty": "0",
+          "score": 90
+        }
+      },
+      {
+        "component_hash": "85b307e65ebbfdb8f35dfa4e635d0b49a9bb949a5e6bbea71b87c546717df2d3",
+        "creative": {
+          "company_relationship": {
+            "award_count": 0,
+            "evidence_refs": [],
+            "latest_year": null,
+            "rating": "0",
+            "screenings": 0
+          },
+          "creative_key": "3820de3736317cac18bd7c79e98f9c3d305433fe5e9a3ab88cbf4c4aa25cdc77",
+          "dimensions": [
+            {
+              "dimension": "thematic_fit",
+              "evidence_refs": [
+                "fixture:dimension:thematic_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "genre_fit",
+              "evidence_refs": [
+                "fixture:dimension:genre_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "lineup_similarity",
+              "evidence_refs": [
+                "fixture:dimension:lineup_similarity"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "company_relationship",
+              "evidence_refs": [
+                "fixture:dimension:company_relationship"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "strategic_value",
+              "evidence_refs": [
+                "fixture:dimension:strategic_value"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "deadline_urgency",
+              "evidence_refs": [
+                "fixture:dimension:deadline_urgency"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            }
+          ],
+          "festival_facts_hash": "7be6b7939a074b00b5793684313179d5fbde549bcf7e27cbd3ef9f287a6790d6",
+          "festival_id": "idfa",
+          "guardrail_adjustments": [],
+          "guardrail_version": "guardrail-v1",
+          "model_version": "fixture-model-v1",
+          "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+          "prompt_version": "match-prompt-v1",
+          "schema_version": 1
+        },
+        "decision_grade": "submit_first",
+        "festival_id": "idfa",
+        "future_quality": "92",
+        "retrieved": {
+          "deadline_fact": {
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:source"
+            ],
+            "status": "confirmed",
+            "value": "2026-10-01"
+          },
+          "fee_fact": {
+            "amount": "50",
+            "currency": "USD",
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:fee:idfa"
+            ],
+            "status": "confirmed"
+          },
+          "festival_facts_hash": "7be6b7939a074b00b5793684313179d5fbde549bcf7e27cbd3ef9f287a6790d6",
+          "festival_id": "idfa",
+          "identity": {
+            "accepts": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": [
+                "feature_doc"
+              ]
+            },
+            "country": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "Netherlands"
+            },
+            "festival_name": "IDFA",
+            "region": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "Europe"
+            },
+            "tier": {
+              "observed_at": "2026-08-25T07:00:00Z",
+              "source_refs": [
+                "fixture:source"
+              ],
+              "status": "confirmed",
+              "value": "A"
+            }
+          },
+          "lexical_score": "0.70",
+          "premiere_rule": {
+            "observed_at": "2026-08-25T07:00:00Z",
+            "source_refs": [
+              "fixture:source"
+            ],
+            "status": "confirmed",
+            "value": "World premiere required"
+          },
+          "retrieval_backend": "frozen-fixture",
+          "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+          "retrieval_rank": 2,
+          "retrieval_sources": [
+            "semantic",
+            "lexical"
+          ],
+          "schema_version": 1,
+          "semantic_score": "0.90",
+          "source_confidence": "confirmed"
+        },
+        "risk": {
+          "as_of_date": "2026-08-25",
+          "deadline": {
+            "confidence": "confirmed",
+            "evidence_refs": [
+              "fixture:deadline:idfa"
+            ],
+            "material_eligible": true,
+            "next_deadline": "2026-10-01",
+            "status": "open"
+          },
+          "eligible": true,
+          "festival_facts_hash": "7be6b7939a074b00b5793684313179d5fbde549bcf7e27cbd3ef9f287a6790d6",
+          "festival_id": "idfa",
+          "hard_eligibility_reason": null,
+          "premiere_constraint": {
+            "evidence_refs": [
+              "fixture:premiere:idfa"
+            ],
+            "rule_status": "confirmed",
+            "scope": "world",
+            "territory": null
+          },
+          "premiere_risk": "none",
+          "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+          "risk_input_hash": "4d19369a3c3860ef24572e5fbe8becc5de813c739514ab27bde07f9af0c52a3d",
+          "risk_key": "745730de17e0166cdac106faeb919554a334ebe73106a91edadb91d495cbb023",
+          "risk_policy_version": "risk-v1",
+          "runtime_eligible": true,
+          "schema_version": 1,
+          "uncertainties": []
+        },
+        "schema_version": 1,
+        "score_breakdown": {
+          "base_score": "82",
+          "dimensions": [
+            {
+              "dimension": "thematic_fit",
+              "evidence_refs": [
+                "fixture:dimension:thematic_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "genre_fit",
+              "evidence_refs": [
+                "fixture:dimension:genre_fit"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "lineup_similarity",
+              "evidence_refs": [
+                "fixture:dimension:lineup_similarity"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "company_relationship",
+              "evidence_refs": [
+                "fixture:dimension:company_relationship"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "strategic_value",
+              "evidence_refs": [
+                "fixture:dimension:strategic_value"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            },
+            {
+              "dimension": "deadline_urgency",
+              "evidence_refs": [
+                "fixture:dimension:deadline_urgency"
+              ],
+              "guarded_rating": "4",
+              "points": "13.66666666666666666666666667",
+              "raw_rating": "4"
+            }
+          ],
+          "premiere_penalty": "0",
+          "score": 82
+        }
+      }
+    ],
+    "compatibility_edges": [
+      {
+        "edge_hash": "1dbc2d2057ec0350365d74b0decf1f9af500c469018b3177cadea90dbb2049ab",
+        "evidence_refs": [
+          "fixture:ledger",
+          "fixture:rule"
+        ],
+        "from_festival_id": "hot-docs",
+        "graph_policy_version": "graph-v1",
+        "reason_code": "fixture-incompatible",
+        "schema_version": 1,
+        "scope": "world",
+        "source_confidence": "confirmed",
+        "status": "incompatible",
+        "territory": null,
+        "to_festival_id": "idfa"
+      },
+      {
+        "edge_hash": "5c710983436f3a7fde491856fc38c9c9d6598f2e0728be45fc739fae07c723f2",
+        "evidence_refs": [
+          "fixture:ledger",
+          "fixture:rule"
+        ],
+        "from_festival_id": "idfa",
+        "graph_policy_version": "graph-v1",
+        "reason_code": "fixture-compatible",
+        "schema_version": 1,
+        "scope": "world",
+        "source_confidence": "confirmed",
+        "status": "compatible",
+        "territory": null,
+        "to_festival_id": "hot-docs"
+      }
+    ],
+    "constraints": [],
+    "opportunities": [
+      {
+        "festival_id": "hot-docs",
+        "offer_state": "none",
+        "opportunity_id": "opportunity-hot-docs",
+        "policy_state": "normal",
+        "submission_state": "submitted",
+        "verification_items": []
+      },
+      {
+        "festival_id": "idfa",
+        "offer_state": "none",
+        "opportunity_id": "opportunity-idfa",
+        "policy_state": "normal",
+        "submission_state": "not_submitted",
+        "verification_items": []
+      }
+    ],
+    "planning_input_hash": "24ec8a0a82da8335d5e7a8e31b696eaa9508bb36df17b74921f8ecbad9d6757a",
+    "policy_versions": [
+      "planner-v2",
+      "budget-v1",
+      "graph-v1"
+    ],
+    "premiere_ledger": {
+      "derivation_policy_version": "premiere-ledger-v1",
+      "input_hash": "3c4767248c4bceab359ac7a90f4b2c544828a66eb84fb0aaf3a27f8c0bde76f6",
+      "ledger_hash": "f620f61be359963dea332c22cefd84587eba5cfd52a383bca7a5e7d53c970b0c",
+      "schema_version": 1,
+      "scopes": [
+        {
+          "availability": "available",
+          "contradiction": false,
+          "evidence_refs": [
+            "fixture:unscreened"
+          ],
+          "reason_code": "sourced-unscreened-assertion",
+          "scope": "world",
+          "territory": null
+        },
+        {
+          "availability": "available",
+          "contradiction": false,
+          "evidence_refs": [
+            "fixture:unscreened"
+          ],
+          "reason_code": "sourced-unscreened-assertion",
+          "scope": "international",
+          "territory": null
+        }
+      ]
+    },
+    "preservation_mode": "balanced",
+    "profile": {
+      "country": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "Israel"
+      },
+      "format": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "feature_doc"
+      },
+      "premiere_assertions": [
+        {
+          "observed_at": "2026-08-25T07:00:00Z",
+          "source_refs": [
+            "fixture:source"
+          ],
+          "status": "confirmed",
+          "value": "No prior public screening"
+        }
+      ],
+      "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+      "runtime_minutes": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": 89
+      },
+      "schema_version": 1,
+      "synopsis": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "An Israeli documentary about women defending a disappearing salt landscape."
+      },
+      "target_regions": [
+        "North America",
+        "Europe"
+      ],
+      "themes": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": [
+          "environment",
+          "women",
+          "displacement"
+        ]
+      },
+      "title": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "Salt Road"
+      }
+    },
+    "required_fees": [
+      {
+        "action_id": "submit-hot-docs",
+        "action_scope": "current_root",
+        "fee": {
+          "amount": "50",
+          "currency": "USD",
+          "observed_at": "2026-08-25T07:00:00Z",
+          "source_refs": [
+            "fixture:fee:hot-docs"
+          ],
+          "status": "confirmed"
+        },
+        "fee_id": "fee-hot-docs",
+        "festival_id": "hot-docs",
+        "required_now": true
+      }
+    ],
+    "schema_version": 1
+  },
+  "RetrievalInput": {
+    "as_of_date": "2026-08-25",
+    "corpus_identity_version": "festival-corpus-v1",
+    "country": "Israel",
+    "embedding_model": "fixture-embedding-v1",
+    "format": "feature_doc",
+    "profile_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+    "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+    "retrieval_policy_version": "retrieval-v1",
+    "schema_version": 1,
+    "semantic_query": "Israeli environmental feature documentary about women and displacement",
+    "target_regions": [
+      "North America",
+      "Europe"
+    ],
+    "themes": [
+      "environment",
+      "women",
+      "displacement"
+    ]
+  },
+  "RetrievedFestivalEvidence": {
+    "deadline_fact": {
+      "observed_at": "2026-08-25T07:00:00Z",
+      "source_refs": [
+        "fixture:source"
+      ],
+      "status": "confirmed",
+      "value": "2026-10-01"
+    },
+    "fee_fact": {
+      "amount": "50",
+      "currency": "USD",
+      "observed_at": "2026-08-25T07:00:00Z",
+      "source_refs": [
+        "fixture:fee:hot-docs"
+      ],
+      "status": "confirmed"
+    },
+    "festival_facts_hash": "e769c9b4c6c3fc64f1b1517bb8e1c20d5587e2e672594ea47abedae57a0b8ea0",
+    "festival_id": "hot-docs",
+    "identity": {
+      "accepts": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": [
+          "feature_doc"
+        ]
+      },
+      "country": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "Canada"
+      },
+      "festival_name": "Hot Docs",
+      "region": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "North America"
+      },
+      "tier": {
+        "observed_at": "2026-08-25T07:00:00Z",
+        "source_refs": [
+          "fixture:source"
+        ],
+        "status": "confirmed",
+        "value": "A"
+      }
+    },
+    "lexical_score": "0.70",
+    "premiere_rule": {
+      "observed_at": "2026-08-25T07:00:00Z",
+      "source_refs": [
+        "fixture:source"
+      ],
+      "status": "confirmed",
+      "value": "World premiere required"
+    },
+    "retrieval_backend": "frozen-fixture",
+    "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+    "retrieval_rank": 1,
+    "retrieval_sources": [
+      "semantic",
+      "lexical"
+    ],
+    "schema_version": 1,
+    "semantic_score": "0.90",
+    "source_confidence": "confirmed"
+  },
+  "ReuseManifest": {
+    "chat_attempts": 0,
+    "current_artifact_keys": {
+      "creative_key": "c5644052b96eca757e6ffd8170345596e23a43fb5caa54971373b0afee49e699",
+      "graph_key": "439db5c7e7d3028960a056dfa4e9f2c1e709e284ed652c342c19039ec97da99a",
+      "identity_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+      "plan_key": "0d66d3ad2bc3653b9433b49d41ea4c803a5c6e199bb471e3ca2d9a587816a459",
+      "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+      "risk_key": "4421a25974b85caf29f709862636ff631115da037d8b24f5af50794fe8059c19"
+    },
+    "embedding_attempts": 0,
+    "invalidated_artifacts": [],
+    "invalidation_class": "C",
+    "prior_artifact_keys": {
+      "creative_key": "c5644052b96eca757e6ffd8170345596e23a43fb5caa54971373b0afee49e699",
+      "graph_key": "439db5c7e7d3028960a056dfa4e9f2c1e709e284ed652c342c19039ec97da99a",
+      "identity_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+      "plan_key": "0d66d3ad2bc3653b9433b49d41ea4c803a5c6e199bb471e3ca2d9a587816a459",
+      "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+      "risk_key": "4421a25974b85caf29f709862636ff631115da037d8b24f5af50794fe8059c19"
+    },
+    "reasons": [
+      "record-rejection"
+    ],
+    "rerun_artifacts": [
+      "planner",
+      "clarification"
+    ],
+    "reused_artifacts": [
+      "retrieval",
+      "creative_evidence",
+      "risk",
+      "premiere_ledger",
+      "compatibility_graph"
+    ],
+    "schema_version": 1
+  },
+  "StrategyDiff": {
+    "added_route_ids": [
+      "hot-docs"
+    ],
+    "base_campaign_version": 2,
+    "base_strategy_ref": "strategy-2",
+    "budget_state_after": "KNOWN_FEASIBLE",
+    "budget_state_before": "KNOWN_FEASIBLE",
+    "campaign_id": "campaign-golden",
+    "causal_refs": [
+      "event:rejection"
+    ],
+    "diff_hash": "ba4170ed70156e6213f0d8775ac7b7345eb5306c6d1866ff9ef82b32d4cdd3a8",
+    "gate_change_ids": [],
+    "new_campaign_version": 3,
+    "new_strategy_ref": "strategy-3",
+    "preservation_after": {
+      "destroyed_ids": [
+        "idfa"
+      ],
+      "known_destroyed_pct": "100",
+      "known_preserved_pct": "0",
+      "mode": "balanced",
+      "possible_additional_pct": "0",
+      "preserved_ids": [],
+      "verify_ids": []
+    },
+    "preservation_before": {
+      "destroyed_ids": [
+        "idfa"
+      ],
+      "known_destroyed_pct": "100",
+      "known_preserved_pct": "0",
+      "mode": "balanced",
+      "possible_additional_pct": "0",
+      "preserved_ids": [],
+      "verify_ids": []
+    },
+    "primary_after": "hot-docs",
+    "primary_before": "idfa",
+    "removed_route_ids": [],
+    "reuse_summary": {
+      "chat_attempts": 0,
+      "current_artifact_keys": {
+        "creative_key": "c5644052b96eca757e6ffd8170345596e23a43fb5caa54971373b0afee49e699",
+        "graph_key": "439db5c7e7d3028960a056dfa4e9f2c1e709e284ed652c342c19039ec97da99a",
+        "identity_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+        "plan_key": "0d66d3ad2bc3653b9433b49d41ea4c803a5c6e199bb471e3ca2d9a587816a459",
+        "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+        "risk_key": "4421a25974b85caf29f709862636ff631115da037d8b24f5af50794fe8059c19"
+      },
+      "embedding_attempts": 0,
+      "invalidated_artifacts": [],
+      "invalidation_class": "C",
+      "prior_artifact_keys": {
+        "creative_key": "c5644052b96eca757e6ffd8170345596e23a43fb5caa54971373b0afee49e699",
+        "graph_key": "439db5c7e7d3028960a056dfa4e9f2c1e709e284ed652c342c19039ec97da99a",
+        "identity_hash": "744e9b92459909226f3e8a855509f3ce7a99a193d3729f5164c71d008cff80ee",
+        "plan_key": "0d66d3ad2bc3653b9433b49d41ea4c803a5c6e199bb471e3ca2d9a587816a459",
+        "retrieval_key": "80a47754e8c4fd72d8fe0a5a1927124ae0c64803068900118bb6142bd3d9fa18",
+        "risk_key": "4421a25974b85caf29f709862636ff631115da037d8b24f5af50794fe8059c19"
+      },
+      "reasons": [
+        "record-rejection"
+      ],
+      "rerun_artifacts": [
+        "planner",
+        "clarification"
+      ],
+      "reused_artifacts": [
+        "retrieval",
+        "creative_evidence",
+        "risk",
+        "premiere_ledger",
+        "compatibility_graph"
+      ],
+      "schema_version": 1
+    },
+    "schema_version": 1,
+    "unchanged_route_ids": [
+      "idfa"
+    ]
+  }
+}

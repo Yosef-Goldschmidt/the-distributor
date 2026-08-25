@@ -1,0 +1,129 @@
+{
+  "cases": [
+    {
+      "case_id": "empty-history-is-unknown",
+      "screening": null,
+      "unscreened_assertion": false,
+      "scope": "world",
+      "availability": "unknown",
+      "contradiction": false,
+      "reason_code": "absence_is_not_availability",
+      "blocking": true
+    },
+    {
+      "case_id": "sourced-unscreened-is-available",
+      "screening": null,
+      "unscreened_assertion": true,
+      "scope": "world",
+      "availability": "available",
+      "contradiction": false,
+      "reason_code": "sourced_unscreened_assertion",
+      "blocking": false
+    },
+    {
+      "case_id": "confirmed-public-consumes-world",
+      "screening": {"state": "occurred", "access": "public", "country": "Canada"},
+      "unscreened_assertion": false,
+      "scope": "world",
+      "availability": "consumed",
+      "contradiction": false,
+      "reason_code": "confirmed_occurred_public",
+      "blocking": false
+    },
+    {
+      "case_id": "foreign-public-consumes-international",
+      "film_country": "Israel",
+      "screening": {"state": "occurred", "access": "public", "country": "Canada"},
+      "unscreened_assertion": false,
+      "scope": "international",
+      "availability": "consumed",
+      "contradiction": false,
+      "reason_code": "confirmed_foreign_public",
+      "blocking": false
+    },
+    {
+      "case_id": "domestic-public-does-not-consume-international",
+      "film_country": "Israel",
+      "screening": {"state": "occurred", "access": "public", "country": "Israel"},
+      "unscreened_assertion": true,
+      "scope": "international",
+      "availability": "available",
+      "contradiction": false,
+      "reason_code": "domestic_public_only",
+      "blocking": false
+    },
+    {
+      "case_id": "scheduled-public-does-not-consume",
+      "screening": {"state": "scheduled", "access": "public", "country": "Canada"},
+      "unscreened_assertion": true,
+      "scope": "world",
+      "availability": "available",
+      "contradiction": false,
+      "reason_code": "not_yet_occurred",
+      "blocking": false
+    },
+    {
+      "case_id": "occurred-private-does-not-consume",
+      "screening": {"state": "occurred", "access": "private", "country": "Canada"},
+      "unscreened_assertion": true,
+      "scope": "world",
+      "availability": "available",
+      "contradiction": false,
+      "reason_code": "private_screening",
+      "blocking": false
+    },
+    {
+      "case_id": "occurred-unknown-access-stays-unknown",
+      "screening": {"state": "occurred", "access": "unknown", "country": "Canada"},
+      "unscreened_assertion": false,
+      "scope": "world",
+      "availability": "unknown",
+      "contradiction": false,
+      "reason_code": "screening_access_verify",
+      "blocking": true
+    },
+    {
+      "case_id": "contradiction-is-unknown",
+      "screening": {"state": "occurred", "access": "public", "country": "Canada"},
+      "unscreened_assertion": true,
+      "scope": "world",
+      "availability": "unknown",
+      "contradiction": true,
+      "reason_code": "unscreened_assertion_conflicts_with_public_occurrence",
+      "blocking": true
+    },
+    {
+      "case_id": "cancelled-screening-does-not-consume",
+      "screening": {"state": "cancelled", "access": "public", "country": "Canada"},
+      "unscreened_assertion": true,
+      "scope": "world",
+      "availability": "available",
+      "contradiction": false,
+      "reason_code": "cancelled_screening",
+      "blocking": false
+    },
+    {
+      "case_id": "correction-rederives-with-history-retained",
+      "screening": {"state": "occurred", "access": "private", "country": "Canada"},
+      "corrects_prior_event": "event:public-screening",
+      "prior_event_retained": true,
+      "unscreened_assertion": true,
+      "scope": "world",
+      "availability": "available",
+      "contradiction": false,
+      "reason_code": "corrected_access_private",
+      "blocking": false
+    },
+    {
+      "case_id": "company-memory-never-consumes-current-film",
+      "screening": null,
+      "company_memory_other_film_screening": true,
+      "unscreened_assertion": false,
+      "scope": "world",
+      "availability": "unknown",
+      "contradiction": false,
+      "reason_code": "company_memory_is_other_films",
+      "blocking": true
+    }
+  ]
+}
