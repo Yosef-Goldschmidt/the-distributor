@@ -8,7 +8,7 @@ planner input and translation is reserved for the later LegacyEvidenceAdapter.
 from __future__ import annotations
 
 from datetime import date, datetime, timezone
-from decimal import Decimal
+from decimal import ROUND_HALF_EVEN, Decimal
 from enum import StrEnum
 from typing import Annotated, Any, Generic, Literal, TypeVar, Union
 from urllib.parse import urlsplit
@@ -398,6 +398,34 @@ class DimensionEvidence(FrozenModel):
     evidence_refs: tuple[Identifier, ...]
 
 
+FUTURE_QUALITY_DIMENSIONS = (
+    "thematic_fit",
+    "genre_fit",
+    "lineup_similarity",
+    "company_relationship",
+    "strategic_value",
+)
+FUTURE_QUALITY_QUANTUM = Decimal("0.1")
+
+
+def calculate_future_quality(dimensions: tuple[DimensionEvidence, ...]) -> Decimal:
+    """Return the canonical one-decimal enduring quality score from five dimensions."""
+
+    points_by_dimension = {item.dimension: item.points for item in dimensions}
+    if len(points_by_dimension) != len(dimensions):
+        raise ValueError("score breakdown dimensions must be unique")
+    missing = set(FUTURE_QUALITY_DIMENSIONS) - points_by_dimension.keys()
+    if missing:
+        raise ValueError("future quality requires all five enduring score dimensions")
+    enduring_points = sum(
+        (points_by_dimension[name] for name in FUTURE_QUALITY_DIMENSIONS),
+        Decimal("0"),
+    )
+    return (
+        Decimal("100") * enduring_points / Decimal("90")
+    ).quantize(FUTURE_QUALITY_QUANTUM, rounding=ROUND_HALF_EVEN)
+
+
 class CompanyRelationshipEvidence(FrozenModel):
     rating: Rating
     screenings: int = Field(ge=0)
@@ -506,6 +534,11 @@ class FrozenCandidateEvidence(FrozenModel):
         profile_hashes = {self.creative.profile_hash, self.risk.profile_hash}
         if len(profile_hashes) != 1:
             raise ValueError("creative and risk evidence must share profile_hash")
+        expected_future_quality = calculate_future_quality(self.score_breakdown.dimensions)
+        if self.future_quality != expected_future_quality:
+            raise ValueError(
+                "future_quality must equal the five enduring score dimensions divided by 90"
+            )
         return self
 
 
@@ -705,7 +738,7 @@ class PlannerCandidateDiagnostic(FrozenModel):
     decision_grade_group: DecisionGradeGroup
     preservation: PreservationDiagnostics
     verification_burden: VerificationBurden
-    budget_assessment: BudgetAssessment
+    budget_assessment: BudgetAssessment | None = None
     immediate_rank: int | None = Field(default=None, ge=1)
     preservation_rank: int | None = Field(default=None, ge=1)
     soft_budget_preference_rank: int = Field(default=0, ge=0)
@@ -715,6 +748,12 @@ class PlannerCandidateDiagnostic(FrozenModel):
     def tie_break_matches(self) -> PlannerCandidateDiagnostic:
         if self.deterministic_tie_break_id != self.festival_id:
             raise ValueError("deterministic tie-break ID must be the canonical festival_id")
+        if (
+            self.budget_assessment is not None
+            and self.budget_assessment.state == HardBudgetState.KNOWN_INFEASIBLE
+            and self.hard_filter.feasible
+        ):
+            raise ValueError("a hard-budget KNOWN_INFEASIBLE root must be hard-filtered")
         return self
 
 
@@ -829,7 +868,7 @@ class CampaignPlan(FrozenModel):
     rejection_branch: RejectionBranch | None = None
     screened_branch: ScreenedBranch | None = None
     verification_gates: tuple[VerificationGate, ...] = ()
-    budget: BudgetAssessment
+    budget: BudgetAssessment | None = None
     post_premiere_opportunities: tuple[CanonicalFestivalId, ...] = ()
     option_preservation: PreservationDiagnostics
     clarifications: tuple[Clarification, ...] = ()
@@ -852,13 +891,18 @@ class CampaignPlan(FrozenModel):
                 raise ValueError("rejection branch promotion must be a grounded alternative")
         if len(self.post_premiere_opportunities) != len(set(self.post_premiere_opportunities)):
             raise ValueError("post-premiere opportunity IDs must be unique")
-        if self.budget.state == HardBudgetState.KNOWN_INFEASIBLE:
+        if self.budget is not None and self.budget.state == HardBudgetState.KNOWN_INFEASIBLE:
             raise ValueError("a selected CampaignPlan cannot be KNOWN_INFEASIBLE")
-        if self.budget.state == HardBudgetState.VERIFY and not any(
+        blocking_budget_gate = any(
             gate.blocking and gate.affected_decision.startswith("budget")
             for gate in self.verification_gates
+        )
+        if self.budget is not None and self.budget.state == HardBudgetState.VERIFY and not (
+            blocking_budget_gate
         ):
             raise ValueError("a hard-budget VERIFY plan requires a blocking budget gate")
+        if self.budget is None and blocking_budget_gate:
+            raise ValueError("a blocking hard-budget gate requires an actual hard budget")
         # Catalog membership is enforced by CanonicalFestivalId validation context.
         preservation_ids = (
             set(self.option_preservation.preserved_ids)
@@ -908,8 +952,8 @@ class StrategyDiff(FrozenModel):
     removed_route_ids: tuple[CanonicalFestivalId, ...] = ()
     unchanged_route_ids: tuple[CanonicalFestivalId, ...] = ()
     gate_change_ids: tuple[Identifier, ...] = ()
-    budget_state_before: HardBudgetState
-    budget_state_after: HardBudgetState
+    budget_state_before: HardBudgetState | None = None
+    budget_state_after: HardBudgetState | None = None
     preservation_before: PreservationDiagnostics
     preservation_after: PreservationDiagnostics
     causal_refs: tuple[Identifier, ...]

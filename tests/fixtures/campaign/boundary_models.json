@@ -195,12 +195,12 @@
   },
   "CampaignSnapshot": {
     "active_strategy_ref": "strategy-3",
-    "aggregate_hash": "4294ba66d6084e67155b77ba40cdcdef4c515acab45cd30a9d5fbaa45c6ec9a6",
+    "aggregate_hash": "99c91944645a90be2ff446f3dd246a36a17a63bac27d3a048edb5059604032b0",
     "campaign_id": "campaign-golden",
     "campaign_version": 3,
     "candidates": [
       {
-        "component_hash": "059cc665d07786dade20338c7c0056c14e8f1e20f43c80daea8369ab1ef5d806",
+        "component_hash": "03de727157ce7934e4df71ea3d8d09617ce444121d546c906c94ed95f0690050",
         "creative": {
           "company_relationship": {
             "award_count": 0,
@@ -277,7 +277,7 @@
         },
         "decision_grade": "submit_first",
         "festival_id": "hot-docs",
-        "future_quality": "88",
+        "future_quality": "83.3",
         "retrieved": {
           "deadline_fact": {
             "observed_at": "2026-08-25T07:00:00Z",
@@ -451,7 +451,7 @@
         }
       },
       {
-        "component_hash": "85b307e65ebbfdb8f35dfa4e635d0b49a9bb949a5e6bbea71b87c546717df2d3",
+        "component_hash": "5de51359c4dc0a2c50515b8e20965bdd11d7308aa9ebb4033536a19bb8b9d689",
         "creative": {
           "company_relationship": {
             "award_count": 0,
@@ -528,7 +528,7 @@
         },
         "decision_grade": "submit_first",
         "festival_id": "idfa",
-        "future_quality": "92",
+        "future_quality": "75.9",
         "retrieved": {
           "deadline_fact": {
             "observed_at": "2026-08-25T07:00:00Z",
@@ -948,7 +948,7 @@
     "to_festival_id": "idfa"
   },
   "FrozenCandidateEvidence": {
-    "component_hash": "059cc665d07786dade20338c7c0056c14e8f1e20f43c80daea8369ab1ef5d806",
+    "component_hash": "03de727157ce7934e4df71ea3d8d09617ce444121d546c906c94ed95f0690050",
     "creative": {
       "company_relationship": {
         "award_count": 0,
@@ -1025,7 +1025,7 @@
     },
     "decision_grade": "submit_first",
     "festival_id": "hot-docs",
-    "future_quality": "88",
+    "future_quality": "83.3",
     "retrieved": {
       "deadline_fact": {
         "observed_at": "2026-08-25T07:00:00Z",
@@ -1220,7 +1220,7 @@
     "campaign_version": 3,
     "candidates": [
       {
-        "component_hash": "059cc665d07786dade20338c7c0056c14e8f1e20f43c80daea8369ab1ef5d806",
+        "component_hash": "03de727157ce7934e4df71ea3d8d09617ce444121d546c906c94ed95f0690050",
         "creative": {
           "company_relationship": {
             "award_count": 0,
@@ -1297,7 +1297,7 @@
         },
         "decision_grade": "submit_first",
         "festival_id": "hot-docs",
-        "future_quality": "88",
+        "future_quality": "83.3",
         "retrieved": {
           "deadline_fact": {
             "observed_at": "2026-08-25T07:00:00Z",
@@ -1471,7 +1471,7 @@
         }
       },
       {
-        "component_hash": "85b307e65ebbfdb8f35dfa4e635d0b49a9bb949a5e6bbea71b87c546717df2d3",
+        "component_hash": "5de51359c4dc0a2c50515b8e20965bdd11d7308aa9ebb4033536a19bb8b9d689",
         "creative": {
           "company_relationship": {
             "award_count": 0,
@@ -1548,7 +1548,7 @@
         },
         "decision_grade": "submit_first",
         "festival_id": "idfa",
-        "future_quality": "92",
+        "future_quality": "75.9",
         "retrieved": {
           "deadline_fact": {
             "observed_at": "2026-08-25T07:00:00Z",
@@ -1775,7 +1775,7 @@
         "verification_items": []
       }
     ],
-    "planning_input_hash": "24ec8a0a82da8335d5e7a8e31b696eaa9508bb36df17b74921f8ecbad9d6757a",
+    "planning_input_hash": "4bdd92addb0b0cc63df48d8859d068c86288e66cc672e4b83d9fac55ed96f183",
     "policy_versions": [
       "planner-v2",
       "budget-v1",
