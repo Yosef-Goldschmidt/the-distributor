@@ -309,15 +309,26 @@ class StrategyValidator:
             errors.append(
                 "plan budget does not equal the selected route's required-now fee assessment"
             )
-        if plan.budget.state == HardBudgetState.KNOWN_INFEASIBLE:
+        if expected is None:
+            if any(
+                item.budget_assessment is not None
+                for item in plan.selection_diagnostics
+            ):
+                errors.append("diagnostics without a hard budget carry budget assessments")
+            if any(
+                gate.blocking and gate.affected_decision.startswith("budget")
+                for gate in plan.verification_gates
+            ):
+                errors.append("a plan without a hard budget carries a blocking budget gate")
+        elif plan.budget is not None and plan.budget.state == HardBudgetState.KNOWN_INFEASIBLE:
             errors.append("selected route is known infeasible under its hard budget")
-        if plan.budget.state == HardBudgetState.VERIFY:
+        if plan.budget is not None and plan.budget.state == HardBudgetState.VERIFY:
             if not any(
                 gate.blocking and gate.affected_decision.startswith("budget")
                 for gate in plan.verification_gates
             ):
                 errors.append("VERIFY budget lacks a blocking budget gate")
-        included = set(plan.budget.included_fee_ids)
+        included = set(plan.budget.included_fee_ids) if plan.budget is not None else set()
         for required in planning_input.required_fees:
             inactive = not required.required_now or required.action_scope.value in {
                 "rejection_alternative",
@@ -355,9 +366,13 @@ class StrategyValidator:
             errors.append("plan prose fabricates a probability")
         if re.search(r"\bwill\s+(?:be\s+)?(?:accepted|rejected|invited|screened)\b", lowered):
             errors.append("plan prose fabricates a future outcome")
-        if plan.budget.state == HardBudgetState.VERIFY and re.search(
+        if (
+            plan.budget is not None
+            and plan.budget.state == HardBudgetState.VERIFY
+            and re.search(
             r"\b(?:confirmed|definitely|known)\s+(?:budget[- ]?)?feasible\b|\bwithin budget\b",
             lowered,
+            )
         ):
             errors.append("VERIFY budget is described as confirmed feasible")
 

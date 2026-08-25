@@ -29,6 +29,7 @@ from app.campaign.models import (
     DeadlineStatus,
     FactStatus,
     FeeActionScope,
+    FUTURE_QUALITY_QUANTUM,
     FrozenCandidateEvidence,
     HardBudgetState,
     HardFilterResult,
@@ -49,18 +50,10 @@ from app.campaign.models import (
     VerificationBurden,
     VerificationGate,
     VerificationItem,
+    calculate_future_quality,
 )
 
 
-FUTURE_QUALITY_DIMENSIONS: Final[frozenset[str]] = frozenset(
-    {
-        "thematic_fit",
-        "genre_fit",
-        "lineup_similarity",
-        "company_relationship",
-        "strategic_value",
-    }
-)
 SUPPORTED_HARD_CONSTRAINTS: Final[frozenset[str]] = frozenset(
     {
         "preserve_world_premiere",
@@ -92,7 +85,7 @@ class _RootEvaluation:
     candidate: FrozenCandidateEvidence
     opportunity: CampaignOpportunity
     hard_filter: HardFilterResult
-    budget: BudgetAssessment
+    budget: BudgetAssessment | None
     preservation: PreservationDiagnostics
     burden: VerificationBurden
     soft_budget_rank: int
@@ -127,18 +120,15 @@ def future_quality(candidate: FrozenCandidateEvidence) -> Decimal:
     Deadline urgency and premiere penalty are intentionally absent.
     """
 
-    points = {
-        dimension.dimension: dimension.points
-        for dimension in candidate.score_breakdown.dimensions
-        if dimension.dimension in FUTURE_QUALITY_DIMENSIONS
-    }
-    missing = FUTURE_QUALITY_DIMENSIONS - set(points)
-    if missing:
-        raise PlannerInputError(
-            f"candidate {candidate.festival_id} lacks future-quality dimensions: "
-            + ", ".join(sorted(missing))
-        )
-    return Decimal(100) * sum(points.values(), Decimal(0)) / Decimal(90)
+    return calculate_future_quality(candidate.score_breakdown.dimensions)
+
+
+@dataclass(frozen=True, slots=True)
+class _FeeSummary:
+    known_total: Decimal
+    unknown_fee_ids: tuple[str, ...]
+    required_action_ids: tuple[str, ...]
+    included_fee_ids: tuple[str, ...]
 
 
 def _budget_fees_for_root(planning_input: PlanningInput, festival_id: str):
@@ -161,16 +151,11 @@ def _budget_fees_for_root(planning_input: PlanningInput, festival_id: str):
     )
 
 
-def assess_budget(planning_input: PlanningInput, festival_id: str) -> BudgetAssessment:
-    """Assess only required-now actions for one mutually exclusive root."""
-
-    constraint = planning_input.budget_constraint
-    if constraint is None:
-        raise PlannerInputError(
-            "PlanningInput permits no budget_constraint but frozen CampaignPlan.budget "
-            "requires a hard_limit; planning cannot invent one"
-        )
-    currency = constraint.limit.currency
+def _fee_summary(
+    planning_input: PlanningInput,
+    festival_id: str,
+    currency: str,
+) -> _FeeSummary:
     known_total = Decimal(0)
     unknown_ids: list[str] = []
     included_ids: list[str] = []
@@ -180,38 +165,60 @@ def assess_budget(planning_input: PlanningInput, festival_id: str) -> BudgetAsse
         if required.action_id not in action_ids:
             action_ids.append(required.action_id)
         fee = required.fee
-        known_status = fee.status in {FactStatus.CONFIRMED, FactStatus.ASSERTED}
+        known_status = fee.status not in {FactStatus.UNKNOWN, FactStatus.CONTRADICTED}
         comparable = fee.currency == currency
         if known_status and comparable and fee.amount is not None:
             known_total += fee.amount
         else:
             unknown_ids.append(required.fee_id)
 
-    if known_total > constraint.limit.amount:
-        state = HardBudgetState.KNOWN_INFEASIBLE
-    elif unknown_ids:
-        state = HardBudgetState.VERIFY
-    else:
-        state = HardBudgetState.KNOWN_FEASIBLE
-    return BudgetAssessment(
-        state=state,
-        hard_limit=constraint.limit,
-        known_total=Money(amount=known_total, currency=currency),
+    return _FeeSummary(
+        known_total=known_total,
         unknown_fee_ids=tuple(unknown_ids),
         required_action_ids=tuple(action_ids),
         included_fee_ids=tuple(included_ids),
     )
 
 
-def _soft_budget_rank(planning_input: PlanningInput, budget: BudgetAssessment) -> int:
+def assess_budget(
+    planning_input: PlanningInput,
+    festival_id: str,
+) -> BudgetAssessment | None:
+    """Assess only a hard budget's required-now actions for one root."""
+
+    constraint = planning_input.budget_constraint
+    if constraint is None or not constraint.hard:
+        return None
+    summary = _fee_summary(planning_input, festival_id, constraint.limit.currency)
+    if summary.known_total > constraint.limit.amount:
+        state = HardBudgetState.KNOWN_INFEASIBLE
+    elif summary.unknown_fee_ids:
+        state = HardBudgetState.VERIFY
+    else:
+        state = HardBudgetState.KNOWN_FEASIBLE
+    return BudgetAssessment(
+        state=state,
+        hard_limit=constraint.limit,
+        known_total=Money(
+            amount=summary.known_total,
+            currency=constraint.limit.currency,
+        ),
+        unknown_fee_ids=summary.unknown_fee_ids,
+        required_action_ids=summary.required_action_ids,
+        included_fee_ids=summary.included_fee_ids,
+    )
+
+
+def _soft_budget_rank(planning_input: PlanningInput, festival_id: str) -> int:
     constraint = planning_input.budget_constraint
     if constraint is None or constraint.hard:
         return 0
-    if budget.state == HardBudgetState.KNOWN_FEASIBLE:
-        return 0
-    if budget.state == HardBudgetState.VERIFY:
+    summary = _fee_summary(planning_input, festival_id, constraint.limit.currency)
+    if summary.known_total > constraint.limit.amount:
+        return 2
+    if summary.unknown_fee_ids:
         return 1
-    return 2
+    return 0
 
 
 def _terminal_or_unavailable(
@@ -269,15 +276,15 @@ def _preservation(
         possible = Decimal(0)
         known_destroyed = Decimal(0)
     else:
-        known_preserved = Decimal(100) * sum(
+        known_preserved = (Decimal(100) * sum(
             (weights[item] for item in preserved), Decimal(0)
-        ) / total
-        possible = Decimal(100) * sum(
+        ) / total).quantize(FUTURE_QUALITY_QUANTUM)
+        possible = (Decimal(100) * sum(
             (weights[item] for item in verify), Decimal(0)
-        ) / total
-        known_destroyed = Decimal(100) * sum(
+        ) / total).quantize(FUTURE_QUALITY_QUANTUM)
+        known_destroyed = (Decimal(100) * sum(
             (weights[item] for item in destroyed), Decimal(0)
-        ) / total
+        ) / total).quantize(FUTURE_QUALITY_QUANTUM)
     return PreservationDiagnostics(
         mode=planning_input.preservation_mode,
         known_preserved_pct=known_preserved,
@@ -304,20 +311,23 @@ def _verification_burden(
     candidate: FrozenCandidateEvidence,
     opportunity: CampaignOpportunity,
     preservation: PreservationDiagnostics,
-    budget: BudgetAssessment,
+    budget: BudgetAssessment | None,
 ) -> VerificationBurden:
     items = _verification_items(candidate, opportunity)
     verify_edges = len(preservation.verify_ids)
     hard_budget_gate = int(
-        bool(planning_input.budget_constraint and planning_input.budget_constraint.hard)
-        and budget.state == HardBudgetState.VERIFY
+        budget is not None and budget.state == HardBudgetState.VERIFY
     )
     return VerificationBurden(
         blocking_gate_count=(
             verify_edges + sum(1 for item in items if item.blocking) + hard_budget_gate
         ),
         verify_edge_quality_pct=preservation.possible_additional_pct,
-        total_gate_count=len(items) + verify_edges + int(budget.state == HardBudgetState.VERIFY),
+        total_gate_count=(
+            len(items)
+            + verify_edges
+            + int(budget is not None and budget.state == HardBudgetState.VERIFY)
+        ),
     )
 
 
@@ -395,8 +405,11 @@ def _hard_filter(
             if festival_id in _constraint_values(constraint):
                 reason = "violates_excluded_festival"
         elif constraint.constraint_type == "minimum_score":
+            value = constraint.value
+            if isinstance(value, tuple):
+                raise PlannerInputError("minimum_score constraint must be an integer")
             try:
-                minimum = int(constraint.value)
+                minimum = int(value)
             except (TypeError, ValueError) as exc:
                 raise PlannerInputError("minimum_score constraint must be an integer") from exc
             if evaluation_candidate.score_breakdown.score < minimum:
@@ -408,11 +421,12 @@ def _hard_filter(
             reason_codes.append(reason)
             constraint_refs.append(constraint.constraint_id)
 
-    constraint = planning_input.budget_constraint
     budget = assess_budget(planning_input, festival_id)
-    if constraint and constraint.hard and budget.state == HardBudgetState.KNOWN_INFEASIBLE:
+    if budget is not None and budget.state == HardBudgetState.KNOWN_INFEASIBLE:
         reason_codes.append("hard_budget_known_infeasible")
-        constraint_refs.append(constraint.constraint_id)
+        budget_constraint = planning_input.budget_constraint
+        assert budget_constraint is not None
+        constraint_refs.append(budget_constraint.constraint_id)
     return HardFilterResult(
         feasible=not reason_codes,
         reason_codes=tuple(dict.fromkeys(reason_codes)),
@@ -576,7 +590,7 @@ class CampaignPlanner:
                     burden=_verification_burden(
                         planning_input, candidate, opportunity, preservation, budget
                     ),
-                    soft_budget_rank=_soft_budget_rank(planning_input, budget),
+                    soft_budget_rank=_soft_budget_rank(planning_input, festival_id),
                 )
             )
 
@@ -590,13 +604,6 @@ class CampaignPlanner:
         )
         primary = ordered[0]
         alternatives = ordered[1:3]
-        constraint = planning_input.budget_constraint
-        if constraint and not constraint.hard and primary.budget.state != HardBudgetState.KNOWN_FEASIBLE:
-            raise PlannerInputError(
-                "frozen CampaignPlan cannot serialize a selected soft-budget route that is "
-                "unknown or over preference without mislabeling it as a hard-budget result"
-            )
-
         plan = self._construct_plan(
             planning_input,
             primary,
@@ -784,7 +791,7 @@ class CampaignPlanner:
                     source_refs=item.source_refs,
                 )
             )
-        if primary.budget.state == HardBudgetState.VERIFY:
+        if primary.budget is not None and primary.budget.state == HardBudgetState.VERIFY:
             source_refs = tuple(
                 dict.fromkeys(
                     ref
@@ -819,7 +826,6 @@ class CampaignPlanner:
 
 
 __all__ = [
-    "FUTURE_QUALITY_DIMENSIONS",
     "CampaignPlanner",
     "NoFeasibleLaunchError",
     "PlannerError",
