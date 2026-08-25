@@ -258,6 +258,13 @@ def main() -> None:
     assert CALLS.count("MatchScorer") == 1 and CALLS.count("RoadmapBuilder") == 1
     assert len(CALLS) == 3, f"expected 3 LLM calls, got {len(CALLS)}: {CALLS}"
     assert result["meta"]["premiere_target"]["id"] == "idfa"
+    executor = next(step for step in result["steps"] if step["module"] == "Executor")
+    scorer_outcome = next(
+        row["outcome"]
+        for row in executor["response"]["executed"]
+        if row["module"] == "MatchScorer"
+    )
+    assert scorer_outcome.startswith("3 creative-fit ratings"), scorer_outcome
 
     bucket_ids = [
         entry["id"]

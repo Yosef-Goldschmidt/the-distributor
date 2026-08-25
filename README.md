@@ -77,7 +77,9 @@ choose which supplied score evidence to emphasize and which facts to ask the dis
 to confirm, but deterministic code writes the summary, each action and the chronological
 calendar and rejects structurally ungrounded evidence references.
 Buckets are then assigned deterministically: **Submit First**, **Prioritize Next**,
-**Leverage**, **Hold / Avoid**.
+**Leverage**, **Hold / Avoid**. These buckets prioritize submission work; the separate
+premiere-sequence label governs whether an accepted screening can follow the selected target
+or remains a mutually exclusive alternative.
 
 ---
 
@@ -118,8 +120,9 @@ Open <http://localhost:8000>.
 
 Without credentials the agent still starts: retrieval falls back to a local TF-IDF search
 over `data/festivals.json` and company memory falls back to `data/company.json`. Only the
-chat calls genuinely require a key. Every fallback is labelled in the trace and final
-grounding rather than being presented as Pinecone or Supabase evidence.
+chat calls genuinely require a key. Every fallback is labelled in the trace; vector and
+festival-fact fallbacks are also repeated in the final grounding rather than being presented
+as Pinecone or Supabase evidence.
 
 `/api/health` reports exactly which integrations are live.
 

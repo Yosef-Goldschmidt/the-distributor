@@ -195,11 +195,13 @@ def assess_deadline(festival: dict[str, Any], today: date) -> dict[str, Any]:
         elif days_until <= 42:
             status = "closing_soon"
             verb = "recorded" if basis == "recorded_final_deadline" else "projected"
-            reason = f"The {verb} final deadline is {target.isoformat()} ({days_until} day(s) away)."
+            unit = "day" if days_until == 1 else "days"
+            reason = f"The {verb} final deadline is {target.isoformat()} ({days_until} {unit} away)."
         else:
             status = "open"
             verb = "recorded" if basis == "recorded_final_deadline" else "projected"
-            reason = f"The {verb} final deadline is {target.isoformat()} ({days_until} day(s) away)."
+            unit = "day" if days_until == 1 else "days"
+            reason = f"The {verb} final deadline is {target.isoformat()} ({days_until} {unit} away)."
 
         urgency = _deadline_rating(status, days_until, days_until_open)
         return {

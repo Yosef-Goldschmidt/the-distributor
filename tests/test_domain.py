@@ -182,6 +182,55 @@ class PremiereSemanticsTest(unittest.TestCase):
         self.assertEqual(result["runtime_constraint"]["maximum_minutes"], 60)
         self.assertIn("not treated as an official eligibility rule", result["runtime_warning"])
 
+    def test_feature_fiction_with_supported_format_remains_eligible(self) -> None:
+        result = domain.assess_premiere(
+            {
+                "format": "feature_fiction",
+                "runtime_minutes": 104,
+                "premiere_status": "world_premiere_available",
+            },
+            {
+                "accepts": ["feature_fiction"],
+                "focus": "Arthouse feature fiction.",
+                "notes": "Programming commonly includes 90- to 120-minute work.",
+                "premiere_requirement_raw": "No Requirements",
+            },
+        )
+        self.assertTrue(result["eligible"])
+        self.assertIsNone(result["runtime_warning"])
+
+    def test_unknown_premiere_status_stays_uncertain_and_selects_no_target(self) -> None:
+        assessment = domain.assess_candidate(
+            {"format": "feature_fiction", "premiere_status": "unknown"},
+            {
+                "id": "festival",
+                "accepts": ["feature_fiction"],
+                "premiere_requirement_raw": "No Info",
+                "final_deadline": "2026-10-01",
+            },
+            date(2026, 8, 25),
+        )
+        ranked = [{
+            "id": "festival", "name": "Festival", "country": "France",
+            "region": "Western Europe", "tier": "A", "score": 85,
+            "bucket": "submit_first", "eligible": assessment["eligible"],
+            "deadline_status": assessment["deadline_status"],
+            "premiere_opportunity": assessment["premiere_opportunity"],
+            "premiere_constraint": assessment["premiere_constraint"],
+            "ratings": {"strategic_value": 5},
+        }]
+
+        target = modules.apply_premiere_strategy(
+            {"premiere_status": "unknown", "country": "Georgia"}, ranked
+        )
+
+        self.assertEqual(assessment["premiere_risk"], "medium")
+        self.assertTrue(assessment["uncertainties"])
+        self.assertIsNone(target)
+        self.assertEqual(
+            ranked[0]["premiere_sequence"]["status"], "not_applicable"
+        )
+
     def test_known_source_typos_are_normalized_without_mutating_source(self) -> None:
         source = {
             "id": "golden-apricot-yerenan-international-film-festival",
@@ -469,6 +518,26 @@ class RoadmapValidationTest(unittest.TestCase):
         self.assertEqual(can_precede["status"], "alternative_only")
         self.assertEqual(alternative["status"], "alternative_only")
 
+    def test_submit_first_alternative_still_has_a_submission_action(self) -> None:
+        roadmap = modules.normalise_roadmap(
+            {"buckets": {}},
+            [{
+                "id": "backup", "name": "Backup Festival", "bucket": "submit_first",
+                "score": 80, "eligible": True, "premiere_risk": "none",
+                "premiere_opportunity": True, "deadline_status": "open",
+                "deadline": {"next_deadline": "2026-11-01"},
+                "evidence": {"strategic_value": "Strong alternative launch value"},
+                "ratings": {"strategic_value": 4},
+                "post_target_compatibility": {"status": "backup_only"},
+                "pre_target_compatibility": {"status": "must_follow_target"},
+            }],
+            {"id": "target", "name": "Target Festival"},
+        )
+
+        action = roadmap["buckets"]["submit_first"][0]["action"]
+        self.assertIn("Submit in the first wave as an alternative", action)
+        self.assertIn("unless the selected target is abandoned", action)
+
     def test_low_score_hold_action_never_tells_user_to_prepare(self) -> None:
         roadmap = modules.normalise_roadmap(
             {"buckets": {}},
@@ -537,6 +606,33 @@ class RoadmapValidationTest(unittest.TestCase):
             any("Festival 8" in item["action"] for item in roadmap["calendar"])
         )
         self.assertIn("Next-cycle premiere target", roadmap["headline"])
+
+    def test_open_questions_do_not_repeat_missing_field_intent(self) -> None:
+        roadmap = modules.normalise_roadmap(
+            {
+                "buckets": {},
+                "open_questions": [
+                    "Confirm producer names and the legal production company.",
+                    "Is the film picture- and sound-locked?",
+                    "Confirm any prior festival submission commitments.",
+                ],
+            },
+            [],
+            None,
+            {
+                "premiere_status": "unknown",
+                "missing_info": [
+                    "producer and production company",
+                    "completion/lock status (picture and sound locked)",
+                ],
+            },
+        )
+
+        self.assertEqual(len(roadmap["open_questions"]), 3)
+        self.assertEqual(
+            roadmap["open_questions"][-1],
+            "Confirm any prior festival submission commitments.",
+        )
 
 
 if __name__ == "__main__":

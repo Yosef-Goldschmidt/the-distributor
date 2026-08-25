@@ -142,11 +142,13 @@ def company_relationship_rating(
     award_bonus = 0.75 if award_count else 0.0
     rating = round(min(5.0, base + recency_bonus + award_bonus), 1)
 
-    parts = [f"{screenings} recorded screening(s)"]
+    screening_label = "screening" if screenings == 1 else "screenings"
+    parts = [f"{screenings} recorded {screening_label}"]
     if latest_year:
         parts.append(f"latest in {latest_year}")
     if award_count:
-        parts.append(f"{award_count} recorded award(s)")
+        award_label = "award" if award_count == 1 else "awards"
+        parts.append(f"{award_count} recorded {award_label}")
     return rating, ", ".join(parts) + ".", {
         "screenings": screenings,
         "latest_year": latest_year,

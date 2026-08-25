@@ -93,7 +93,7 @@ def _run(
             scores = modules.match_scorer(llm, trace, profile, candidates, memory)
             ranked = modules.assemble(candidates, scores, risks, memory, trace)
             recommended_target = modules.apply_premiere_strategy(profile, ranked)
-            outcome = f"{len(scores)} creative-fit ratings combined with deterministic scores"
+            outcome = f"{len(ranked)} creative-fit ratings combined with deterministic scores"
         elif module_name == "RoadmapBuilder":
             if not ranked:
                 ranked = modules.assemble(candidates, scores, risks, memory, trace)

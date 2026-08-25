@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from app.agent import modules  # noqa: E402
-from app.stores import supabase_store  # noqa: E402
+from app.stores import pinecone_store, supabase_store  # noqa: E402
 
 
 def festival(festival_id: str, name: str, tier: str, website: str) -> dict:
@@ -112,6 +112,46 @@ class HybridRetrievalTest(unittest.TestCase):
 
         self.assertEqual([row["id"] for row in rows], ["remote", "local"])
         self.assertIn("supabase:festivals+local_seed", source)
+
+    def test_pinecone_query_failure_uses_labelled_lexical_fallback(self) -> None:
+        provider = MagicMock()
+        provider.Index.return_value.query.side_effect = TimeoutError("simulated timeout")
+        with patch.object(
+            pinecone_store.config, "pinecone_enabled", return_value=True
+        ), patch.object(
+            pinecone_store.config, "embeddings_enabled", return_value=True
+        ), patch(
+            "app.stores.pinecone_store.embeddings.embed", return_value=[[0.1, 0.2]]
+        ), patch(
+            "app.stores.pinecone_store._pinecone", return_value=provider
+        ), patch(
+            "app.stores.pinecone_store.corpus.lexical_search",
+            return_value=[("local", 1.0)],
+        ):
+            matches, backend, reason = pinecone_store.search("query", 3)
+
+        self.assertEqual(matches, [("local", 1.0)])
+        self.assertEqual(backend, "local_tfidf_fallback")
+        self.assertEqual(reason, "vector_retrieval_error:TimeoutError")
+
+    def test_supabase_failure_uses_labelled_local_festival_seed(self) -> None:
+        client = MagicMock()
+        client.table.side_effect = TimeoutError("simulated timeout")
+        local = festival("local", "Local Festival", "B", "https://local.test")
+        with patch.object(
+            supabase_store.config, "supabase_enabled", return_value=True
+        ), patch(
+            "app.stores.supabase_store._supabase", return_value=client
+        ), patch(
+            "app.stores.supabase_store.corpus.festivals_by_id",
+            return_value={"local": local},
+        ):
+            rows, source = supabase_store.get_festivals(["local"])
+
+        self.assertEqual([row["id"] for row in rows], ["local"])
+        self.assertEqual(
+            source, "local_seed:data/festivals.json (supabase_request_failed)"
+        )
 
 
 if __name__ == "__main__":

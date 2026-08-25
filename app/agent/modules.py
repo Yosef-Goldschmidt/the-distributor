@@ -915,6 +915,49 @@ def _evidence_dimensions(
     return (available or ["deadline_urgency"])[:2]
 
 
+_QUESTION_STOP_WORDS = {
+    "and", "are", "confirm", "current", "film", "for", "from", "information",
+    "missing", "official", "provide", "site", "that", "the", "this", "what",
+    "with", "your",
+}
+
+
+def _question_terms(value: Any) -> set[str]:
+    """Return stable content terms for conservative open-question deduplication."""
+
+    terms: set[str] = set()
+    for token in re.findall(r"[a-z0-9]+", str(value).lower()):
+        if token in _QUESTION_STOP_WORDS or len(token) < 4:
+            continue
+        if token.endswith("ies") and len(token) > 5:
+            token = token[:-3] + "y"
+        elif token.endswith("ed") and len(token) > 5:
+            token = token[:-2]
+        elif token.endswith("s") and not token.endswith(("ss", "us")) and len(token) > 4:
+            token = token[:-1]
+        terms.add(token)
+    return terms
+
+
+def _duplicates_question(question: str, existing: list[str]) -> bool:
+    candidate = _question_terms(question)
+    if not candidate:
+        return question in existing
+    for current in existing:
+        terms = _question_terms(current)
+        overlap = len(candidate & terms)
+        smaller = min(len(candidate), len(terms)) if terms else 0
+        if smaller == 1 and overlap == 1:
+            return True
+        if overlap >= 2 and overlap / smaller >= 0.5:
+            return True
+    return False
+
+
+def _counted(count: int, singular: str, plural: str | None = None) -> str:
+    return f"{count} {singular if count == 1 else (plural or singular + 's')}"
+
+
 def _constrained_action(record: dict[str, Any]) -> str:
     sequence = record.get("premiere_sequence") or premiere_sequence_role(record)
     sequence_status = sequence.get("status")
@@ -936,8 +979,16 @@ def _constrained_action(record: dict[str, Any]) -> str:
                 f"{f' around {next_deadline}' if next_deadline else ''}; do not screen here "
                 "within the selected target sequence."
             )
+        elif record.get("bucket") == "submit_first":
+            base = (
+                "Submit in the first wave as an alternative premiere path; do not accept "
+                "a screening there unless the selected target is abandoned."
+            )
         else:
-            base = "Keep as an alternative premiere path only; do not combine it with the selected target sequence."
+            base = (
+                "Plan the next submission wave as an alternative premiere path; do not "
+                "accept a screening there unless the selected target is abandoned."
+            )
     elif sequence_status == "verify":
         if record.get("deadline_status") == "closed":
             base = "Verify the official premiere rule before preparing for the next cycle."
@@ -1037,20 +1088,27 @@ def normalise_roadmap(
         if question not in open_questions:
             open_questions.append(question)
     if len(missing_items) > 4:
+        remaining = len(missing_items) - 4
         open_questions.append(
-            f"Provide or confirm the remaining {len(missing_items) - 4} missing film field(s) listed in the analysis trace."
+            f"Provide or confirm the remaining {_counted(remaining, 'missing film field')} "
+            "listed in the analysis trace."
         )
+    missing_questions = list(open_questions)
     uncertain = [record for record in ranked if record.get("uncertainties")]
     for record in uncertain[:2]:
         open_questions.append(
             f"Confirm current deadline and premiere rules for {record['name']} on its official site."
         )
     if len(uncertain) > 2:
+        remaining = len(uncertain) - 2
         open_questions.append(
-            f"Confirm current official rules for the remaining {len(uncertain) - 2} uncertain candidate(s)."
+            f"Confirm current official rules for the remaining "
+            f"{_counted(remaining, 'uncertain candidate')}."
         )
     for question in llm_questions:
-        if question not in open_questions:
+        if question not in open_questions and not _duplicates_question(
+            question, missing_questions
+        ):
             open_questions.append(question)
 
     next_actions = [
@@ -1093,21 +1151,25 @@ def normalise_roadmap(
         )
         if target_record.get("bucket") == "prioritize_next":
             headline = (
-                f"Next-cycle premiere target: {target_name}; {submit_count} currently "
-                f"actionable first-wave candidate(s) and {len(backups)} mutually exclusive "
-                "premiere alternative(s)"
+                f"Next-cycle premiere target: {target_name}; "
+                f"{_counted(submit_count, 'currently actionable first-wave candidate')} and "
+                f"{_counted(len(backups), 'mutually exclusive premiere alternative')}"
             )
         else:
             headline = (
-                f"Premiere target: {target_name}; {submit_count} first-wave candidate(s) and "
-                f"{len(backups)} mutually exclusive premiere alternative(s)"
+                f"Premiere target: {target_name}; "
+                f"{_counted(submit_count, 'first-wave candidate')} and "
+                f"{_counted(len(backups), 'mutually exclusive premiere alternative')}"
             )
         summary_parts = [
             f"Use {target_name} as the intended first public festival screening; its "
             f"recorded premiere scope is {target_scope or 'unknown'} and must be verified."
         ]
     else:
-        headline = f"Evidence-grounded roadmap with {submit_count} first-wave candidate(s)"
+        headline = (
+            f"Evidence-grounded roadmap with "
+            f"{_counted(submit_count, 'first-wave candidate')}"
+        )
         premiere_status = (profile or {}).get("premiere_status")
         if premiere_status == "already_premiered":
             summary_parts = [
@@ -1140,7 +1202,8 @@ def normalise_roadmap(
         )
     if uncertain_count:
         summary_parts.append(
-            f"Verify official current rules for {uncertain_count} candidate(s) before committing."
+            f"Verify official current rules for "
+            f"{_counted(uncertain_count, 'candidate')} before committing."
         )
 
     normalized = dict(roadmap)

@@ -7,7 +7,7 @@ import sys
 import unittest
 from pathlib import Path
 from typing import Any
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import httpx
 
@@ -229,6 +229,28 @@ class LLMTraceTest(unittest.TestCase):
 
         self.assertEqual(len(steps), 1)
         self.assertIn("malformed vector", steps[0]["response"]["error"])
+
+    def test_pinecone_hosted_embedding_error_attempt_is_traced(self) -> None:
+        provider = MagicMock()
+        provider.inference.embed.side_effect = TimeoutError("simulated timeout")
+        steps = []
+        with patch.object(config, "EMBED_PROVIDER", "pinecone"), patch.object(
+            config, "PINECONE_API_KEY", "test-secret"
+        ), patch("pinecone.Pinecone", return_value=provider):
+            with self.assertRaisesRegex(embeddings.EmbeddingError, "Pinecone embedding failed"):
+                embeddings.embed(
+                    ["festival query"],
+                    input_type="query",
+                    trace_callback=lambda module, prompt, response: steps.append(
+                        {"module": module, "prompt": prompt, "response": response}
+                    ),
+                )
+
+        self.assertEqual(len(steps), 1)
+        self.assertEqual(steps[0]["module"], "FestivalSearch")
+        self.assertEqual(steps[0]["prompt"]["provider"]["service"], "pinecone")
+        self.assertIn("TimeoutError", steps[0]["response"]["error"])
+        self.assertNotIn("test-secret", json.dumps(steps))
 
 
 if __name__ == "__main__":

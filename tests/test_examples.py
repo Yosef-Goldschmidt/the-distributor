@@ -101,6 +101,16 @@ class SubmissionExamplesTest(unittest.TestCase):
             retrieved = search_step["response"]["festivals"]
             self.assertEqual(len(retrieved), len({row["id"] for row in retrieved}))
             self.assertEqual(len(retrieved), len({row["name"] for row in retrieved}))
+            executor = next(step for step in steps if step["module"] == "Executor")
+            scorer_outcome = next(
+                row["outcome"]
+                for row in executor["response"]["executed"]
+                if row["module"] == "MatchScorer"
+            )
+            self.assertEqual(
+                scorer_outcome,
+                f"{len(retrieved)} creative-fit ratings combined with deterministic scores",
+            )
 
             roadmap_step = next(
                 step for step in steps
@@ -121,6 +131,7 @@ class SubmissionExamplesTest(unittest.TestCase):
             self.assertIn("**Source / submission page:**", response)
             self.assertIn("**Score calculation:**", response)
             self.assertNotIn("deadline ~", response)
+            self.assertNotRegex(response, r"\b\w+\(s\)")
             self.assertRegex(response, r"deadline \d{4}-\d{2}-\d{2}")
 
             target_name = (roadmap_payload.get("recommended_premiere_target") or {}).get("name")
@@ -190,7 +201,8 @@ class SubmissionExamplesTest(unittest.TestCase):
                     self.assertIn("Verify the projected date", section, name)
                 sequence = festival.get("premiere_sequence") or {}
                 if sequence.get("status") == "alternative_only":
-                    self.assertIn("alternative premiere path only", section.lower(), name)
+                    self.assertIn("alternative premiere path", section.lower(), name)
+                    self.assertIn("unless the selected target is abandoned", section.lower(), name)
                 if festival.get("eligibility_issue"):
                     self.assertIn("**Eligibility:** ineligible", section, name)
 
