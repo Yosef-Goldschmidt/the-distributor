@@ -32,8 +32,10 @@ from app.campaign.models import (
     DecisionGrade,
     DecisionGradeGroup,
     ExpectedPolicyResult,
+    FactStatus,
     FrozenModel,
     FrozenCandidateEvidence,
+    HardBudgetState,
     PlanningInput,
     PersistenceTableContract,
     RetrievalInput,
@@ -521,6 +523,51 @@ def validate_plan_against_input(payload: Any, planning_input: PlanningInput) -> 
         payload,
         context={"known_festival_ids": frozenset(planning_input.candidate_ids)},
     )
+    hard_budget = (
+        planning_input.budget_constraint
+        if planning_input.budget_constraint is not None
+        and planning_input.budget_constraint.hard
+        else None
+    )
+    if hard_budget is None:
+        if plan.budget is not None:
+            raise ValueError("a plan without a hard budget cannot carry a hard-budget assessment")
+        if any(item.budget_assessment is not None for item in plan.selection_diagnostics):
+            raise ValueError("diagnostics without a hard budget cannot carry hard-budget assessments")
+    else:
+        if plan.budget is None:
+            raise ValueError("a hard budget requires a plan budget assessment")
+        if plan.budget.hard_limit != hard_budget.limit:
+            raise ValueError("plan hard limit must match the PlanningInput hard budget")
+        required_now = tuple(item for item in planning_input.required_fees if item.required_now)
+        known_total = Decimal("0")
+        unknown_fee_ids: list[str] = []
+        for item in required_now:
+            fee = item.fee
+            if (
+                fee.status in {FactStatus.UNKNOWN, FactStatus.CONTRADICTED}
+                or fee.amount is None
+                or fee.currency != hard_budget.limit.currency
+            ):
+                unknown_fee_ids.append(item.fee_id)
+            else:
+                known_total += fee.amount
+        if known_total > hard_budget.limit.amount:
+            expected_state = HardBudgetState.KNOWN_INFEASIBLE
+        elif unknown_fee_ids:
+            expected_state = HardBudgetState.VERIFY
+        else:
+            expected_state = HardBudgetState.KNOWN_FEASIBLE
+        if plan.budget.state != expected_state:
+            raise ValueError("plan budget state must agree with required-now fee facts")
+        if plan.budget.known_total.amount != known_total:
+            raise ValueError("plan known total must equal comparable required-now fees")
+        if set(plan.budget.unknown_fee_ids) != set(unknown_fee_ids):
+            raise ValueError("plan unknown fee IDs must match required-now fee facts")
+        if set(plan.budget.included_fee_ids) != {item.fee_id for item in required_now}:
+            raise ValueError("plan included fee IDs must match required-now fees")
+        if set(plan.budget.required_action_ids) != {item.action_id for item in required_now}:
+            raise ValueError("plan required action IDs must match required-now fees")
     edge_by_pair = {
         (edge.from_festival_id, edge.to_festival_id): edge
         for edge in planning_input.compatibility_edges

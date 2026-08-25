@@ -34,8 +34,8 @@
             "destroyed_ids": [
               "idfa"
             ],
-            "known_destroyed_pct": "90",
-            "known_preserved_pct": "10",
+            "known_destroyed_pct": "100",
+            "known_preserved_pct": "0",
             "mode": "balanced",
             "possible_additional_pct": "0",
             "preserved_ids": [],
@@ -127,7 +127,7 @@
         }
       ],
       "naive_selected_id": "hot-docs",
-      "result_hash": "682c9d8a41d34dc4a147683dc33d14b506807c7543b9e824f825cf4cae6a3510"
+      "result_hash": "1339a7cddc4026322839eb006f30f4f87b15d340a699a15103a810937fc09484"
     },
     "planning_input": {
       "artifact_keys": {
@@ -151,7 +151,7 @@
       "campaign_version": 1,
       "candidates": [
         {
-          "component_hash": "31a8a908ee7b7b3d0d9ed245c615c433540b8625073dd6a0ad8707fe3746a8f5",
+          "component_hash": "03de727157ce7934e4df71ea3d8d09617ce444121d546c906c94ed95f0690050",
           "creative": {
             "company_relationship": {
               "award_count": 0,
@@ -228,7 +228,7 @@
           },
           "decision_grade": "submit_first",
           "festival_id": "hot-docs",
-          "future_quality": "90",
+          "future_quality": "83.3",
           "retrieved": {
             "deadline_fact": {
               "observed_at": "2026-08-25T07:00:00Z",
@@ -402,7 +402,7 @@
           }
         },
         {
-          "component_hash": "ead8be86d896fadd9252c07de7ad3d33d174be7a6b8e4d1504b63357c0c470e0",
+          "component_hash": "5de51359c4dc0a2c50515b8e20965bdd11d7308aa9ebb4033536a19bb8b9d689",
           "creative": {
             "company_relationship": {
               "award_count": 0,
@@ -479,7 +479,7 @@
           },
           "decision_grade": "submit_first",
           "festival_id": "idfa",
-          "future_quality": "89",
+          "future_quality": "75.9",
           "retrieved": {
             "deadline_fact": {
               "observed_at": "2026-08-25T07:00:00Z",
@@ -706,7 +706,7 @@
           "verification_items": []
         }
       ],
-      "planning_input_hash": "63c5260a04828d39bbefaad6040de0adb89cc80f505e911652eb64a0b3a704ee",
+      "planning_input_hash": "cbd2b69f3f712b78a926af2eb4f63d577c66a8f5868f18782f2e560b74fbff7a",
       "policy_versions": [
         "planner-v2",
         "budget-v1",
@@ -850,8 +850,8 @@
             "destroyed_ids": [
               "sheffield-docfest"
             ],
-            "known_destroyed_pct": "80",
-            "known_preserved_pct": "20",
+            "known_destroyed_pct": "100",
+            "known_preserved_pct": "0",
             "mode": "balanced",
             "possible_additional_pct": "0",
             "preserved_ids": [],
@@ -943,7 +943,7 @@
         }
       ],
       "naive_selected_id": "hot-docs",
-      "result_hash": "a3759b40b7a211f29b7c448e1bd8a7315f73a0694e08941c6893582ca22e51f2"
+      "result_hash": "a3c162f1952d1f5bd0921a0c7fd2975d173baf4195b565212a771bd511143b29"
     },
     "planning_input": {
       "artifact_keys": {
@@ -967,7 +967,7 @@
       "campaign_version": 1,
       "candidates": [
         {
-          "component_hash": "927ebd295ee23839f396be2a32841be4dfc88d476a074b74fb9cdfd454ad3e38",
+          "component_hash": "67084a2c8cf0af72ed9df6040cbfa6ef812625542a3fbfc099ec0820ab7327ca",
           "creative": {
             "company_relationship": {
               "award_count": 0,
@@ -1044,7 +1044,7 @@
           },
           "decision_grade": "submit_first",
           "festival_id": "hot-docs",
-          "future_quality": "90",
+          "future_quality": "87.0",
           "retrieved": {
             "deadline_fact": {
               "observed_at": "2026-08-25T07:00:00Z",
@@ -1218,7 +1218,7 @@
           }
         },
         {
-          "component_hash": "e84f32e26a8c24799a1989c9c594ad2efd080ab4e02c90302fecc241ef0eb12e",
+          "component_hash": "c98d0c27568f4b6ef8afbe183d2cfda56e0388781b986f3055d3d40ea9cc574d",
           "creative": {
             "company_relationship": {
               "award_count": 0,
@@ -1295,7 +1295,7 @@
           },
           "decision_grade": "prioritize_next",
           "festival_id": "sheffield-docfest",
-          "future_quality": "89",
+          "future_quality": "50.9",
           "retrieved": {
             "deadline_fact": {
               "observed_at": "2026-08-25T07:00:00Z",
@@ -1522,7 +1522,7 @@
           "verification_items": []
         }
       ],
-      "planning_input_hash": "e58e295aa11fba029f987a0dc80ee834a239669ea2f5f9832c9cd57a4db0cab5",
+      "planning_input_hash": "f8ae2375383dbd1703bbedaac3c283bf28ed4fec45c5fa7b7cb2ba6ec5279109",
       "policy_versions": [
         "planner-v2",
         "budget-v1",
@@ -1665,9 +1665,9 @@
           "preservation": {
             "destroyed_ids": [],
             "known_destroyed_pct": "0",
-            "known_preserved_pct": "60",
+            "known_preserved_pct": "0",
             "mode": "balanced",
-            "possible_additional_pct": "40",
+            "possible_additional_pct": "100",
             "preserved_ids": [],
             "verify_ids": [
               "idfa"
@@ -1678,7 +1678,7 @@
           "verification_burden": {
             "blocking_gate_count": 1,
             "total_gate_count": 1,
-            "verify_edge_quality_pct": "40"
+            "verify_edge_quality_pct": "100"
           }
         },
         {
@@ -1712,8 +1712,8 @@
             "destroyed_ids": [
               "hot-docs"
             ],
-            "known_destroyed_pct": "40",
-            "known_preserved_pct": "60",
+            "known_destroyed_pct": "100",
+            "known_preserved_pct": "0",
             "mode": "balanced",
             "possible_additional_pct": "0",
             "preserved_ids": [],
@@ -1755,7 +1755,7 @@
         }
       ],
       "naive_selected_id": "hot-docs",
-      "result_hash": "e36c60af4e87bb470add3886602a95b6ba82f05c218ecfe1574d185e5a65b984"
+      "result_hash": "ee7d32af9ab53750fee943a4eb090214c48052778b301687b069712dd8fcdba3"
     },
     "planning_input": {
       "artifact_keys": {
@@ -1779,7 +1779,7 @@
       "campaign_version": 1,
       "candidates": [
         {
-          "component_hash": "48d058385178d8aa44b54bb09be27852be44dfdfd636269ae249cb319322cdbd",
+          "component_hash": "727c75530dcedccc7f05e5c9aecc35f9c0015061dc4b386e0dcce5e031642cb6",
           "creative": {
             "company_relationship": {
               "award_count": 0,
@@ -1856,7 +1856,7 @@
           },
           "decision_grade": "submit_first",
           "festival_id": "hot-docs",
-          "future_quality": "90",
+          "future_quality": "78.7",
           "retrieved": {
             "deadline_fact": {
               "observed_at": "2026-08-25T07:00:00Z",
@@ -2030,7 +2030,7 @@
           }
         },
         {
-          "component_hash": "7c2aaebe1b619b4d0dbeebf766cf7bf06316008864ca5c7b0c0e0a74ad58addd",
+          "component_hash": "5a15241981e34cdaa602953dbb46a2af3a902164a9b5497d4ca69c59cca154b5",
           "creative": {
             "company_relationship": {
               "award_count": 0,
@@ -2107,7 +2107,7 @@
           },
           "decision_grade": "submit_first",
           "festival_id": "idfa",
-          "future_quality": "89",
+          "future_quality": "78.7",
           "retrieved": {
             "deadline_fact": {
               "observed_at": "2026-08-25T07:00:00Z",
@@ -2334,7 +2334,7 @@
           "verification_items": []
         }
       ],
-      "planning_input_hash": "e610db230206a30c548077366ab01e05c5daa116fb6cf5b1e3a273e87e23f3db",
+      "planning_input_hash": "ff08bbf66348ec33e82e9d785f6dbd714e0d55a5f7affef1bcdf3d3509fb4c44",
       "policy_versions": [
         "planner-v2",
         "budget-v1",
@@ -2595,7 +2595,7 @@
       "campaign_version": 1,
       "candidates": [
         {
-          "component_hash": "0396f5b82e052bc08fa1c9e1e4bfc34fe9d1009a4afb1e3ad9af08380ce5dcf5",
+          "component_hash": "3a5348e741b76a213d81dadaabab8cb8bb921ec47e736137c952b87c9126fa42",
           "creative": {
             "company_relationship": {
               "award_count": 0,
@@ -2672,7 +2672,7 @@
           },
           "decision_grade": "submit_first",
           "festival_id": "hot-docs",
-          "future_quality": "90",
+          "future_quality": "88.0",
           "retrieved": {
             "deadline_fact": {
               "observed_at": "2026-08-25T07:00:00Z",
@@ -2846,7 +2846,7 @@
           }
         },
         {
-          "component_hash": "bcb37e7f2a179e307a10e866c775793e9d9998c7a7454b499eb21820157692b4",
+          "component_hash": "d34d5d0764de2cda340670edd4a6a6b940da36d407afed48bf321decb46a50fa",
           "creative": {
             "company_relationship": {
               "award_count": 0,
@@ -2923,7 +2923,7 @@
           },
           "decision_grade": "submit_first",
           "festival_id": "idfa",
-          "future_quality": "89",
+          "future_quality": "74.1",
           "retrieved": {
             "deadline_fact": {
               "observed_at": "2026-08-25T07:00:00Z",
@@ -3161,7 +3161,7 @@
           "verification_items": []
         }
       ],
-      "planning_input_hash": "df9c87605151d8bade3d21df5b038bccb3de42b7e925a3562bd0aacbe5183924",
+      "planning_input_hash": "cf5c06f0aa565177cafdc568a2c9ec6786f6984d105edd7d49a0e56574a96be0",
       "policy_versions": [
         "planner-v2",
         "budget-v1",
@@ -3418,7 +3418,7 @@
       "campaign_version": 1,
       "candidates": [
         {
-          "component_hash": "2858e8d356dcb78c71e4ee285e84398c47040c0cce295f5b2b9c82b94a3d77e1",
+          "component_hash": "0a73ccb90b4727e6731148b8d4df808b1916df87007022a1c98406197d951a2c",
           "creative": {
             "company_relationship": {
               "award_count": 0,
@@ -3495,7 +3495,7 @@
           },
           "decision_grade": "submit_first",
           "festival_id": "hot-docs",
-          "future_quality": "90",
+          "future_quality": "81.5",
           "retrieved": {
             "deadline_fact": {
               "observed_at": "2026-08-25T07:00:00Z",
@@ -3669,7 +3669,7 @@
           }
         },
         {
-          "component_hash": "bcb37e7f2a179e307a10e866c775793e9d9998c7a7454b499eb21820157692b4",
+          "component_hash": "d34d5d0764de2cda340670edd4a6a6b940da36d407afed48bf321decb46a50fa",
           "creative": {
             "company_relationship": {
               "award_count": 0,
@@ -3746,7 +3746,7 @@
           },
           "decision_grade": "submit_first",
           "festival_id": "idfa",
-          "future_quality": "89",
+          "future_quality": "74.1",
           "retrieved": {
             "deadline_fact": {
               "observed_at": "2026-08-25T07:00:00Z",
@@ -3973,7 +3973,7 @@
           "verification_items": []
         }
       ],
-      "planning_input_hash": "f4016b18e19ec56b5e8d6245cb5f349d964997dd54cbadc1baeeb2c0e960c0c0",
+      "planning_input_hash": "ee16516dc3a194877b4ba57836d71528d9215ae2306dca4c34ce8f4f2957e53e",
       "policy_versions": [
         "planner-v2",
         "budget-v1",

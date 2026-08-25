@@ -41,7 +41,7 @@
       "score": 90,
       "base_score": "90",
       "decision_grade": "submit_first",
-      "future_quality": "88",
+      "future_quality": "83.3",
       "fee_amount": "75",
       "premiere_scope": "world"
     },
@@ -58,7 +58,7 @@
       "score": 82,
       "base_score": "82",
       "decision_grade": "submit_first",
-      "future_quality": "92",
+      "future_quality": "75.9",
       "fee_amount": "65",
       "premiere_scope": "world"
     }

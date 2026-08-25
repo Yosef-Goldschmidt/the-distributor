@@ -132,7 +132,6 @@ def _candidate(
     festival_id: str,
     score: int,
     grade: str,
-    future_quality: Decimal = Decimal("80"),
     *,
     profile: models.CampaignProfile | None = None,
     retrieval: models.RetrievalInput | None = None,
@@ -235,7 +234,7 @@ def _candidate(
             dimensions=dimensions,
         ),
         decision_grade=models.DecisionGrade(grade),
-        future_quality=future_quality,
+        future_quality=models.calculate_future_quality(dimensions),
         component_hash=HASH,
     )
     return candidate_initial.model_copy(
@@ -304,11 +303,10 @@ def _planning_input_from_specs(specs: list[dict[str, Any]], case_id: str) -> mod
             item["festival_id"],
             item["score"],
             item["grade"],
-            Decimal(str(90 - index)),
             profile=profile,
             retrieval=retrieval,
         )
-        for index, item in enumerate(specs)
+        for item in specs
     )
     edges: list[models.CompatibilityEdge] = []
     for source in specs:
@@ -428,10 +426,10 @@ def _boundary_bundle() -> dict[str, models.FrozenModel]:
     profile = _profile()
     retrieval = _retrieval_input(profile)
     hot_docs = _candidate(
-        "hot-docs", 90, "submit_first", Decimal("88"), profile=profile, retrieval=retrieval
+        "hot-docs", 90, "submit_first", profile=profile, retrieval=retrieval
     )
     idfa = _candidate(
-        "idfa", 82, "submit_first", Decimal("92"), profile=profile, retrieval=retrieval
+        "idfa", 82, "submit_first", profile=profile, retrieval=retrieval
     )
     edges = (
         _edge("hot-docs", "idfa", "incompatible"),
@@ -659,6 +657,43 @@ def test_all_boundary_contracts_have_typed_frozen_golden_instances() -> None:
         assert descriptor.producer and descriptor.consumers and descriptor.hash_field
         with pytest.raises(ValidationError):
             type(instance).model_validate({**instance.model_dump(), "unexpected": True})
+
+
+def test_every_frozen_candidate_future_quality_matches_five_dimension_formula() -> None:
+    payloads: list[dict[str, Any]] = []
+
+    def collect(value: Any) -> None:
+        if isinstance(value, dict):
+            if {"festival_id", "future_quality", "score_breakdown"} <= value.keys():
+                payloads.append(value)
+            for item in value.values():
+                collect(item)
+        elif isinstance(value, list):
+            for item in value:
+                collect(item)
+
+    for fixture_name in ("boundary_models.json", "planner_archetype_models.json"):
+        collect(json.loads((FIXTURES / fixture_name).read_text()))
+
+    assert payloads
+    for payload in payloads:
+        candidate = models.FrozenCandidateEvidence.model_validate(
+            payload,
+            context={"known_festival_ids": KNOWN_IDS},
+        )
+        expected = models.calculate_future_quality(candidate.score_breakdown.dimensions)
+        assert candidate.future_quality == expected
+        assert candidate.future_quality.as_tuple().exponent == -1
+
+    excluded_dimensions = deepcopy(payloads[0])
+    excluded_dimensions["score_breakdown"]["premiere_penalty"] = "100"
+    for dimension in excluded_dimensions["score_breakdown"]["dimensions"]:
+        if dimension["dimension"] == "deadline_urgency":
+            dimension["points"] = "0"
+    assert models.FrozenCandidateEvidence.model_validate(
+        excluded_dimensions,
+        context={"known_festival_ids": KNOWN_IDS},
+    ).future_quality == Decimal(excluded_dimensions["future_quality"])
 
 
 def test_planner_boundary_accepts_only_planning_input_contract() -> None:
@@ -1074,6 +1109,138 @@ def test_budget_golden_states_required_now_scope_and_unknown_fee_semantics() -> 
             )
 
 
+def test_no_hard_budget_and_soft_preference_do_not_fabricate_hard_semantics() -> None:
+    bundle = _boundary_bundle()
+    baseline_input = bundle["PlanningInput"]
+    baseline_plan = bundle["CampaignPlan"]
+    assert baseline_input.budget_constraint is not None
+
+    def planning_variant(
+        constraint: models.BudgetConstraint | None,
+        required_fees: tuple[models.RequiredFee, ...],
+    ) -> models.PlanningInput:
+        payload = baseline_input.model_dump()
+        payload["budget_constraint"] = (
+            constraint.model_dump() if constraint is not None else None
+        )
+        payload["required_fees"] = [item.model_dump() for item in required_fees]
+        payload["planning_input_hash"] = HASH
+        initial = models.PlanningInput.model_validate(payload)
+        return initial.model_copy(
+            update={"planning_input_hash": planning_input_hash(initial)}
+        )
+
+    plan_payload = baseline_plan.model_dump(by_alias=True)
+    plan_payload["budget"] = None
+    plan_payload["selection_diagnostics"][0]["budget_assessment"] = None
+
+    no_budget_input = planning_variant(None, ())
+    no_budget_plan = validate_plan_against_input(plan_payload, no_budget_input)
+    assert no_budget_plan.budget is None
+    assert no_budget_plan.model_dump(mode="json")["budget"] is None
+    aggregate = models.CampaignAggregateResponse(
+        snapshot=bundle["CampaignSnapshot"],
+        active_plan=no_budget_plan,
+    )
+    assert aggregate.model_dump(mode="json")["active_plan"]["budget"] is None
+    with pytest.raises(ValueError, match="hard budget requires"):
+        validate_plan_against_input(plan_payload, baseline_input)
+
+    soft_constraint = models.BudgetConstraint(
+        constraint_id="soft-budget",
+        limit=models.Money(amount=Decimal("200"), currency="USD"),
+        hard=False,
+    )
+    known_over_fee = models.RequiredFee(
+        fee_id="fee-soft-over",
+        action_id="submit-hot-docs",
+        festival_id="hot-docs",
+        action_scope=models.FeeActionScope.CURRENT_ROOT,
+        required_now=True,
+        fee=models.FeeFact(
+            amount=Decimal("250"),
+            currency="USD",
+            status=models.FactStatus.CONFIRMED,
+            source_refs=("fixture:soft-fee",),
+            observed_at=OBSERVED_AT,
+        ),
+    )
+    soft_over_input = planning_variant(soft_constraint, (known_over_fee,))
+    plan_payload["selection_diagnostics"][0]["soft_budget_preference_rank"] = 2
+    soft_over_plan = validate_plan_against_input(plan_payload, soft_over_input)
+    assert soft_over_plan.budget is None
+    assert soft_over_plan.selection_diagnostics[0].hard_filter.feasible
+    assert soft_over_plan.selection_diagnostics[0].soft_budget_preference_rank == 2
+
+    unknown_fee = models.RequiredFee(
+        fee_id="fee-soft-unknown",
+        action_id="submit-hot-docs",
+        festival_id="hot-docs",
+        action_scope=models.FeeActionScope.CURRENT_ROOT,
+        required_now=True,
+        fee=models.FeeFact(
+            status=models.FactStatus.UNKNOWN,
+            source_refs=(),
+            observed_at=OBSERVED_AT,
+        ),
+    )
+    soft_unknown_input = planning_variant(soft_constraint, (unknown_fee,))
+    soft_unknown_plan = validate_plan_against_input(plan_payload, soft_unknown_input)
+    assert soft_unknown_plan.budget is None
+    assert unknown_fee.fee.amount is None
+    assert unknown_fee.fee.currency is None
+    assert not any(
+        gate.blocking and gate.affected_decision.startswith("budget")
+        for gate in soft_unknown_plan.verification_gates
+    )
+
+    hard_unknown_input = planning_variant(
+        baseline_input.budget_constraint,
+        (unknown_fee,),
+    )
+    hard_verify_payload = baseline_plan.model_dump(by_alias=True)
+    hard_verify_payload["budget"] = models.BudgetAssessment(
+        state=models.HardBudgetState.VERIFY,
+        hard_limit=baseline_input.budget_constraint.limit,
+        known_total=models.Money(amount=Decimal("0"), currency="USD"),
+        unknown_fee_ids=(unknown_fee.fee_id,),
+        required_action_ids=(unknown_fee.action_id,),
+        included_fee_ids=(unknown_fee.fee_id,),
+    ).model_dump()
+    hard_verify_payload["verification_gates"] = [{
+        "id": "verify-hard-budget-fee",
+        "fact_key": "fee.fee-soft-unknown",
+        "affected_decision": "budget:primary_launch",
+        "blocking": True,
+        "source_refs": [],
+    }]
+    assert validate_plan_against_input(
+        hard_verify_payload, hard_unknown_input
+    ).budget.state == models.HardBudgetState.VERIFY
+
+    false_feasible_payload = deepcopy(hard_verify_payload)
+    false_feasible_payload["budget"] = models.BudgetAssessment(
+        state=models.HardBudgetState.KNOWN_FEASIBLE,
+        hard_limit=baseline_input.budget_constraint.limit,
+        known_total=models.Money(amount=Decimal("0"), currency="USD"),
+        required_action_ids=(unknown_fee.action_id,),
+        included_fee_ids=(unknown_fee.fee_id,),
+    ).model_dump()
+    with pytest.raises(ValueError, match="required-now fee facts"):
+        validate_plan_against_input(false_feasible_payload, hard_unknown_input)
+
+    blocking_soft_payload = deepcopy(plan_payload)
+    blocking_soft_payload["verification_gates"] = [{
+        "id": "verify-soft-budget-fee",
+        "fact_key": "fee.fee-soft-unknown",
+        "affected_decision": "budget:primary_launch",
+        "blocking": True,
+        "source_refs": [],
+    }]
+    with pytest.raises(ValidationError, match="actual hard budget"):
+        validate_plan_against_input(blocking_soft_payload, soft_unknown_input)
+
+
 def test_campaign_plan_cardinality_grounding_and_budget_validation() -> None:
     plan = _boundary_bundle()["CampaignPlan"]
     payload = plan.model_dump(by_alias=True)
@@ -1125,6 +1292,16 @@ def test_campaign_plan_cardinality_grounding_and_budget_validation() -> None:
     ).model_dump()
     with pytest.raises(ValidationError, match="cannot be KNOWN_INFEASIBLE"):
         models.CampaignPlan.model_validate(infeasible_payload)
+
+    diagnostic_payload = plan.selection_diagnostics[0].model_dump()
+    diagnostic_payload["budget_assessment"] = infeasible_payload["budget"]
+    with pytest.raises(ValidationError, match="must be hard-filtered"):
+        models.PlannerCandidateDiagnostic.model_validate(diagnostic_payload)
+    diagnostic_payload["hard_filter"]["feasible"] = False
+    diagnostic_payload["hard_filter"]["reason_codes"] = ["hard_budget_known_infeasible"]
+    assert not models.PlannerCandidateDiagnostic.model_validate(
+        diagnostic_payload
+    ).hard_filter.feasible
 
 
 def _bucket_candidate(score: int, **updates: Any) -> dict[str, Any]:
@@ -1180,6 +1357,62 @@ def _dominates(left: dict[str, Any], right: dict[str, Any]) -> bool:
     return no_worse and strict
 
 
+def _weighted_preservation(
+    planning: models.PlanningInput, root_id: str
+) -> tuple[dict[models.CompatibilityStatus, Decimal], dict[models.CompatibilityStatus, tuple[str, ...]]]:
+    candidate_quality = {
+        candidate.festival_id: candidate.future_quality
+        for candidate in planning.candidates
+    }
+    nonterminal = {
+        opportunity.festival_id
+        for opportunity in planning.opportunities
+        if opportunity.submission_state
+        not in {models.SubmissionState.REJECTED, models.SubmissionState.WITHDRAWN}
+    }
+    downstream_ids = tuple(
+        festival_id
+        for festival_id in planning.candidate_ids
+        if festival_id != root_id and festival_id in nonterminal
+    )
+    edge_by_target = {
+        edge.to_festival_id: edge.status
+        for edge in planning.compatibility_edges
+        if edge.from_festival_id == root_id
+    }
+    ids_by_status = {
+        status: tuple(
+            festival_id
+            for festival_id in downstream_ids
+            if edge_by_target[festival_id] == status
+        )
+        for status in models.CompatibilityStatus
+    }
+    total_quality = sum(
+        (candidate_quality[festival_id] for festival_id in downstream_ids),
+        Decimal("0"),
+    )
+    if not downstream_ids:
+        percentages = {
+            models.CompatibilityStatus.COMPATIBLE: Decimal("100"),
+            models.CompatibilityStatus.VERIFY: Decimal("0"),
+            models.CompatibilityStatus.INCOMPATIBLE: Decimal("0"),
+        }
+    else:
+        percentages = {
+            status: (
+                Decimal("100")
+                * sum(
+                    (candidate_quality[festival_id] for festival_id in ids_by_status[status]),
+                    Decimal("0"),
+                )
+                / total_quality
+            ).quantize(models.FUTURE_QUALITY_QUANTUM)
+            for status in models.CompatibilityStatus
+        }
+    return percentages, ids_by_status
+
+
 def test_archetypes_a_to_e_are_typed_consistent_and_freeze_all_six_invariants() -> None:
     fixture = json.loads((FIXTURES / "planner_archetypes.json").read_text())
     exact_models = json.loads((FIXTURES / "planner_archetype_models.json").read_text())
@@ -1220,10 +1453,35 @@ def test_archetypes_a_to_e_are_typed_consistent_and_freeze_all_six_invariants() 
             actual_grade = scoring.assign_bucket(_bucket_candidate(item["score"], tier="B"))
             assert actual_grade == item["grade"]
         for source, diagnostic in zip(case["candidates"], policy.diagnostics, strict=True):
-            assert set(diagnostic.preservation.verify_ids) == set(source["verify_ids"])
-            assert not (
-                set(diagnostic.preservation.verify_ids)
-                & set(diagnostic.preservation.preserved_ids)
+            percentages, ids_by_status = _weighted_preservation(
+                planning, source["festival_id"]
+            )
+            assert diagnostic.preservation.known_preserved_pct == percentages[
+                models.CompatibilityStatus.COMPATIBLE
+            ]
+            assert diagnostic.preservation.possible_additional_pct == percentages[
+                models.CompatibilityStatus.VERIFY
+            ]
+            assert diagnostic.preservation.known_destroyed_pct == percentages[
+                models.CompatibilityStatus.INCOMPATIBLE
+            ]
+            assert diagnostic.preservation.preserved_ids == ids_by_status[
+                models.CompatibilityStatus.COMPATIBLE
+            ]
+            assert diagnostic.preservation.verify_ids == ids_by_status[
+                models.CompatibilityStatus.VERIFY
+            ]
+            assert diagnostic.preservation.destroyed_ids == ids_by_status[
+                models.CompatibilityStatus.INCOMPATIBLE
+            ]
+            assert diagnostic.verification_burden.verify_edge_quality_pct == percentages[
+                models.CompatibilityStatus.VERIFY
+            ]
+            assert not set(diagnostic.preservation.verify_ids) & set(
+                diagnostic.preservation.preserved_ids
+            )
+            assert not set(diagnostic.preservation.destroyed_ids) & set(
+                diagnostic.preservation.preserved_ids
             )
 
     case_a = fixture["cases"][0]
