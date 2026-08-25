@@ -237,7 +237,7 @@ class ClarificationEngine:
         planning_input: PlanningInput,
         plan: CampaignPlan,
     ) -> list[Clarification]:
-        if plan.budget.state != HardBudgetState.VERIFY:
+        if plan.budget is None or plan.budget.state != HardBudgetState.VERIFY:
             return []
         unknown = set(plan.budget.unknown_fee_ids)
         required = [

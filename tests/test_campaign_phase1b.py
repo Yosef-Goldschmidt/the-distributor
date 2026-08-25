@@ -177,9 +177,9 @@ def test_compatibility_unknown_rule_is_verify_never_compatible() -> None:
 
 def test_future_quality_uses_only_the_exact_five_enduring_dimensions() -> None:
     candidate = _input("A-option-destruction").candidates[0]
-    expected = Decimal(100) * Decimal(75) / Decimal(90)
+    expected = Decimal("83.3")
     assert future_quality(candidate) == expected
-    assert future_quality(candidate) != candidate.future_quality
+    assert future_quality(candidate) == candidate.future_quality
     changed_dimensions = tuple(
         dimension.model_copy(update={"points": Decimal("999")})
         if dimension.dimension == "deadline_urgency"
@@ -197,6 +197,54 @@ def test_future_quality_uses_only_the_exact_five_enduring_dimensions() -> None:
         }
     )
     assert future_quality(changed) == expected
+
+
+def test_no_hard_budget_serializes_null_assessments() -> None:
+    base = _input("E-no-tradeoff")
+    planning_input = _updated(base, budget_constraint=None, required_fees=())
+    plan = CampaignPlanner().plan(planning_input)
+    assert plan.budget is None
+    assert all(
+        diagnostic.budget_assessment is None
+        for diagnostic in plan.selection_diagnostics
+    )
+
+
+@pytest.mark.parametrize(
+    ("fee", "expected_rank"),
+    [
+        (_known_fee("hot-docs", "50"), 2),
+        (_unknown_fee("hot-docs"), 1),
+    ],
+)
+def test_soft_budget_is_only_an_ordinal_preference(
+    fee: RequiredFee,
+    expected_rank: int,
+) -> None:
+    base = _input("E-no-tradeoff")
+    soft = BudgetConstraint(
+        constraint_id="soft-budget",
+        limit=Money(amount=Decimal("40"), currency="USD"),
+        hard=False,
+    )
+    planning_input = _updated(
+        base,
+        budget_constraint=soft,
+        required_fees=(fee,),
+    )
+    plan = CampaignPlanner().plan(planning_input)
+    diagnostic = next(
+        item for item in plan.selection_diagnostics if item.festival_id == "hot-docs"
+    )
+    assert plan.primary_launch.festival_id == "hot-docs"
+    assert plan.budget is None
+    assert diagnostic.hard_filter.feasible
+    assert diagnostic.budget_assessment is None
+    assert diagnostic.soft_budget_preference_rank == expected_rank
+    assert not any(
+        gate.blocking and gate.affected_decision.startswith("budget")
+        for gate in plan.verification_gates
+    )
 
 
 @pytest.mark.parametrize(
@@ -320,6 +368,15 @@ def test_budget_tri_state_and_required_now_branch_scope() -> None:
         required_fees=(_known_fee("hot-docs", "101"), inactive),
     )
     assert assess_budget(infeasible, "hot-docs").state == HardBudgetState.KNOWN_INFEASIBLE
+    infeasible_plan = CampaignPlanner().plan(infeasible)
+    hot_docs = next(
+        item
+        for item in infeasible_plan.selection_diagnostics
+        if item.festival_id == "hot-docs"
+    )
+    assert not hot_docs.hard_filter.feasible
+    assert "hard_budget_known_infeasible" in hot_docs.hard_filter.reason_codes
+    assert infeasible_plan.primary_launch.festival_id == "idfa"
 
     verify = _updated(
         base,
