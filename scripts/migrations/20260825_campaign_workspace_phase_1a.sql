@@ -253,6 +253,26 @@ begin
     select '{' || coalesce(
       string_agg(
         to_jsonb(item.key)::text || ':' || case
+          -- Snapshot hashing treats these projection arrays as identity-keyed
+          -- sets without changing their returned retrieval/display order.
+          when item.key in (
+            'screenings', 'constraints', 'opportunities', 'candidates'
+          ) and jsonb_typeof(item.value) = 'array'
+          then (
+            select '[' || coalesce(
+              string_agg(
+                campaign_canonical_json(element.value),
+                ',' order by (case item.key
+                  when 'screenings' then element.value ->> 'screening_id'
+                  when 'constraints' then element.value ->> 'constraint_id'
+                  when 'opportunities' then element.value ->> 'festival_id'
+                  when 'candidates' then element.value ->> 'festival_id'
+                end) collate "C"
+              ),
+              ''
+            ) || ']'
+            from jsonb_array_elements(item.value) element(value)
+          )
           -- Pydantic serializes Decimal values as JSON strings while the
           -- frozen canonical serializer removes insignificant trailing scale.
           when item.key in (

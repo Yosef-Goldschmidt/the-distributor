@@ -198,6 +198,17 @@ def test_additive_migration_defines_eight_tables_initial_creation_and_atomic_sta
         "future_quality",
     }
     assert "trim_scale((item.value #>> '{}')::numeric)::text" in canonical_function
+    for array_field, identity_field in (
+        ("screenings", "screening_id"),
+        ("constraints", "constraint_id"),
+        ("opportunities", "festival_id"),
+        ("candidates", "festival_id"),
+    ):
+        assert (
+            f"when '{array_field}' then element.value ->> '{identity_field}'"
+            in canonical_function
+        )
+    assert "from jsonb_array_elements(item.value) element(value)" in canonical_function
     command_rpc = sql.index("create or replace function apply_campaign_command")
     activation_rpc = sql.index("create or replace function activate_campaign_strategy")
     assert command_rpc < activation_rpc
