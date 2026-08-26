@@ -1,7 +1,8 @@
-"""Frozen Phase 0 contracts for the future Campaign Workspace.
+"""Campaign Workspace contracts and deterministic runtime implementation.
 
-This package intentionally contains no persistence, reducer, planner, API, or
-provider integration. Runtime implementation starts in later phases.
+The public API feature flag remains off until the Phase 3 product boundary is
+mounted, while the state, planning, orchestration, and scenario layers are
+fully importable and independently testable.
 """
 
 from app.campaign.contracts import CAMPAIGN_RUNTIME_ENABLED

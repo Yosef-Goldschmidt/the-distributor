@@ -19,9 +19,11 @@ from app.campaign.contracts import canonical_hash, campaign_snapshot_hash
 from app.campaign.models import (
     CampaignCommand,
     CampaignEvent,
+    CampaignOpportunity,
     CampaignPlan,
     CampaignReadiness,
     CampaignSnapshot,
+    FrozenCandidateEvidence,
     StrategyDiff,
 )
 from app.campaign.state import CampaignStateReducer, StateReduction, VersionConflict
@@ -279,10 +281,15 @@ class InMemoryCampaignRepository:
             )
             stored.strategies.append(version)
             if attempt.outcome == "ready":
+                candidates, opportunities = self._strategy_projection(
+                    attempt, stored.snapshot
+                )
                 provisional = stored.snapshot.model_copy(
                     update={
                         "active_strategy_ref": attempt.strategy_id,
                         "readiness": CampaignReadiness.READY,
+                        "candidates": candidates,
+                        "opportunities": opportunities,
                         "aggregate_hash": "0" * 64,
                     }
                 )
@@ -293,6 +300,66 @@ class InMemoryCampaignRepository:
             else:
                 stored.strategy_stale = True
             return self._aggregate(stored)
+
+    @staticmethod
+    def _strategy_projection(
+        attempt: StrategyAttempt, snapshot: CampaignSnapshot
+    ) -> tuple[
+        tuple[FrozenCandidateEvidence, ...],
+        tuple[CampaignOpportunity, ...],
+    ]:
+        raw_candidates = attempt.input_snapshot_json.get("candidates")
+        if raw_candidates is None:
+            return snapshot.candidates, snapshot.opportunities
+        raw_ids = frozenset(
+            str(item.get("festival_id"))
+            for item in raw_candidates
+            if isinstance(item, Mapping) and item.get("festival_id")
+        )
+        try:
+            candidates = tuple(
+                FrozenCandidateEvidence.model_validate(
+                    item, context={"known_festival_ids": raw_ids}
+                )
+                for item in raw_candidates
+            )
+        except Exception as exc:  # noqa: BLE001 - reject a corrupt activation projection
+            raise CampaignRepositoryError(
+                "ready strategy carries an invalid candidate projection"
+            ) from exc
+        if not candidates or {item.festival_id for item in candidates} != raw_ids:
+            raise CampaignRepositoryError(
+                "ready strategy candidate projection has invalid canonical IDs"
+            )
+        raw_opportunities = attempt.input_snapshot_json.get("opportunities")
+        if raw_opportunities is None:
+            if not raw_ids <= {
+                item.festival_id for item in snapshot.opportunities
+            }:
+                raise CampaignRepositoryError(
+                    "new candidate projections require typed opportunities"
+                )
+            return candidates, snapshot.opportunities
+        try:
+            current_opportunities = tuple(
+                CampaignOpportunity.model_validate(
+                    item, context={"known_festival_ids": raw_ids}
+                )
+                for item in raw_opportunities
+            )
+        except Exception as exc:  # noqa: BLE001
+            raise CampaignRepositoryError(
+                "ready strategy carries an invalid opportunity projection"
+            ) from exc
+        if {item.festival_id for item in current_opportunities} != raw_ids:
+            raise CampaignRepositoryError(
+                "strategy candidates and current opportunities must share IDs"
+            )
+        merged = {item.festival_id: item for item in snapshot.opportunities}
+        merged.update(
+            {item.festival_id: item for item in current_opportunities}
+        )
+        return candidates, tuple(merged[item] for item in sorted(merged))
 
     def _require_workspace(self, workspace_id: str) -> None:
         if workspace_id not in self._workspace_digests:

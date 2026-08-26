@@ -301,11 +301,19 @@ as $$
       from campaign_opportunities co
       where co.campaign_id = c.id
     ), '[]'::jsonb),
-    'candidates', coalesce((
-      select jsonb_agg(co.evidence_json order by co.festival_id)
-      from campaign_opportunities co
-      where co.campaign_id = c.id
-    ), '[]'::jsonb),
+    'candidates', coalesce(
+      (
+        select sv.input_snapshot_json -> 'candidates'
+        from strategy_versions sv
+        where sv.id = c.active_strategy_version_id
+      ),
+      (
+        select jsonb_agg(co.evidence_json order by co.festival_id)
+        from campaign_opportunities co
+        where co.campaign_id = c.id
+      ),
+      '[]'::jsonb
+    ),
     'active_strategy_ref', c.active_strategy_version_id,
     'aggregate_hash', c.aggregate_hash
   )
@@ -1222,6 +1230,8 @@ declare
   v_strategy_id text;
   v_snapshot jsonb;
   v_hash text;
+  v_projection_count integer;
+  v_projection_unique_count integer;
 begin
   select * into v_campaign from campaigns where id = p_campaign_id for update;
   if not found then
@@ -1269,6 +1279,75 @@ begin
   );
 
   if p_attempt ->> 'outcome' = 'ready' then
+    -- A B-class replan replaces risk/score evidence as one CAS-protected
+    -- projection. C-class inputs carry identical candidates, so this is a
+    -- deterministic no-op. Candidate IDs must exactly match the strategy's
+    -- current opportunity projection; older opportunity history is retained.
+    if jsonb_typeof(p_attempt -> 'input_snapshot_json' -> 'candidates') is distinct from 'array'
+       or jsonb_typeof(p_attempt -> 'input_snapshot_json' -> 'opportunities') is distinct from 'array' then
+      raise exception using errcode = '22023', message = 'strategy_candidate_projection_missing';
+    end if;
+    select count(*), count(distinct item ->> 'festival_id')
+      into v_projection_count, v_projection_unique_count
+    from jsonb_array_elements(
+      p_attempt -> 'input_snapshot_json' -> 'candidates'
+    ) item;
+    if v_projection_count < 1
+       or v_projection_count <> v_projection_unique_count
+       or v_projection_count <> jsonb_array_length(
+         p_attempt -> 'input_snapshot_json' -> 'opportunities'
+       )
+       or exists (
+         select 1
+         from jsonb_array_elements(
+           p_attempt -> 'input_snapshot_json' -> 'candidates'
+         ) candidate
+         where not exists (
+           select 1
+           from jsonb_array_elements(
+             p_attempt -> 'input_snapshot_json' -> 'opportunities'
+           ) opportunity
+           where opportunity ->> 'festival_id' = candidate ->> 'festival_id'
+         )
+       ) then
+      raise exception using errcode = '22023', message = 'strategy_candidate_projection_mismatch';
+    end if;
+    insert into campaign_opportunities (
+      id, campaign_id, festival_id, submission_state, offer_state,
+      policy_state, evidence_json, creative_scores_json, risk_json,
+      verification_items_json, evidence_hash, creative_hash, risk_hash
+    )
+    select
+      opportunity.value ->> 'opportunity_id', p_campaign_id,
+      candidate.value ->> 'festival_id',
+      opportunity.value ->> 'submission_state',
+      opportunity.value ->> 'offer_state',
+      opportunity.value ->> 'policy_state',
+      candidate.value, candidate.value -> 'creative', candidate.value -> 'risk',
+      coalesce(opportunity.value -> 'verification_items', '[]'::jsonb),
+      candidate.value ->> 'component_hash',
+      candidate.value -> 'creative' ->> 'creative_key',
+      candidate.value -> 'risk' ->> 'risk_key'
+    from jsonb_array_elements(
+      p_attempt -> 'input_snapshot_json' -> 'candidates'
+    ) candidate
+    join jsonb_array_elements(
+      p_attempt -> 'input_snapshot_json' -> 'opportunities'
+    ) opportunity
+      on opportunity.value ->> 'festival_id' = candidate.value ->> 'festival_id'
+    on conflict (campaign_id, festival_id) do update
+    set submission_state = excluded.submission_state,
+        offer_state = excluded.offer_state,
+        policy_state = excluded.policy_state,
+        evidence_json = excluded.evidence_json,
+        creative_scores_json = excluded.creative_scores_json,
+        risk_json = excluded.risk_json,
+        verification_items_json = excluded.verification_items_json,
+        evidence_hash = excluded.evidence_hash,
+        creative_hash = excluded.creative_hash,
+        risk_hash = excluded.risk_hash,
+        updated_at = now();
+
     update campaigns
     set active_strategy_version_id = v_strategy_id,
         strategy_stale = false,
