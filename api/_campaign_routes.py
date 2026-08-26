@@ -48,7 +48,14 @@ T = TypeVar("T")
 def _safe_exception_detail(exc: Exception) -> str:
     """Return bounded diagnostics without allowing configured secrets into logs."""
 
-    detail = str(exc)
+    parts = [str(exc)]
+    cause = exc.__cause__ or exc.__context__
+    seen = {id(exc)}
+    while cause is not None and id(cause) not in seen and len(parts) < 4:
+        seen.add(id(cause))
+        parts.append(f"{type(cause).__name__}: {cause}")
+        cause = cause.__cause__ or cause.__context__
+    detail = " <- ".join(parts)
     for variable in (
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_SERVICE_KEY",

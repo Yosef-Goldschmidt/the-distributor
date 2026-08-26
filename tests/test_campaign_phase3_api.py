@@ -110,10 +110,15 @@ def _client() -> TestClient:
 def test_campaign_error_detail_redacts_configured_secrets(monkeypatch) -> None:
     secret = "server-only-test-credential"
     monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", secret)
+    error = RuntimeError(f"request failed:\n{secret}")
+    error.__cause__ = ValueError("database rejected the request")
 
-    detail = _safe_exception_detail(RuntimeError(f"request failed:\n{secret}"))
+    detail = _safe_exception_detail(error)
 
-    assert detail == "request failed: [redacted]"
+    assert detail == (
+        "request failed: [redacted] <- "
+        "ValueError: database rejected the request"
+    )
 
 
 def _bootstrap(client: TestClient) -> dict[str, Any]:
