@@ -21,7 +21,7 @@ from pydantic import BaseModel, Field  # noqa: E402
 
 from app import config  # noqa: E402
 from app.agent import graph, prompts, scoring  # noqa: E402
-from api.campaign_routes import (  # noqa: E402
+from api._campaign_routes import (  # noqa: E402
     CampaignApiException,
     campaign_api_exception_response,
     campaign_validation_error_response,
@@ -168,6 +168,14 @@ def agent_info() -> JSONResponse:
                 "premiere_policy": "Territorial shorthand is not treated as a strict world-premiere rule; compatibility is evaluated across the whole sequence.",
                 "trace_policy": "Every actual chat or embedding model attempt, including retries, errors and rejected-parameter fallbacks, appears in steps.",
             },
+            "campaign_workspace": {
+                "status": "implemented; runtime fails closed unless the additive schema and server-only service-role credential are configured",
+                "architecture": "Capability-scoped aggregate, deterministic reducer and premiere ledger, directed compatibility graph, frozen PlanningInput, deterministic CampaignPlanner, immutable strategy versions/diffs, and cloned no-write scenarios.",
+                "legacy_evidence_boundary": "Initial and A-class refreshes reuse FilmAnalyzer, CompanyMemory, FestivalSearch, RiskChecker and MatchScorer through LegacyEvidenceAdapter; CampaignPlanner never accepts legacy dictionaries.",
+                "incremental_policy": "Valid B/C cached replans perform no chat or embedding calls and return an explicit ReuseManifest. Cache mismatches remain stale without silent provider fallback.",
+                "security": "A 256-bit opaque Secure HttpOnly SameSite=Lax cookie is hashed with SHA-256 server-side; campaign IDs do not authorize access; JSON mutations require an exact configured Origin; persistence requires a server-only Supabase service-role credential.",
+                "ui": "GET /campaign serves the compact, server-authoritative Campaign Workspace while GET / remains the public Quick Strategy experience.",
+            },
             "prompt_template": {
                 "template": (
                     "Title: {title}\n"
@@ -193,6 +201,8 @@ def agent_info() -> JSONResponse:
                 "GET /api/agent_info": "This document.",
                 "GET /api/model_architecture": "Architecture diagram (PNG).",
                 "POST /api/execute": "Run the agent. Always returns exactly status, error, response and steps.",
+                "GET /campaign": "Campaign Workspace page (workspace bootstrap occurs only from the page's explicit JSON request).",
+                "/api/workspace/*": "Capability-scoped campaign creation, commands, replanning, scenarios and immutable strategy history.",
             },
         }
     )

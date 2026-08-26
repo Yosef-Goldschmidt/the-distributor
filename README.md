@@ -11,6 +11,12 @@ behind it, and its risks.
 
 Built by Yosef Goldschmidt and Reuven Shpitz.
 
+The public **Quick Strategy** experience remains the course-compatible one-shot agent.
+An additive **Campaign Workspace** at `/campaign` turns the same evidence pipeline into a
+durable, event-driven campaign: it tracks premiere state and human decisions, constructs a
+directed compatibility graph, selects a globally coherent launch route, versions every
+strategy, reuses valid evidence on deterministic replans, and compares no-write scenarios.
+
 ---
 
 ## Architecture — Plan-and-Execute
@@ -43,6 +49,32 @@ including parameter fallbacks, errors and retries, are traced separately. The ru
 260-second application deadline, leaving headroom below Vercel's 300-second function limit.
 Query embeddings have a separate 20-second timeout and fall back to local TF-IDF rather than
 holding the entire run open.
+
+### Campaign Workspace — deterministic incremental planning
+
+Campaign planning is additive to the module chain above; it does not replace or rename any
+Quick Strategy module. `LegacyEvidenceAdapter` is the only raw-dictionary boundary. It
+converts the existing analyzer, CompanyMemory, retrieval, risk and guarded scoring outputs
+into frozen typed evidence. `CampaignPlanner` accepts only `PlanningInput` and performs no
+provider or database call.
+
+The campaign layer adds:
+
+- a capability-scoped aggregate, deterministic reducer, premiere ledger and append-only
+  events;
+- a complete directed tri-state festival compatibility graph and a deterministic planner
+  with one primary launch, at most two alternatives, explicit preservation diagnostics,
+  verification gates, clarification and exact hard/soft budget semantics;
+- immutable strategy versions, structured `StrategyDiff` values and explicit
+  `ReuseManifest` hashes;
+- A/B/C invalidation: A refreshes identity-dependent legacy evidence, B reruns
+  ledger/risk/graph/planning, and C reruns planning/clarification only;
+- an in-memory scenario engine that applies one to three of the same typed commands, uses
+  the same B/C path, returns a diff and discards the clone without a database write.
+
+For a valid B/C cache, operational replans are deterministic and make zero chat and zero
+embedding attempts. A cache mismatch never silently falls back to a provider: the strategy
+remains stale and exposes the miss.
 
 ### Scoring
 
@@ -93,6 +125,14 @@ or remains a mutually exclusive alternative.
 | `GET /api/model_architecture` | Architecture diagram (`image/png`) |
 | `POST /api/execute` | `{"prompt": "..."}` → exactly `{"status", "error", "response", "steps"}` |
 | `GET /api/health` | Which integrations are configured (diagnostics) |
+| `GET /campaign` | Compact Campaign Workspace page; Quick Strategy at `/` remains public |
+| `POST /api/workspace/bootstrap` | Resolve or create a private capability-scoped demo workspace |
+| `GET/POST /api/workspace/campaigns` | List campaigns or create one from structured/free-text film evidence |
+| `GET /api/workspace/campaigns/{id}` | Authoritative aggregate, active plan, latest diff, evidence and trace summary |
+| `POST /api/workspace/campaigns/{id}/commands` | Apply one typed human command and synchronously replan |
+| `POST /api/workspace/campaigns/{id}/replan` | Retry the current stale version without a state event |
+| `POST /api/workspace/campaigns/{id}/simulate` | Compare one to three commands on a discarded in-memory clone |
+| `GET /api/workspace/campaigns/{id}/strategies/{no}` | Inspect an immutable historical strategy |
 
 `steps` is the ordered list of module invocations, each `{module, prompt, response}`. It
 covers every actual chat or embedding model attempt (including retries, errors and
@@ -126,15 +166,29 @@ as Pinecone or Supabase evidence.
 
 `/api/health` reports exactly which integrations are live.
 
+Campaign Workspace persistence deliberately fails closed unless both `SUPABASE_URL` and
+the server-only `SUPABASE_SERVICE_ROLE_KEY` are configured. Before enabling it, review and
+apply `scripts/migrations/20260825_campaign_workspace_phase_1a.sql` to the intended
+Supabase project. The migration is additive, creates no browser policies, and has not been
+applied by the implementation workflow. Set `CAMPAIGN_ALLOWED_ORIGINS` to an exact
+comma-separated list such as `http://localhost:8000,https://your-app.vercel.app`; wildcard,
+missing and `null` origins are rejected for JSON mutations. The raw 256-bit workspace
+capability is sent only in a `Secure`, `HttpOnly`, `SameSite=Lax` cookie; only its SHA-256
+digest is stored.
+
 ### Offline test (spends nothing)
 
 ```bash
-python -m unittest discover -s tests -p 'test_*.py'
+.venv/bin/python -m pytest -q
+.venv/bin/python evals/run_campaign.py
 ```
 
 The suite spends no LLM budget. It covers the end-to-end pipeline and API contract,
 corpus-wide date/premiere invariants, company-memory integrity, hybrid retrieval and entity
-deduplication, explainable scoring guardrails, roadmap uniqueness, and per-attempt LLM tracing.
+deduplication, explainable scoring guardrails, roadmap uniqueness, per-attempt LLM tracing,
+planner archetypes A–E, budget/premiere semantics, two-capability isolation, zero-provider
+B/C replanning, correction behavior and scenario no-write behavior. The campaign evaluation
+runner is offline and reports Sitges separately as a known corpus-coverage issue.
 
 ---
 
@@ -190,9 +244,13 @@ build that keeps the real names.
 
 1. Push this repository to GitHub.
 2. Import it in Vercel — `vercel.json` routes everything to the FastAPI app in `api/index.py`.
-3. Add the environment variables from `.env.example` in **Settings → Environment Variables**
-   (use the Supabase anon key in production; the service key is only needed locally for seeding).
-4. Deploy, then verify:
+3. Add the environment variables from `.env.example` in **Settings → Environment Variables**.
+   Quick Strategy can use the existing read configuration. Campaign Workspace additionally
+   requires the server-only `SUPABASE_SERVICE_ROLE_KEY` and exact
+   `CAMPAIGN_ALLOWED_ORIGINS`; neither value is exposed to the browser.
+4. With explicit production-mutation authorization, apply the additive campaign migration
+   once to the target Supabase project. Do not reseed festivals or rebuild Pinecone.
+5. Deploy, then verify Quick Strategy and the capability-scoped campaign smoke path:
 
 ```bash
 curl https://<your-app>.vercel.app/api/health

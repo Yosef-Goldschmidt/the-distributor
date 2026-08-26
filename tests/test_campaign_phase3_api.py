@@ -10,7 +10,7 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 
-from api.campaign_routes import COOKIE_NAME, configure_campaign_runtime_for_tests
+from api._campaign_routes import COOKIE_NAME, configure_campaign_runtime_for_tests
 from api.index import app
 from app.campaign.adapter import AdaptedCampaignEvidence, LegacyEvidenceAdapter
 from app.campaign.models import (
@@ -419,6 +419,12 @@ def test_version_validation_history_and_course_contracts_remain_exact(
 def test_single_router_and_vercel_function_contract(campaign_runtime) -> None:
     vercel = json.loads((ROOT / "vercel.json").read_text())
     assert list(vercel["functions"]) == ["api/index.py"]
+    public_python_entries = sorted(
+        path.name
+        for path in (ROOT / "api").glob("*.py")
+        if not path.name.startswith("_")
+    )
+    assert public_python_entries == ["index.py"]
     assert vercel["rewrites"] == [
         {"source": "/(.*)", "destination": "/api/index"}
     ]

@@ -20,7 +20,7 @@ from app.agent import prompts  # noqa: E402
 
 OUT = ROOT / "assets" / "architecture.png"
 
-W, H = 1680, 1010
+W, H = 1680, 1430
 BG = (14, 17, 23)
 PANEL = (28, 35, 48)
 LINE = (58, 70, 90)
@@ -193,6 +193,58 @@ def main() -> None:
         draw.rounded_rectangle((x, 926, x + 22, 948), radius=5, fill=color)
         draw.text((x + 34, 927), label, font=font(17), fill=MUTED)
         x += int(draw.textlength(label, font=font(17))) + 90
+
+    # Additive Campaign Workspace path. The Quick Strategy module names and
+    # trace contract above remain unchanged.
+    draw.line([60, 990, W - 60, 990], fill=LINE, width=2)
+    draw.text(
+        (60, 1014),
+        "Campaign Workspace — durable state, global premiere planning, incremental replanning and isolated scenarios",
+        font=font(27, bold=True), fill=TEXT,
+    )
+    draw.text(
+        (60, 1052),
+        "Free-text initial campaign: FilmAnalyzer + retrieval/risk/scoring evidence (no RoadmapBuilder)  ·  valid B/C replans and scenarios: zero provider calls",
+        font=font(17), fill=MUTED,
+    )
+
+    top_boxes = [
+        ((60, 1092, 390, 1176), "Capability API", "Secure HttpOnly cookie · exact Origin · workspace scope", GREEN),
+        ((460, 1092, 790, 1176), "Campaign Service", "Typed commands · A/B/C orchestration", ACCENT),
+        ((860, 1092, 1190, 1176), "LegacyEvidenceAdapter", "Only raw legacy → frozen campaign boundary", BLUE),
+        ((1260, 1092, 1620, 1176), "Frozen PlanningInput", "Only input accepted by CampaignPlanner", PURPLE),
+    ]
+    for xy, title, subtitle, color in top_boxes:
+        box(draw, xy, title, subtitle, accent=color, title_size=19, sub_size=13)
+
+    lower_boxes = [
+        ((60, 1230, 390, 1320), "Supabase Campaign State", "8 additive tables · atomic command/activation RPCs", GREEN),
+        ((460, 1230, 790, 1320), "Reducer + Premiere Ledger", "Versioned facts · locks · events · corrections", PURPLE),
+        ((860, 1230, 1190, 1320), "Graph + CampaignPlanner", "Global preservation · budget · gates · ≤2 alternatives", PURPLE),
+        ((1260, 1230, 1620, 1320), "Versions · Diff · Scenario", "ReuseManifest · cloned state · no scenario writes", ACCENT),
+    ]
+    for xy, title, subtitle, color in lower_boxes:
+        box(draw, xy, title, subtitle, accent=color, title_size=18, sub_size=13)
+
+    arrow(draw, (390, 1134), (452, 1134), color=ACCENT)
+    arrow(draw, (790, 1134), (852, 1134), color=ACCENT, dashed=True, label="initial / A", label_offset=(0, -17))
+    arrow(draw, (1190, 1134), (1252, 1134), color=ACCENT)
+    arrow(draw, (225, 1176), (225, 1222), color=GREEN)
+    arrow(draw, (625, 1176), (625, 1222), color=PURPLE)
+    arrow(draw, (1440, 1176), (1120, 1222), color=PURPLE)
+    arrow(draw, (790, 1275), (852, 1275), color=PURPLE)
+    arrow(draw, (1190, 1275), (1252, 1275), color=ACCENT)
+
+    draw.text(
+        (60, 1362),
+        "Security boundary  ·  campaign_id is never authority  ·  SHA-256 capability digest server-side  ·  service-role persistence only  ·  no browser database access",
+        font=font(16), fill=MUTED,
+    )
+    draw.text(
+        (60, 1392),
+        "Incremental claim  ·  rejection → new immutable strategy + structured diff + explicit evidence reuse + chat_attempts=0 + embedding_attempts=0",
+        font=font(16), fill=MUTED,
+    )
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     image.save(OUT, "PNG")

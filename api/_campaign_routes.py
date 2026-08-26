@@ -1,4 +1,4 @@
-"""Capability-scoped Campaign Workspace routes mounted by the existing app."""
+"""Capability-scoped routes mounted by the sole Vercel FastAPI entry point."""
 
 from __future__ import annotations
 
