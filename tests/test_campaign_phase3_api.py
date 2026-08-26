@@ -10,7 +10,11 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 
-from api._campaign_routes import COOKIE_NAME, configure_campaign_runtime_for_tests
+from api._campaign_routes import (
+    COOKIE_NAME,
+    _safe_exception_detail,
+    configure_campaign_runtime_for_tests,
+)
 from api.index import app
 from app.campaign.adapter import AdaptedCampaignEvidence, LegacyEvidenceAdapter
 from app.campaign.models import (
@@ -101,6 +105,15 @@ def campaign_runtime():
 
 def _client() -> TestClient:
     return TestClient(app, base_url=ORIGIN)
+
+
+def test_campaign_error_detail_redacts_configured_secrets(monkeypatch) -> None:
+    secret = "server-only-test-credential"
+    monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", secret)
+
+    detail = _safe_exception_detail(RuntimeError(f"request failed: {secret}"))
+
+    assert detail == "request failed: [redacted]"
 
 
 def _bootstrap(client: TestClient) -> dict[str, Any]:
