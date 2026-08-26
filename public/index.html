@@ -37,6 +37,7 @@
   button.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); font-weight: 500; }
   .status { font-size: 13px; color: var(--muted); }
   .status.err { color: var(--bad); }
+  .status.busy::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 8px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; vertical-align: -2px; animation: spin .8s linear infinite; }
   h2 { font-size: 16px; margin: 0 0 12px; color: var(--accent); letter-spacing: .3px; text-transform: uppercase; }
   .response h1 { font-size: 20px; margin: 0 0 10px; }
   .response h2 { font-size: 15px; margin: 22px 0 8px; color: var(--accent); text-transform: none; letter-spacing: 0; }
@@ -71,6 +72,7 @@
   .turn .q { color: var(--muted); font-size: 13px; margin-bottom: 10px; white-space: pre-wrap; }
   footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 0 40px; }
   a { color: var(--accent-2); }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -256,7 +258,8 @@ async function run() {
   const prompt = $('prompt').value.trim();
   if (!prompt) { $('status').textContent = 'Enter a film description first.'; return; }
   $('run').disabled = true;
-  $('status').className = 'status';
+  $('run').textContent = 'Running…';
+  $('status').className = 'status busy';
   $('status').textContent = 'Running agent — planning, retrieving festivals, scoring…';
   const started = Date.now();
   try {
@@ -275,6 +278,7 @@ async function run() {
     $('status').textContent = `Request failed: ${err}`;
   } finally {
     $('run').disabled = false;
+    $('run').textContent = 'Run Agent';
   }
 }
 

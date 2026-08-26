@@ -6,57 +6,68 @@
 <title>Campaign Workspace — The Distributor</title>
 <style>
   :root {
-    --ink: #17211c; --muted: #637068; --paper: #f5f2e9; --card: #fffdf7;
-    --line: #d9d4c7; --green: #174f3b; --mint: #dcebe2; --amber: #a85d1d;
-    --red: #9b3737; --shadow: 0 10px 30px rgba(34, 44, 38, .07);
+    --bg: #0e1117; --panel: #161b23; --panel-2: #1c2330; --line: #2a3242;
+    --text: #e6edf3; --muted: #8b97a8; --accent: #f0a35e; --accent-2: #6ea8fe;
+    --ok: #6ee7a8; --warn: #f6c177; --bad: #f2777a;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px max(20px, calc((100vw - 1180px)/2)); border-bottom: 1px solid var(--line); background: rgba(255,253,247,.9); }
-  header h1 { margin: 0; font: 650 20px/1.2 Georgia, serif; }
-  header a { color: var(--green); }
-  main { max-width: 1180px; margin: auto; padding: 22px 20px 50px; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 24px max(20px, calc((100vw - 1080px)/2)); border-bottom: 1px solid var(--line); }
+  header h1 { margin: 0; font-size: 22px; line-height: 1.2; letter-spacing: .2px; }
+  header h1 span { color: var(--accent); }
+  header a { color: var(--accent-2); }
+  main { max-width: 1080px; margin: auto; padding: 24px 20px 50px; }
   .shell, .grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, .75fr); gap: 16px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 13px; padding: 17px; box-shadow: var(--shadow); }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
   .stack { display: grid; gap: 16px; }
   h2, h3 { margin: 0 0 10px; }
-  h2 { font: 650 21px/1.2 Georgia, serif; }
-  h3 { color: var(--muted); font-size: 11px; letter-spacing: .11em; text-transform: uppercase; }
+  h2 { font-size: 20px; line-height: 1.25; }
+  h3 { color: var(--accent); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
   p { margin: 6px 0; }
   .muted { color: var(--muted); }
   .meta, .chips, .actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
-  .chip { border: 1px solid var(--line); border-radius: 99px; padding: 4px 9px; color: var(--muted); font-size: 12px; background: #fff; }
-  .chip.good { color: var(--green); border-color: #a9c8b8; background: var(--mint); }
-  .chip.warn { color: var(--amber); border-color: #e0bf9d; background: #fff4e6; }
-  .route { border-left: 4px solid var(--green); padding: 8px 0 8px 13px; margin: 12px 0; }
-  .route strong { display: block; font: 650 24px/1.2 Georgia, serif; }
+  .chip { border: 1px solid var(--line); border-radius: 99px; padding: 4px 9px; color: var(--muted); font-size: 12px; background: var(--panel-2); }
+  .chip.good { color: var(--ok); }
+  .chip.warn { color: var(--warn); }
+  .campaign-title { margin-bottom: 2px; }
+  .campaign-summary { color: var(--muted); font-size: 13px; }
+  .route { border-left: 3px solid var(--accent); padding: 8px 0 8px 14px; margin: 12px 0; }
+  .route strong { display: block; font-size: 25px; line-height: 1.2; }
   .alternatives { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
-  .alternative { padding: 11px; border: 1px solid var(--line); border-radius: 9px; }
-  .band { height: 10px; border-radius: 99px; overflow: hidden; background: #e8e4da; margin: 10px 0 5px; }
-  .band span { display: block; height: 100%; background: var(--green); }
+  .alternative { padding: 11px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel-2); }
+  .band { height: 8px; border-radius: 99px; overflow: hidden; background: #252c38; margin: 10px 0 5px; }
+  .band span { display: block; height: 100%; background: var(--accent); }
   ul { margin: 7px 0 0; padding-left: 20px; }
   li { margin: 4px 0; }
-  textarea, select { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 10px; background: white; color: var(--ink); font: inherit; }
+  textarea, select { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 11px; background: var(--panel-2); color: var(--text); font: inherit; }
+  textarea:focus, select:focus { outline: none; border-color: var(--accent-2); }
   textarea { min-height: 110px; resize: vertical; }
-  button { border: 0; border-radius: 8px; padding: 9px 12px; background: var(--green); color: white; font: 650 13px/1 system-ui; cursor: pointer; }
-  button.secondary { color: var(--green); background: var(--mint); }
-  button.danger { background: var(--red); }
-  button:disabled { opacity: .5; cursor: wait; }
-  .status { min-height: 24px; color: var(--muted); margin: 10px 0; }
-  .status.error { color: var(--red); }
-  .diff { background: #f0ede4; border-radius: 9px; padding: 11px; }
-  .diff strong { color: var(--green); }
-  details { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 10px; }
-  summary { cursor: pointer; color: var(--green); font-weight: 600; }
-  pre { overflow: auto; max-height: 280px; white-space: pre-wrap; word-break: break-word; font: 11px/1.45 ui-monospace, monospace; background: #f0ede4; padding: 10px; border-radius: 7px; }
+  button { border: 0; border-radius: 8px; padding: 10px 14px; background: var(--accent); color: #191100; font: 650 13px/1 system-ui; cursor: pointer; }
+  button.secondary { color: var(--text); background: transparent; border: 1px solid var(--line); }
+  button.danger { background: var(--bad); color: #1b090a; }
+  button:disabled { opacity: .55; cursor: not-allowed; }
+  .status { min-height: 24px; color: var(--muted); margin: 10px 0; font-size: 13px; }
+  .status.error { color: var(--bad); }
+  .status.busy::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 8px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; vertical-align: -2px; animation: spin .8s linear infinite; }
+  .diff { background: var(--panel-2); border-radius: 9px; padding: 12px; }
+  .diff strong { color: var(--ok); }
+  .target-line { margin: 10px 0 0; color: var(--muted); }
+  .target-line strong { color: var(--text); }
+  .activity { margin-top: 10px; color: var(--muted); font-size: 13px; }
+  .scenario-result { border-left: 3px solid var(--accent-2); margin-top: 12px; padding: 9px 0 9px 12px; }
+  .scenario-result h4 { margin: 0 0 4px; font-size: 14px; }
+  details.technical { border-top: 1px solid var(--line); margin-top: 2px; padding-top: 12px; }
+  summary { cursor: pointer; color: var(--accent-2); font-weight: 600; }
+  pre { overflow: auto; max-height: 300px; white-space: pre-wrap; word-break: break-word; font: 11px/1.45 ui-monospace, monospace; background: #0b0f16; border: 1px solid var(--line); padding: 10px; border-radius: 7px; }
   .hidden { display: none !important; }
   .empty { text-align: center; padding: 34px; color: var(--muted); }
+  @keyframes spin { to { transform: rotate(360deg); } }
   @media (max-width: 780px) { .shell, .grid { grid-template-columns: 1fr; } .alternatives { grid-template-columns: 1fr; } header { align-items: flex-start; } }
 </style>
 </head>
 <body>
 <header>
-  <h1>The Distributor · Campaign Workspace</h1>
+  <h1>The <span>Distributor</span> · Campaign Workspace</h1>
   <a href="/">Quick Strategy</a>
 </header>
 <main>
@@ -77,13 +88,8 @@
 
   <section id="workspace" class="hidden stack">
     <div class="card">
-      <div class="meta">
-        <span id="film-title" class="chip"></span>
-        <span id="version" class="chip"></span>
-        <span id="lifecycle" class="chip"></span>
-        <span id="readiness" class="chip"></span>
-        <span id="strategy" class="chip"></span>
-      </div>
+      <h2 id="film-title" class="campaign-title"></h2>
+      <p id="campaign-summary" class="campaign-summary"></p>
     </div>
     <div class="grid">
       <div class="stack">
@@ -99,6 +105,7 @@
           <p id="preservation"></p>
           <div class="band"><span id="preservation-band"></span></div>
           <p id="destroyed" class="muted"></p>
+          <p id="premiere-note" class="muted"></p>
           <h3 style="margin-top:15px">Verification gates</h3>
           <ul id="gates"></ul>
           <h3 style="margin-top:15px">Budget</h3>
@@ -117,6 +124,7 @@
         </article>
         <article class="card">
           <h3>Human event controls</h3>
+          <p class="target-line">Apply event to: <strong id="event-target-name">—</strong></p>
           <select id="festival" aria-label="Festival opportunity"></select>
           <div class="actions" style="margin-top:10px">
             <button class="secondary event" data-command="mark_submitted">Submitted</button>
@@ -124,22 +132,24 @@
             <button class="secondary event" data-command="lock_opportunity">Lock</button>
             <button class="secondary event" data-command="exclude_opportunity">Exclude</button>
           </div>
-          <p class="muted">Irreversible facts remain human-confirmed typed events.</p>
+          <p id="campaign-activity" class="activity">No submitted, rejected, locked or excluded opportunities.</p>
         </article>
         <article class="card">
-          <h3>What-if · discarded after comparison</h3>
+          <h3>What-if comparison</h3>
+          <p class="muted">Hypothetical only. Scenarios are discarded and never change the real campaign.</p>
           <div class="actions">
             <button class="secondary scenario" data-scenario="reject">Rejection</button>
             <button class="secondary scenario" data-scenario="screen">Public screening</button>
             <button class="secondary scenario" data-scenario="strict">Strict preservation</button>
           </div>
-          <div id="scenario-result" style="margin-top:10px"></div>
+          <div id="scenario-result"></div>
         </article>
         <article class="card">
-          <h3>Evidence and history</h3>
-          <p id="memory" class="muted"></p>
-          <details><summary>Recent events</summary><pre id="events"></pre></details>
-          <details><summary>Execution trace</summary><pre id="trace"></pre></details>
+          <details class="technical">
+            <summary>Evidence &amp; technical details</summary>
+            <p class="muted">Raw provenance, identifiers, recent events and execution details.</p>
+            <pre id="technical"></pre>
+          </details>
         </article>
       </aside>
     </div>
@@ -150,11 +160,58 @@
 const byId = (id) => document.getElementById(id);
 let current = null;
 let activeCampaignId = null;
+let actionInFlight = false;
 
-function status(message, error = false) {
+const PRESENTATION_LABELS = Object.freeze({
+  submit_first: "Submit First",
+  prioritize_next: "Prioritize Next",
+  leverage: "Leverage",
+  hold_avoid: "Hold / Avoid",
+  not_submitted: "Not Submitted",
+  submitted: "Submitted",
+  rejected: "Rejected",
+  invited: "Invited",
+  accepted: "Accepted",
+  declined: "Declined",
+  withdrawn: "Withdrawn",
+  normal: "Available",
+  locked: "Locked",
+  excluded: "Excluded",
+  balanced: "Balanced",
+  strict: "Strict",
+  active: "Active",
+  ready: "Ready",
+  stale: "Stale",
+});
+
+const EVENT_COPY = Object.freeze({
+  mark_submitted: {confirm: (name) => `Record ${name} as submitted?`, busy: "Recording submission…", done: "Submitted"},
+  record_rejection: {confirm: (name) => `Record ${name} as rejected?`, busy: "Recording rejection…", done: "Rejected"},
+  lock_opportunity: {confirm: (name) => `Lock ${name} in the current strategy?`, busy: "Locking…", done: "Locked"},
+  exclude_opportunity: {confirm: (name) => `Exclude ${name} from planning?`, busy: "Excluding…", done: "Excluded"},
+});
+
+function present(value) {
+  if (value == null) return "—";
+  return PRESENTATION_LABELS[value] || String(value).replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function possessive(value) {
+  return `${value}${String(value).endsWith("s") ? "’" : "’s"}`;
+}
+
+function status(message, error = false, busy = false) {
   const node = byId("status");
   node.textContent = message;
   node.classList.toggle("error", error);
+  node.classList.toggle("busy", busy);
+}
+
+function setButtonBusy(button, label) {
+  const original = button.textContent;
+  button.disabled = true;
+  button.textContent = label;
+  return () => { button.disabled = false; button.textContent = original; };
 }
 
 async function request(path, options = {}) {
@@ -183,7 +240,7 @@ async function listCampaigns() {
   body.campaigns.forEach((campaign) => {
     const button = document.createElement("button");
     button.className = "secondary";
-    button.textContent = `${campaign.title} · v${campaign.campaign_version} · ${campaign.strategy_stale ? "stale" : "ready"}`;
+    button.textContent = `${campaign.title} · version ${campaign.campaign_version} · ${campaign.strategy_stale ? "Needs replan" : "Ready"}`;
     button.addEventListener("click", () => loadCampaign(campaign.campaign_id));
     host.append(button);
   });
@@ -192,22 +249,72 @@ async function listCampaigns() {
 async function createCampaign() {
   const text = byId("film-input").value.trim();
   if (!text) return status("Describe the film first.", true);
-  status("Building grounded evidence and the initial campaign strategy…");
-  byId("create").disabled = true;
+  if (actionInFlight) return;
+  actionInFlight = true;
+  const restore = setButtonBusy(byId("create"), "Creating…");
+  status("Creating the campaign and building its grounded strategy…", false, true);
   try {
     const result = await request("/api/workspace/campaigns", {method: "POST", body: JSON.stringify({free_text: text})});
     await listCampaigns();
     await loadCampaign(result.campaign_id);
-    status(`Campaign created. Strategy is ${result.strategy_status}.`);
+    status(`Campaign created. Strategy is ${present(result.strategy_status)}.`);
   } catch (error) { status(error.message, true); }
-  finally { byId("create").disabled = false; }
+  finally { actionInFlight = false; restore(); }
 }
 
 function text(node, value) { byId(node).textContent = value == null ? "—" : String(value); }
 function pct(value) { return value == null ? "unknown" : `${value}%`; }
 function routeName(id) {
+  if (!id) return "No route";
   const candidate = current.snapshot.candidates.find((item) => item.festival_id === id);
-  return candidate ? candidate.retrieved.identity.festival_name : id;
+  return candidate ? candidate.retrieved.identity.festival_name : present(id);
+}
+
+function affectedDecisionLabel(value) {
+  const [kind, festivalId] = String(value || "").split(":", 2);
+  const route = festivalId ? routeName(festivalId) : "the affected route";
+  if (kind === "primary_launch") return `the primary launch at ${route}`;
+  if (kind === "post_premiere") return `the post-premiere route at ${route}`;
+  return route;
+}
+
+function verificationText(gate) {
+  const target = affectedDecisionLabel(gate.affected_decision);
+  if (gate.fact_key === "premiere.rule") return `Verify ${possessive(routeName(String(gate.affected_decision).split(":")[1]))} current premiere requirement before confirming this route.`;
+  if (String(gate.fact_key).startsWith("compatibility.")) return `Confirm that ${target} remains eligible after the planned premiere.`;
+  return `Verify the evidence affecting ${target}.`;
+}
+
+function clarificationText(clarification) {
+  if (!clarification) return "No decision-changing clarification is currently visible.";
+  const affected = clarification.affected_decisions.map(affectedDecisionLabel).join(" and ");
+  return `${clarification.question}${affected ? ` This may affect ${affected}.` : ""}`;
+}
+
+function updateEventTarget() {
+  const selected = byId("festival").value;
+  text("event-target-name", selected ? routeName(selected) : "No opportunity selected");
+}
+
+function renderActivity(opportunities) {
+  const changed = opportunities.filter((item) => item.submission_state !== "not_submitted" || item.policy_state !== "normal");
+  text("campaign-activity", changed.length
+    ? `Recorded campaign state: ${changed.map((item) => `${routeName(item.festival_id)} — ${item.submission_state !== "not_submitted" ? present(item.submission_state) : present(item.policy_state)}`).join("; ")}.`
+    : "No submitted, rejected, locked or excluded opportunities.");
+}
+
+function renderTechnical(data) {
+  const reasonRefs = data.active_plan ? data.active_plan.primary_launch.reason_refs : [];
+  text("technical", JSON.stringify({
+    strategy_ref: data.view.strategy_ref,
+    primary_reason_refs: reasonRefs,
+    verification_gates: data.view.verification_gates,
+    company_memory: data.view.company_memory,
+    reuse: data.view.reuse,
+    strategy_diff: data.latest_diff,
+    recent_events: data.events.slice(-8),
+    execution_trace: data.trace,
+  }, null, 2));
 }
 
 function renderCampaign(data) {
@@ -216,56 +323,61 @@ function renderCampaign(data) {
   const view = data.view;
   byId("workspace").classList.remove("hidden");
   text("film-title", data.snapshot.profile.title.value || "Untitled film");
-  text("version", `version ${data.snapshot.campaign_version}`);
-  text("lifecycle", data.snapshot.lifecycle);
-  text("readiness", data.strategy_stale ? "strategy stale" : data.snapshot.readiness);
-  text("strategy", view.strategy_ref || "no active strategy");
+  text("campaign-summary", `Campaign version ${data.snapshot.campaign_version} · ${present(data.snapshot.lifecycle)} · ${data.strategy_stale ? "Strategy Stale" : present(data.snapshot.readiness)}`);
 
   byId("primary").replaceChildren();
   const primaryStrong = document.createElement("strong");
   primaryStrong.textContent = view.primary ? view.primary.festival_name : "No ready route";
   const primaryMeta = document.createElement("span");
   primaryMeta.className = "muted";
-  primaryMeta.textContent = view.primary ? `Score ${view.primary.score} · ${view.primary.decision_grade}` : "Planning is stale or failed.";
+  primaryMeta.textContent = view.primary ? `Score ${view.primary.score} · ${present(view.primary.decision_grade)}` : "Planning is stale or failed.";
   byId("primary").append(primaryStrong, primaryMeta);
-  text("why", data.active_plan ? `Evidence refs: ${data.active_plan.primary_launch.reason_refs.join(", ")}` : "No selected-plan evidence yet.");
+  text("why", data.active_plan ? "Highest-ranked eligible launch route in the current grounded plan. Confirm the important premiere requirements below before committing." : "No selected plan is currently active.");
 
   byId("alternatives").replaceChildren();
   (view.alternatives || []).forEach((item) => {
     const card = document.createElement("div"); card.className = "alternative";
     const strong = document.createElement("strong"); strong.textContent = item.festival_name;
-    const small = document.createElement("div"); small.className = "muted"; small.textContent = `Score ${item.score} · activates if primary is rejected or withdrawn`;
+    const small = document.createElement("div"); small.className = "muted"; small.textContent = `Score ${item.score} · ${present(item.decision_grade)} · next route if the primary is unavailable`;
     card.append(strong, small); byId("alternatives").append(card);
   });
   if (!(view.alternatives || []).length) text("alternatives", "No grounded alternatives.");
 
   const option = data.active_plan && data.active_plan.option_preservation;
-  text("preservation", option ? `${option.mode} policy · known preserved ${pct(option.known_preserved_pct)} + possible ${pct(option.possible_additional_pct)}` : "Not available while strategy is stale.");
+  text("preservation", option ? `${present(option.mode)} policy · ${pct(option.known_preserved_pct)} known preserved, with ${pct(option.possible_additional_pct)} more possible after verification.` : "Not available while strategy is stale.");
   byId("preservation-band").style.width = option ? `${option.known_preserved_pct}%` : "0%";
-  text("destroyed", option ? `Destroyed: ${option.destroyed_ids.map(routeName).join(", ") || "none"}. Verify: ${option.verify_ids.map(routeName).join(", ") || "none"}.` : "");
+  text("destroyed", option ? `Confirmed lost options: ${option.destroyed_ids.map(routeName).join(", ") || "none"}. Needs verification: ${option.verify_ids.map(routeName).join(", ") || "none"}.` : "");
+  const worldPremiere = (data.snapshot.premiere_ledger.scopes || []).find((scope) => scope.scope === "world");
+  text("premiere-note", worldPremiere && worldPremiere.availability === "consumed"
+    ? "A confirmed public screening has consumed world-premiere availability."
+    : "No confirmed public screening has consumed world-premiere availability.");
 
   const gates = byId("gates"); gates.replaceChildren();
-  (view.verification_gates || []).forEach((gate) => {
-    const li = document.createElement("li"); li.textContent = `${gate.blocking ? "Blocking" : "Check"}: ${gate.fact_key} → ${gate.affected_decision}`; gates.append(li);
+  [...(view.verification_gates || [])].sort((left, right) => {
+    const priority = (gate) => gate.fact_key === "premiere.rule" ? 0 : gate.blocking ? 1 : 2;
+    return priority(left) - priority(right);
+  }).slice(0, 3).forEach((gate) => {
+    const li = document.createElement("li"); li.textContent = verificationText(gate); gates.append(li);
   });
   if (!gates.children.length) { const li = document.createElement("li"); li.textContent = "No current verification gate."; gates.append(li); }
   renderBudget(data.active_plan && data.active_plan.budget);
 
   const visibleClarifications = (view.clarifications || []).filter((item) => !item.suppressed);
   const clarification = visibleClarifications[0];
-  text("clarification", clarification ? `${clarification.question} Affects: ${clarification.affected_decisions.join(", ")}.` : "No decision-changing clarification is currently visible.");
+  text("clarification", clarificationText(clarification));
   renderDiff(data.latest_diff, view.reuse);
 
   const select = byId("festival"); select.replaceChildren();
   data.snapshot.opportunities.forEach((opportunity) => {
     const optionNode = document.createElement("option");
     optionNode.value = opportunity.festival_id;
-    optionNode.textContent = `${routeName(opportunity.festival_id)} · ${opportunity.submission_state} · ${opportunity.policy_state}`;
+    optionNode.textContent = `${routeName(opportunity.festival_id)} · ${present(opportunity.submission_state)} · ${present(opportunity.policy_state)}`;
     select.append(optionNode);
   });
-  text("memory", Object.keys(view.company_memory || {}).length ? `CompanyMemory: ${JSON.stringify(view.company_memory)}` : "No CompanyMemory summary stored.");
-  text("events", JSON.stringify(data.events.slice(-8), null, 2));
-  text("trace", JSON.stringify(data.trace, null, 2));
+  if (view.primary && data.snapshot.opportunities.some((item) => item.festival_id === view.primary.festival_id)) select.value = view.primary.festival_id;
+  updateEventTarget();
+  renderActivity(data.snapshot.opportunities);
+  renderTechnical(data);
 }
 
 function renderBudget(budget) {
@@ -283,13 +395,17 @@ function renderDiff(diff, reuse) {
   if (!diff) { node.textContent = "No replan diff yet."; }
   else {
     const strong = document.createElement("strong"); strong.textContent = `${routeName(diff.primary_before)} → ${routeName(diff.primary_after)}`;
-    const detail = document.createElement("p"); detail.textContent = `Added: ${diff.added_route_ids.map(routeName).join(", ") || "none"}. Removed: ${diff.removed_route_ids.map(routeName).join(", ") || "none"}. Cause: ${diff.causal_refs.join(", ")}.`;
+    const rejected = current.snapshot.opportunities.filter((item) => item.submission_state === "rejected").map((item) => routeName(item.festival_id));
+    const detail = document.createElement("p");
+    detail.textContent = rejected.length
+      ? `${rejected.join(", ")} recorded as rejected. The strategy moved to the best remaining eligible route.`
+      : `Added: ${diff.added_route_ids.map(routeName).join(", ") || "none"}. Removed: ${diff.removed_route_ids.map(routeName).join(", ") || "none"}.`;
     node.append(strong, detail);
   }
   const host = byId("reuse"); host.replaceChildren();
   if (reuse) {
-    const labels = [reuse.no_new_llm ? "No new LLM or embeddings" : "Provider refresh used", reuse.evidence_reused ? "Evidence reused" : "Evidence refreshed", `chat ${reuse.chat_attempts} · embedding ${reuse.embedding_attempts}`];
-    labels.forEach((label, index) => { const chip = document.createElement("span"); chip.className = `chip ${index < 2 ? "good" : ""}`; chip.textContent = label; host.append(chip); });
+    const labels = [reuse.evidence_reused ? "Existing evidence reused" : "Evidence refreshed", reuse.no_new_llm ? "0 new chat calls · 0 new embeddings" : `${reuse.chat_attempts} chat calls · ${reuse.embedding_attempts} embeddings`];
+    labels.forEach((label) => { const chip = document.createElement("span"); chip.className = `chip ${reuse.no_new_llm ? "good" : "warn"}`; chip.textContent = label; host.append(chip); });
   }
 }
 
@@ -303,14 +419,24 @@ function commandPayload(type, festivalId, version, key) {
   return {type, payload: decision ? {festival_id: festivalId, source_refs: [`human:workspace:${key}`]} : {festival_id: festivalId}, expected_version: version, idempotency_key: key, actor: {kind: "human", actor_ref: "human:workspace"}, invalidation_class: "C"};
 }
 
-async function applyEvent(type) {
-  if (!current || !confirm(`Record ${type.replaceAll("_", " ")} as a real campaign event?`)) return;
+async function applyEvent(type, button) {
+  if (!current || actionInFlight) return;
+  const festivalId = byId("festival").value;
+  const festivalName = routeName(festivalId);
+  const copy = EVENT_COPY[type];
+  if (!festivalId || !copy || !confirm(copy.confirm(festivalName))) return;
+  actionInFlight = true;
+  const restore = setButtonBusy(button, copy.busy);
+  status(`${copy.busy.replace("…", "")} for ${festivalName}…`, false, true);
   const key = crypto.randomUUID();
-  const payload = commandPayload(type, byId("festival").value, current.snapshot.campaign_version, key);
+  const payload = commandPayload(type, festivalId, current.snapshot.campaign_version, key);
   try {
     const result = await request(`/api/workspace/campaigns/${encodeURIComponent(activeCampaignId)}/commands`, {method: "POST", body: JSON.stringify(payload)});
-    await loadCampaign(activeCampaignId); await listCampaigns(); status(`Event recorded; strategy ${result.strategy_status}.`);
+    await loadCampaign(activeCampaignId);
+    await listCampaigns();
+    status(`${festivalName} recorded as ${copy.done.toLowerCase()}. Campaign is now version ${result.campaign_version}; strategy ${present(result.strategy_status)}.`);
   } catch (error) { status(error.message, true); }
+  finally { actionInFlight = false; restore(); }
 }
 
 function scenarioCommands(kind, festivalId, version) {
@@ -334,22 +460,43 @@ function scenarioCommands(kind, festivalId, version) {
   ];
 }
 
-async function simulate(kind) {
-  if (!current) return;
+async function simulate(kind, button) {
+  if (!current || actionInFlight) return;
   const beforeVersion = current.snapshot.campaign_version;
+  const beforeEventCount = current.events.length;
+  const festivalId = byId("festival").value;
+  const festivalName = routeName(festivalId);
+  const scenarioTarget = kind === "strict" ? "the campaign" : festivalName;
+  actionInFlight = true;
+  const restore = setButtonBusy(button, "Simulating…");
+  status(`Simulating a hypothetical ${kind === "screen" ? "public screening" : kind === "strict" ? "preservation-policy change" : "rejection"} for ${scenarioTarget}…`, false, true);
   try {
-    const result = await request(`/api/workspace/campaigns/${encodeURIComponent(activeCampaignId)}/simulate`, {method: "POST", body: JSON.stringify({commands: scenarioCommands(kind, byId("festival").value, beforeVersion)})});
+    const result = await request(`/api/workspace/campaigns/${encodeURIComponent(activeCampaignId)}/simulate`, {method: "POST", body: JSON.stringify({commands: scenarioCommands(kind, festivalId, beforeVersion)})});
+    const persisted = await request(`/api/workspace/campaigns/${encodeURIComponent(activeCampaignId)}`);
+    if (result.mutated_campaign || persisted.snapshot.campaign_version !== beforeVersion || persisted.events.length !== beforeEventCount) throw new Error("Scenario safety check failed: the real campaign changed.");
+    renderCampaign(persisted);
     const host = byId("scenario-result"); host.replaceChildren();
-    const p = document.createElement("p");
-    p.textContent = result.requires_provider_refresh ? "This scenario needs refreshed evidence." : result.diff ? `${routeName(result.diff.primary_before)} → ${routeName(result.diff.primary_after)}. Discarded; campaign unchanged.` : "No route change. Discarded; campaign unchanged.";
-    host.append(p);
-    status(`Scenario complete. Real campaign remains version ${beforeVersion}.`);
+    host.className = "scenario-result";
+    const heading = document.createElement("h4"); heading.textContent = "Hypothetical comparison";
+    const change = document.createElement("p");
+    change.textContent = result.requires_provider_refresh ? "This scenario needs refreshed evidence before it can be compared." : result.diff ? `${routeName(result.diff.primary_before)} → ${routeName(result.diff.primary_after)}.` : "The primary route would not change.";
+    const safety = document.createElement("p"); safety.className = "muted"; safety.textContent = `Not saved. The real campaign remains version ${beforeVersion} with ${beforeEventCount} recorded events.`;
+    const reuse = document.createElement("p"); reuse.className = "muted";
+    reuse.textContent = result.reuse_manifest && result.reuse_manifest.chat_attempts === 0 && result.reuse_manifest.embedding_attempts === 0
+      ? "Existing evidence reused; 0 new chat calls and 0 new embeddings."
+      : "Evidence refresh would be required for this comparison.";
+    const close = document.createElement("button"); close.className = "secondary"; close.textContent = "Close comparison";
+    close.addEventListener("click", () => { host.replaceChildren(); host.className = ""; status(`Hypothetical comparison closed. Real campaign remains version ${beforeVersion}.`); });
+    host.append(heading, change, safety, reuse, close);
+    status(`Scenario complete. Nothing was saved; real campaign remains version ${beforeVersion}.`);
   } catch (error) { status(error.message, true); }
+  finally { actionInFlight = false; restore(); }
 }
 
 byId("create").addEventListener("click", createCampaign);
-document.querySelectorAll(".event").forEach((button) => button.addEventListener("click", () => applyEvent(button.dataset.command)));
-document.querySelectorAll(".scenario").forEach((button) => button.addEventListener("click", () => simulate(button.dataset.scenario)));
+byId("festival").addEventListener("change", updateEventTarget);
+document.querySelectorAll(".event").forEach((button) => button.addEventListener("click", () => applyEvent(button.dataset.command, button)));
+document.querySelectorAll(".scenario").forEach((button) => button.addEventListener("click", () => simulate(button.dataset.scenario, button)));
 bootstrap().catch((error) => status(error.message, true));
 </script>
 </body>

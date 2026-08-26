@@ -469,17 +469,20 @@ def test_campaign_page_is_compact_server_authoritative_and_quick_root_survives(
         "Premiere-option preservation",
         "Verification gates",
         "Highest-priority clarification",
-        "No new LLM or embeddings",
+        "0 new chat calls · 0 new embeddings",
         "Latest strategy change",
         "What-if",
         "Public screening",
         "Strict preservation",
+        "Apply event to:",
+        "Evidence &amp; technical details",
+        "Hypothetical only",
     ):
         assert required in html
     assert "innerHTML" not in html
     assert "localStorage" not in html
     assert "compatibility_edges" not in html
-    assert "premiere_ledger" not in html
+    assert ">premiere_ledger<" not in html
     assert "supabase" not in html.lower()
     assert "pinecone" not in html.lower()
 
@@ -489,3 +492,36 @@ def test_campaign_page_is_compact_server_authoritative_and_quick_root_survives(
     assert 'id="run"' in root.text
     assert "Run Agent" in root.text
     assert 'href="/campaign"' in root.text
+
+
+def test_campaign_page_targets_the_authoritative_primary_and_names_confirmations(
+    campaign_runtime,
+) -> None:
+    client = _client()
+    html = client.get("/campaign").text
+
+    # Regression: opportunity storage order must not silently choose the event
+    # target when the active plan has a different primary festival.
+    assert "select.value = view.primary.festival_id" in html
+    assert 'const festivalId = byId("festival").value' in html
+    assert 'text("event-target-name", selected ? routeName(selected)' in html
+    assert "copy.confirm(festivalName)" in html
+    assert "Record ${name} as rejected?" in html
+    assert "Record ${name} as submitted?" in html
+    assert "Campaign is now version ${result.campaign_version}" in html
+
+    # Long actions acknowledge the click immediately and cannot be duplicated.
+    assert 'setButtonBusy(byId("create"), "Creating…")' in html
+    assert 'busy: "Recording rejection…"' in html
+    assert 'setButtonBusy(button, "Simulating…")' in html
+    assert "if (!current || actionInFlight) return" in html
+
+    # Raw provenance remains available, but outside the normal reading path.
+    assert "Evidence refs:" not in html
+    assert html.count("Evidence &amp; technical details") == 1
+    assert "primary_reason_refs" in html
+    assert "Scenario safety check failed: the real campaign changed." in html
+
+    root = client.get("/").text
+    assert "Running…" in root
+    assert "status busy" in root
