@@ -609,20 +609,27 @@ class SupabaseCampaignRepository:
 
     @staticmethod
     def _attempt_payload(attempt: StrategyAttempt) -> dict[str, Any]:
-        return {
+        payload: dict[str, Any] = {
             "strategy_id": attempt.strategy_id,
             "outcome": attempt.outcome,
             "input_snapshot_json": deepcopy(dict(attempt.input_snapshot_json)),
             "input_hash": attempt.input_hash,
-            "plan_json": attempt.plan.model_dump(mode="json") if attempt.plan else None,
-            "diff_json": attempt.diff.model_dump(mode="json") if attempt.diff else None,
             "trace_json": deepcopy(dict(attempt.trace_json)),
             "reuse_manifest_json": deepcopy(dict(attempt.reuse_manifest_json)),
             "usage_json": deepcopy(dict(attempt.usage_json)),
             "policy_versions": list(attempt.policy_versions),
             "model_versions": list(attempt.model_versions),
-            "error_json": deepcopy(dict(attempt.error_json)) if attempt.error_json else None,
         }
+        # PostgreSQL distinguishes SQL NULL from JSON null. The activation RPC
+        # intentionally maps an absent optional key to SQL NULL, which is also
+        # what the strategy_versions outcome/plan check requires.
+        if attempt.plan is not None:
+            payload["plan_json"] = attempt.plan.model_dump(mode="json")
+        if attempt.diff is not None:
+            payload["diff_json"] = attempt.diff.model_dump(mode="json")
+        if attempt.error_json is not None:
+            payload["error_json"] = deepcopy(dict(attempt.error_json))
+        return payload
 
     @staticmethod
     def _parse_aggregate(payload: Mapping[str, Any]) -> CampaignAggregate:

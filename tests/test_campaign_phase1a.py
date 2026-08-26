@@ -1113,6 +1113,23 @@ class _FailingSupabaseClient:
         return _FailingRpcCall(self.payload)
 
 
+def test_supabase_strategy_payload_omits_absent_optional_json_fields() -> None:
+    attempt = StrategyAttempt(
+        strategy_id="strategy-failed-json-null",
+        based_on_campaign_version=3,
+        outcome="failed",
+        input_snapshot_json={"campaign_id": "campaign-golden"},
+        input_hash="f" * 64,
+        error_json={"code": "planner_failed"},
+    )
+
+    payload = SupabaseCampaignRepository._attempt_payload(attempt)
+
+    assert "plan_json" not in payload
+    assert "diff_json" not in payload
+    assert payload["error_json"] == {"code": "planner_failed"}
+
+
 def test_supabase_repository_command_uses_one_rpc_not_application_transactions() -> None:
     local = _repository()
     command = _command("lock_opportunity", {"festival_id": "hot-docs"})
