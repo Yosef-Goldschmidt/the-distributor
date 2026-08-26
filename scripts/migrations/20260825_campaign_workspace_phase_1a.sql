@@ -252,7 +252,26 @@ begin
   if jsonb_typeof(p_value) = 'object' then
     select '{' || coalesce(
       string_agg(
-        to_jsonb(item.key)::text || ':' || campaign_canonical_json(item.value),
+        to_jsonb(item.key)::text || ':' || case
+          -- Pydantic serializes Decimal values as JSON strings while the
+          -- frozen canonical serializer removes insignificant trailing scale.
+          when item.key in (
+            'amount',
+            'semantic_score',
+            'lexical_score',
+            'raw_rating',
+            'guarded_rating',
+            'points',
+            'rating',
+            'base_score',
+            'premiere_penalty',
+            'future_quality'
+          ) and jsonb_typeof(item.value) = 'string'
+          then to_jsonb(
+            trim_scale((item.value #>> '{}')::numeric)::text
+          )::text
+          else campaign_canonical_json(item.value)
+        end,
         ',' order by item.key collate "C"
       ),
       ''

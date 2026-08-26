@@ -182,6 +182,22 @@ def test_additive_migration_defines_eight_tables_initial_creation_and_atomic_sta
         "aggregate_hash",
         *VOLATILE_DISPLAY_FIELDS,
     }
+    decimal_normalization = canonical_function.split(
+        "Pydantic serializes Decimal values", 1
+    )[1].split("and jsonb_typeof", 1)[0]
+    assert set(re.findall(r"'([a-z_]+)'", decimal_normalization)) == {
+        "amount",
+        "semantic_score",
+        "lexical_score",
+        "raw_rating",
+        "guarded_rating",
+        "points",
+        "rating",
+        "base_score",
+        "premiere_penalty",
+        "future_quality",
+    }
+    assert "trim_scale((item.value #>> '{}')::numeric)::text" in canonical_function
     command_rpc = sql.index("create or replace function apply_campaign_command")
     activation_rpc = sql.index("create or replace function activate_campaign_strategy")
     assert command_rpc < activation_rpc
