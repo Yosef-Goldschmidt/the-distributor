@@ -426,6 +426,7 @@ def test_single_router_and_vercel_function_contract(campaign_runtime) -> None:
     )
     assert public_python_entries == ["index.py"]
     assert vercel["rewrites"] == [
+        {"source": "/campaign", "destination": "/campaign.html"},
         {"source": "/(.*)", "destination": "/api/index"}
     ]
     paths = {getattr(route, "path", None) for route in app.routes}

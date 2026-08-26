@@ -8,6 +8,10 @@
   },
   "rewrites": [
     {
+      "source": "/campaign",
+      "destination": "/campaign.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/api/index"
     }
