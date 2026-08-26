@@ -481,6 +481,21 @@ function scenarioCommands(kind, festivalId, version) {
   ];
 }
 
+function scenarioChangeText(kind, result) {
+  if (result.requires_provider_refresh) return "This scenario needs refreshed evidence before it can be compared.";
+  const diff = result.diff;
+  const changed = diff && diff.primary_before !== diff.primary_after;
+  const routeChange = changed
+    ? `${routeName(diff.primary_before)} → ${routeName(diff.primary_after)}.`
+    : `Primary remains ${routeName(diff ? diff.primary_after : current.view.primary && current.view.primary.festival_id)}.`;
+  if (kind !== "screen") return changed ? routeChange : "The primary route would not change.";
+  const worldPremiere = (result.hypothetical_snapshot.premiere_ledger.scopes || []).find((scope) => scope.scope === "world");
+  const premiereChange = worldPremiere && worldPremiere.availability === "consumed"
+    ? "The hypothetical public screening consumes world-premiere availability."
+    : "Premiere-sensitive routes would be re-evaluated.";
+  return `${routeChange} ${premiereChange}`;
+}
+
 async function simulate(kind, button) {
   if (!current || actionInFlight) return;
   const beforeVersion = current.snapshot.campaign_version;
@@ -500,7 +515,7 @@ async function simulate(kind, button) {
     host.className = "scenario-result";
     const heading = document.createElement("h4"); heading.textContent = "Hypothetical comparison";
     const change = document.createElement("p");
-    change.textContent = result.requires_provider_refresh ? "This scenario needs refreshed evidence before it can be compared." : result.diff ? `${routeName(result.diff.primary_before)} → ${routeName(result.diff.primary_after)}.` : "The primary route would not change.";
+    change.textContent = scenarioChangeText(kind, result);
     const safety = document.createElement("p"); safety.className = "muted"; safety.textContent = `Not saved. The real campaign remains version ${beforeVersion} with ${beforeEventCount} recorded events.`;
     const reuse = document.createElement("p"); reuse.className = "muted";
     reuse.textContent = result.reuse_manifest && result.reuse_manifest.chat_attempts === 0 && result.reuse_manifest.embedding_attempts === 0

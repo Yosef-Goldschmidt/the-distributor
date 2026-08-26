@@ -525,6 +525,8 @@ def test_campaign_page_targets_the_authoritative_primary_and_names_confirmations
     assert html.count("Evidence &amp; technical details") == 1
     assert "primary_reason_refs" in html
     assert "values.indexOf(value) === index" in html
+    assert "Primary remains ${routeName" in html
+    assert "The hypothetical public screening consumes world-premiere availability." in html
     assert "Scenario safety check failed: the real campaign changed." in html
 
     root = client.get("/").text
