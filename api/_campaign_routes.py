@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import logging
 import os
 import re
 from functools import lru_cache
@@ -44,7 +43,6 @@ COOKIE_NAME = "distributor_workspace"
 _CAPABILITY_PATTERN = re.compile(r"^[A-Za-z0-9_-]{43}$")
 router = APIRouter()
 T = TypeVar("T")
-logger = logging.getLogger(__name__)
 
 
 def _safe_exception_detail(exc: Exception) -> str:
@@ -61,7 +59,7 @@ def _safe_exception_detail(exc: Exception) -> str:
         secret = os.getenv(variable)
         if secret:
             detail = detail.replace(secret, "[redacted]")
-    return detail[:500]
+    return detail.replace("\r", " ").replace("\n", " ")[:500]
 
 
 class CampaignApiException(Exception):
@@ -275,10 +273,11 @@ def _call(operation: Callable[[], T]) -> T:
     except CampaignApiException:
         raise
     except Exception as exc:  # noqa: BLE001 - normalize the public boundary
-        logger.error(
-            "campaign_operation_failed error_type=%s detail=%s",
-            type(exc).__name__,
-            _safe_exception_detail(exc),
+        print(  # noqa: T201 - Vercel captures stdout, not Python logger records
+            "campaign_operation_failed "
+            f"error_type={type(exc).__name__} "
+            f"detail={_safe_exception_detail(exc)}",
+            flush=True,
         )
         raise _translate(exc) from exc
 

@@ -111,7 +111,7 @@ def test_campaign_error_detail_redacts_configured_secrets(monkeypatch) -> None:
     secret = "server-only-test-credential"
     monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", secret)
 
-    detail = _safe_exception_detail(RuntimeError(f"request failed: {secret}"))
+    detail = _safe_exception_detail(RuntimeError(f"request failed:\n{secret}"))
 
     assert detail == "request failed: [redacted]"
 
