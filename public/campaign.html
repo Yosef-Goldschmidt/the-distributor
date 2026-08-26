@@ -420,23 +420,43 @@ function commandPayload(type, festivalId, version, key) {
   return {type, payload: decision ? {festival_id: festivalId, source_refs: [`human:workspace:${key}`]} : {festival_id: festivalId}, expected_version: version, idempotency_key: key, actor: {kind: "human", actor_ref: "human:workspace"}, invalidation_class: "C"};
 }
 
+async function sendCommand(type, festivalId, version) {
+  const payload = commandPayload(type, festivalId, version, crypto.randomUUID());
+  return request(`/api/workspace/campaigns/${encodeURIComponent(activeCampaignId)}/commands`, {method: "POST", body: JSON.stringify(payload)});
+}
+
 async function applyEvent(type, button) {
   if (!current || actionInFlight) return;
   const festivalId = byId("festival").value;
   const festivalName = routeName(festivalId);
+  const opportunity = current.snapshot.opportunities.find((item) => item.festival_id === festivalId);
+  const needsSubmission = type === "record_rejection" && opportunity && opportunity.submission_state === "not_submitted";
   const copy = EVENT_COPY[type];
-  if (!festivalId || !copy || !confirm(copy.confirm(festivalName))) return;
+  const confirmation = copy ? `${copy.confirm(festivalName)}${needsSubmission ? " It will first be recorded as submitted." : ""}` : "";
+  if (!festivalId || !copy || !confirm(confirmation)) return;
   actionInFlight = true;
   const restore = setButtonBusy(button, copy.busy);
   status(`${copy.busy.replace("…", "")} for ${festivalName}…`, false, true);
-  const key = crypto.randomUUID();
-  const payload = commandPayload(type, festivalId, current.snapshot.campaign_version, key);
+  let submittedFirst = false;
   try {
-    const result = await request(`/api/workspace/campaigns/${encodeURIComponent(activeCampaignId)}/commands`, {method: "POST", body: JSON.stringify(payload)});
+    let version = current.snapshot.campaign_version;
+    if (needsSubmission) {
+      status(`Recording submission for ${festivalName} before its rejection…`, false, true);
+      const submitted = await sendCommand("mark_submitted", festivalId, version);
+      version = submitted.campaign_version;
+      submittedFirst = true;
+      status(`Recording rejection for ${festivalName}…`, false, true);
+    }
+    const result = await sendCommand(type, festivalId, version);
     await loadCampaign(activeCampaignId);
     await listCampaigns();
     status(`${festivalName} recorded as ${copy.done.toLowerCase()}. Campaign is now version ${result.campaign_version}; strategy ${present(result.strategy_status)}.`);
-  } catch (error) { status(error.message, true); }
+  } catch (error) {
+    if (submittedFirst) {
+      await loadCampaign(activeCampaignId);
+      status(`${festivalName} was recorded as submitted, but its rejection failed: ${error.message}`, true);
+    } else status(error.message, true);
+  }
   finally { actionInFlight = false; restore(); }
 }
 

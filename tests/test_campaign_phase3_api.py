@@ -508,6 +508,10 @@ def test_campaign_page_targets_the_authoritative_primary_and_names_confirmations
     assert "copy.confirm(festivalName)" in html
     assert "Record ${name} as rejected?" in html
     assert "Record ${name} as submitted?" in html
+    assert 'type === "record_rejection" && opportunity' in html
+    assert 'await sendCommand("mark_submitted", festivalId, version)' in html
+    assert "It will first be recorded as submitted." in html
+    assert "was recorded as submitted, but its rejection failed" in html
     assert "Campaign is now version ${result.campaign_version}" in html
 
     # Long actions acknowledge the click immediately and cannot be duplicated.
