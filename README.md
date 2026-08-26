@@ -243,7 +243,9 @@ build that keeps the real names.
 ## Deployment (Vercel)
 
 1. Push this repository to GitHub.
-2. Import it in Vercel — `vercel.json` routes everything to the FastAPI app in `api/index.py`.
+2. Import it in Vercel with **Framework Preset: Other**. This preserves the repository's
+   single Python function at `api/index.py`; `vercel.json` serves the campaign page from the
+   emitted static asset and sends the remaining catch-all traffic to the FastAPI app.
 3. Add the environment variables from `.env.example` in **Settings → Environment Variables**.
    Quick Strategy can use the existing read configuration. Campaign Workspace additionally
    requires the server-only `SUPABASE_SERVICE_ROLE_KEY` and exact
