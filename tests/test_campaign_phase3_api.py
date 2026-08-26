@@ -520,6 +520,7 @@ def test_campaign_page_targets_the_authoritative_primary_and_names_confirmations
     assert "Evidence refs:" not in html
     assert html.count("Evidence &amp; technical details") == 1
     assert "primary_reason_refs" in html
+    assert "values.indexOf(value) === index" in html
     assert "Scenario safety check failed: the real campaign changed." in html
 
     root = client.get("/").text

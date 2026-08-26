@@ -353,11 +353,12 @@ function renderCampaign(data) {
     : "No confirmed public screening has consumed world-premiere availability.");
 
   const gates = byId("gates"); gates.replaceChildren();
-  [...(view.verification_gates || [])].sort((left, right) => {
+  const visibleGateTexts = [...(view.verification_gates || [])].sort((left, right) => {
     const priority = (gate) => gate.fact_key === "premiere.rule" ? 0 : gate.blocking ? 1 : 2;
     return priority(left) - priority(right);
-  }).slice(0, 3).forEach((gate) => {
-    const li = document.createElement("li"); li.textContent = verificationText(gate); gates.append(li);
+  }).map(verificationText).filter((value, index, values) => values.indexOf(value) === index).slice(0, 3);
+  visibleGateTexts.forEach((gateText) => {
+    const li = document.createElement("li"); li.textContent = gateText; gates.append(li);
   });
   if (!gates.children.length) { const li = document.createElement("li"); li.textContent = "No current verification gate."; gates.append(li); }
   renderBudget(data.active_plan && data.active_plan.budget);
