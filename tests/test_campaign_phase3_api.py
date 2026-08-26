@@ -477,6 +477,7 @@ def test_campaign_page_is_compact_server_authoritative_and_quick_root_survives(
         "Apply event to:",
         "Evidence &amp; technical details",
         "Hypothetical only",
+        "New campaign",
     ):
         assert required in html
     assert "innerHTML" not in html
@@ -528,6 +529,8 @@ def test_campaign_page_targets_the_authoritative_primary_and_names_confirmations
     assert "Primary remains ${routeName" in html
     assert "The hypothetical public screening consumes world-premiere availability." in html
     assert "Scenario safety check failed: the real campaign changed." in html
+    assert 'byId("setup").classList.add("has-active")' in html
+    assert 'byId("setup").classList.remove("has-active")' in html
 
     root = client.get("/").text
     assert "Running…" in root
