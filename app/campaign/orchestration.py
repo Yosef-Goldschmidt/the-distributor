@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime, timezone
 from typing import Any, Literal, Mapping
 
 from app.campaign.adapter import AdaptedCampaignEvidence, LegacyEvidenceAdapter
@@ -70,6 +70,7 @@ class PlanningExecution:
     reuse_manifest: ReuseManifest | None = None
     strategy_ref: str | None = None
     cache_miss_reasons: tuple[str, ...] = ()
+    idempotent_replay: bool = False
 
 
 def _aggregate_key(candidates: tuple[Any, ...], attribute: str) -> str:
@@ -179,8 +180,11 @@ class CampaignOrchestrator:
                     diff=ready.attempt.diff,
                     reuse_manifest=self._parse_manifest(ready),
                     strategy_ref=ready.attempt.strategy_id,
+                    idempotent_replay=True,
                 )
-            return PlanningExecution(status="stale", aggregate=current)
+            return PlanningExecution(
+                status="stale", aggregate=current, idempotent_replay=True
+            )
         prior = self._active_ready_before(application)
         return self._plan_and_record(
             workspace_id,
@@ -723,7 +727,13 @@ class CampaignOrchestrator:
             {"module": "ClarificationEngine", "provider_call": False},
             {"module": "StrategyDiff", "provider_call": False},
         ]
-        return {"provider_trace": provider_trace, "deterministic_trace": deterministic}
+        return {
+            "provider_trace": provider_trace,
+            "deterministic_trace": deterministic,
+            "company_memory": (
+                dict(evidence.company_memory_summary) if evidence else None
+            ),
+        }
 
     def _record_failure(
         self,
@@ -830,8 +840,28 @@ def snapshot_from_evidence(
         in {"continental", "territorial"}
         and candidate.risk.premiere_constraint.territory
     }
+    screenings = tuple(
+        sorted(
+            evidence.screenings,
+            key=lambda item: (
+                item.occurred_at
+                or item.scheduled_at
+                or datetime.max.replace(tzinfo=timezone.utc),
+                item.screening_id,
+            ),
+        )
+    )
+    candidates = tuple(
+        sorted(
+            evidence.candidates,
+            key=lambda item: (
+                item.retrieved.retrieval_rank,
+                item.festival_id,
+            ),
+        )
+    )
     ledger = PremiereLedger().derive(
-        evidence.profile, evidence.screenings, tracked_scopes=tracked
+        evidence.profile, screenings, tracked_scopes=tracked
     )
     initial = CampaignSnapshot(
         workspace_id=workspace_id,
@@ -841,16 +871,16 @@ def snapshot_from_evidence(
         readiness=CampaignReadiness.STALE,
         profile=evidence.profile,
         premiere_ledger=ledger,
-        screenings=evidence.screenings,
+        screenings=screenings,
         opportunities=tuple(
             CampaignOpportunity(
                 opportunity_id=f"opportunity:{campaign_id}:{item.festival_id}",
                 festival_id=item.festival_id,
                 verification_items=item.risk.uncertainties,
             )
-            for item in evidence.candidates
+            for item in candidates
         ),
-        candidates=evidence.candidates,
+        candidates=candidates,
         aggregate_hash="0" * 64,
     )
     return initial.model_copy(

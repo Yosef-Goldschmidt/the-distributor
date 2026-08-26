@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campaign Workspace — The Distributor</title>
+<style>
+  :root {
+    --ink: #17211c; --muted: #637068; --paper: #f5f2e9; --card: #fffdf7;
+    --line: #d9d4c7; --green: #174f3b; --mint: #dcebe2; --amber: #a85d1d;
+    --red: #9b3737; --shadow: 0 10px 30px rgba(34, 44, 38, .07);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px max(20px, calc((100vw - 1180px)/2)); border-bottom: 1px solid var(--line); background: rgba(255,253,247,.9); }
+  header h1 { margin: 0; font: 650 20px/1.2 Georgia, serif; }
+  header a { color: var(--green); }
+  main { max-width: 1180px; margin: auto; padding: 22px 20px 50px; }
+  .shell, .grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, .75fr); gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 13px; padding: 17px; box-shadow: var(--shadow); }
+  .stack { display: grid; gap: 16px; }
+  h2, h3 { margin: 0 0 10px; }
+  h2 { font: 650 21px/1.2 Georgia, serif; }
+  h3 { color: var(--muted); font-size: 11px; letter-spacing: .11em; text-transform: uppercase; }
+  p { margin: 6px 0; }
+  .muted { color: var(--muted); }
+  .meta, .chips, .actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+  .chip { border: 1px solid var(--line); border-radius: 99px; padding: 4px 9px; color: var(--muted); font-size: 12px; background: #fff; }
+  .chip.good { color: var(--green); border-color: #a9c8b8; background: var(--mint); }
+  .chip.warn { color: var(--amber); border-color: #e0bf9d; background: #fff4e6; }
+  .route { border-left: 4px solid var(--green); padding: 8px 0 8px 13px; margin: 12px 0; }
+  .route strong { display: block; font: 650 24px/1.2 Georgia, serif; }
+  .alternatives { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+  .alternative { padding: 11px; border: 1px solid var(--line); border-radius: 9px; }
+  .band { height: 10px; border-radius: 99px; overflow: hidden; background: #e8e4da; margin: 10px 0 5px; }
+  .band span { display: block; height: 100%; background: var(--green); }
+  ul { margin: 7px 0 0; padding-left: 20px; }
+  li { margin: 4px 0; }
+  textarea, select { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 10px; background: white; color: var(--ink); font: inherit; }
+  textarea { min-height: 110px; resize: vertical; }
+  button { border: 0; border-radius: 8px; padding: 9px 12px; background: var(--green); color: white; font: 650 13px/1 system-ui; cursor: pointer; }
+  button.secondary { color: var(--green); background: var(--mint); }
+  button.danger { background: var(--red); }
+  button:disabled { opacity: .5; cursor: wait; }
+  .status { min-height: 24px; color: var(--muted); margin: 10px 0; }
+  .status.error { color: var(--red); }
+  .diff { background: #f0ede4; border-radius: 9px; padding: 11px; }
+  .diff strong { color: var(--green); }
+  details { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 10px; }
+  summary { cursor: pointer; color: var(--green); font-weight: 600; }
+  pre { overflow: auto; max-height: 280px; white-space: pre-wrap; word-break: break-word; font: 11px/1.45 ui-monospace, monospace; background: #f0ede4; padding: 10px; border-radius: 7px; }
+  .hidden { display: none !important; }
+  .empty { text-align: center; padding: 34px; color: var(--muted); }
+  @media (max-width: 780px) { .shell, .grid { grid-template-columns: 1fr; } .alternatives { grid-template-columns: 1fr; } header { align-items: flex-start; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>The Distributor · Campaign Workspace</h1>
+  <a href="/">Quick Strategy</a>
+</header>
+<main>
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+  <section id="setup" class="shell">
+    <div class="card">
+      <h3>Start a durable campaign</h3>
+      <h2>Describe the film once</h2>
+      <textarea id="film-input" aria-label="Film description" placeholder="Title, format, country, runtime, synopsis, themes, premiere history and goals…"></textarea>
+      <div class="actions" style="margin-top:10px"><button id="create">Create campaign</button></div>
+      <p class="muted">Initial evidence uses the existing Quick Strategy retrieval, risk, scoring and CompanyMemory pipeline. Later operational replans reuse it when valid.</p>
+    </div>
+    <div class="card">
+      <h3>This private workspace</h3>
+      <div id="campaign-list" class="stack"><p class="muted">Loading saved campaigns…</p></div>
+    </div>
+  </section>
+
+  <section id="workspace" class="hidden stack">
+    <div class="card">
+      <div class="meta">
+        <span id="film-title" class="chip"></span>
+        <span id="version" class="chip"></span>
+        <span id="lifecycle" class="chip"></span>
+        <span id="readiness" class="chip"></span>
+        <span id="strategy" class="chip"></span>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="stack">
+        <article class="card">
+          <h3>Primary launch</h3>
+          <div id="primary" class="route"></div>
+          <p id="why" class="muted"></p>
+          <h3 style="margin-top:16px">Up to two alternatives</h3>
+          <div id="alternatives" class="alternatives"></div>
+        </article>
+        <article class="card">
+          <h3>Premiere-option preservation</h3>
+          <p id="preservation"></p>
+          <div class="band"><span id="preservation-band"></span></div>
+          <p id="destroyed" class="muted"></p>
+          <h3 style="margin-top:15px">Verification gates</h3>
+          <ul id="gates"></ul>
+          <h3 style="margin-top:15px">Budget</h3>
+          <p id="budget"></p>
+        </article>
+        <article class="card">
+          <h3>Latest strategy change</h3>
+          <div id="diff" class="diff">No replan diff yet.</div>
+          <div id="reuse" class="chips" style="margin-top:10px"></div>
+        </article>
+      </div>
+      <aside class="stack">
+        <article class="card">
+          <h3>Highest-priority clarification</h3>
+          <p id="clarification">No blocking clarification.</p>
+        </article>
+        <article class="card">
+          <h3>Human event controls</h3>
+          <select id="festival" aria-label="Festival opportunity"></select>
+          <div class="actions" style="margin-top:10px">
+            <button class="secondary event" data-command="mark_submitted">Submitted</button>
+            <button class="danger event" data-command="record_rejection">Rejected</button>
+            <button class="secondary event" data-command="lock_opportunity">Lock</button>
+            <button class="secondary event" data-command="exclude_opportunity">Exclude</button>
+          </div>
+          <p class="muted">Irreversible facts remain human-confirmed typed events.</p>
+        </article>
+        <article class="card">
+          <h3>What-if · discarded after comparison</h3>
+          <div class="actions">
+            <button class="secondary scenario" data-scenario="reject">Rejection</button>
+            <button class="secondary scenario" data-scenario="screen">Public screening</button>
+            <button class="secondary scenario" data-scenario="strict">Strict preservation</button>
+          </div>
+          <div id="scenario-result" style="margin-top:10px"></div>
+        </article>
+        <article class="card">
+          <h3>Evidence and history</h3>
+          <p id="memory" class="muted"></p>
+          <details><summary>Recent events</summary><pre id="events"></pre></details>
+          <details><summary>Execution trace</summary><pre id="trace"></pre></details>
+        </article>
+      </aside>
+    </div>
+  </section>
+</main>
+<script>
+"use strict";
+const byId = (id) => document.getElementById(id);
+let current = null;
+let activeCampaignId = null;
+
+function status(message, error = false) {
+  const node = byId("status");
+  node.textContent = message;
+  node.classList.toggle("error", error);
+}
+
+async function request(path, options = {}) {
+  const response = await fetch(path, {
+    credentials: "same-origin",
+    ...options,
+    headers: options.body ? {"Content-Type": "application/json", ...(options.headers || {})} : options.headers,
+  });
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.message || `${response.status} request failed`);
+  return body;
+}
+
+async function bootstrap() {
+  await request("/api/workspace/bootstrap", {method: "POST", body: "{}"});
+  await listCampaigns();
+}
+
+async function listCampaigns() {
+  const body = await request("/api/workspace/campaigns");
+  const host = byId("campaign-list");
+  host.replaceChildren();
+  if (!body.campaigns.length) {
+    const p = document.createElement("p"); p.className = "muted"; p.textContent = "No saved campaigns yet."; host.append(p); return;
+  }
+  body.campaigns.forEach((campaign) => {
+    const button = document.createElement("button");
+    button.className = "secondary";
+    button.textContent = `${campaign.title} · v${campaign.campaign_version} · ${campaign.strategy_stale ? "stale" : "ready"}`;
+    button.addEventListener("click", () => loadCampaign(campaign.campaign_id));
+    host.append(button);
+  });
+}
+
+async function createCampaign() {
+  const text = byId("film-input").value.trim();
+  if (!text) return status("Describe the film first.", true);
+  status("Building grounded evidence and the initial campaign strategy…");
+  byId("create").disabled = true;
+  try {
+    const result = await request("/api/workspace/campaigns", {method: "POST", body: JSON.stringify({free_text: text})});
+    await listCampaigns();
+    await loadCampaign(result.campaign_id);
+    status(`Campaign created. Strategy is ${result.strategy_status}.`);
+  } catch (error) { status(error.message, true); }
+  finally { byId("create").disabled = false; }
+}
+
+function text(node, value) { byId(node).textContent = value == null ? "—" : String(value); }
+function pct(value) { return value == null ? "unknown" : `${value}%`; }
+function routeName(id) {
+  const candidate = current.snapshot.candidates.find((item) => item.festival_id === id);
+  return candidate ? candidate.retrieved.identity.festival_name : id;
+}
+
+function renderCampaign(data) {
+  current = data;
+  activeCampaignId = data.snapshot.campaign_id;
+  const view = data.view;
+  byId("workspace").classList.remove("hidden");
+  text("film-title", data.snapshot.profile.title.value || "Untitled film");
+  text("version", `version ${data.snapshot.campaign_version}`);
+  text("lifecycle", data.snapshot.lifecycle);
+  text("readiness", data.strategy_stale ? "strategy stale" : data.snapshot.readiness);
+  text("strategy", view.strategy_ref || "no active strategy");
+
+  byId("primary").replaceChildren();
+  const primaryStrong = document.createElement("strong");
+  primaryStrong.textContent = view.primary ? view.primary.festival_name : "No ready route";
+  const primaryMeta = document.createElement("span");
+  primaryMeta.className = "muted";
+  primaryMeta.textContent = view.primary ? `Score ${view.primary.score} · ${view.primary.decision_grade}` : "Planning is stale or failed.";
+  byId("primary").append(primaryStrong, primaryMeta);
+  text("why", data.active_plan ? `Evidence refs: ${data.active_plan.primary_launch.reason_refs.join(", ")}` : "No selected-plan evidence yet.");
+
+  byId("alternatives").replaceChildren();
+  (view.alternatives || []).forEach((item) => {
+    const card = document.createElement("div"); card.className = "alternative";
+    const strong = document.createElement("strong"); strong.textContent = item.festival_name;
+    const small = document.createElement("div"); small.className = "muted"; small.textContent = `Score ${item.score} · activates if primary is rejected or withdrawn`;
+    card.append(strong, small); byId("alternatives").append(card);
+  });
+  if (!(view.alternatives || []).length) text("alternatives", "No grounded alternatives.");
+
+  const option = data.active_plan && data.active_plan.option_preservation;
+  text("preservation", option ? `${option.mode} policy · known preserved ${pct(option.known_preserved_pct)} + possible ${pct(option.possible_additional_pct)}` : "Not available while strategy is stale.");
+  byId("preservation-band").style.width = option ? `${option.known_preserved_pct}%` : "0%";
+  text("destroyed", option ? `Destroyed: ${option.destroyed_ids.map(routeName).join(", ") || "none"}. Verify: ${option.verify_ids.map(routeName).join(", ") || "none"}.` : "");
+
+  const gates = byId("gates"); gates.replaceChildren();
+  (view.verification_gates || []).forEach((gate) => {
+    const li = document.createElement("li"); li.textContent = `${gate.blocking ? "Blocking" : "Check"}: ${gate.fact_key} → ${gate.affected_decision}`; gates.append(li);
+  });
+  if (!gates.children.length) { const li = document.createElement("li"); li.textContent = "No current verification gate."; gates.append(li); }
+  renderBudget(data.active_plan && data.active_plan.budget);
+
+  const visibleClarifications = (view.clarifications || []).filter((item) => !item.suppressed);
+  const clarification = visibleClarifications[0];
+  text("clarification", clarification ? `${clarification.question} Affects: ${clarification.affected_decisions.join(", ")}.` : "No decision-changing clarification is currently visible.");
+  renderDiff(data.latest_diff, view.reuse);
+
+  const select = byId("festival"); select.replaceChildren();
+  data.snapshot.opportunities.forEach((opportunity) => {
+    const optionNode = document.createElement("option");
+    optionNode.value = opportunity.festival_id;
+    optionNode.textContent = `${routeName(opportunity.festival_id)} · ${opportunity.submission_state} · ${opportunity.policy_state}`;
+    select.append(optionNode);
+  });
+  text("memory", Object.keys(view.company_memory || {}).length ? `CompanyMemory: ${JSON.stringify(view.company_memory)}` : "No CompanyMemory summary stored.");
+  text("events", JSON.stringify(data.events.slice(-8), null, 2));
+  text("trace", JSON.stringify(data.trace, null, 2));
+}
+
+function renderBudget(budget) {
+  if (!budget) return text("budget", "No hard budget supplied — no feasibility claim is made.");
+  const known = `${budget.known_total.amount} ${budget.known_total.currency}`;
+  const limit = `${budget.hard_limit.amount} ${budget.hard_limit.currency}`;
+  if (budget.state === "KNOWN_FEASIBLE") text("budget", `Budget confirmed: ${known} of ${limit}.`);
+  else if (budget.state === "VERIFY") text("budget", `Budget verification required: ${known} known, ${budget.unknown_fee_ids.length} required fees unknown — not confirmed feasible.`);
+  else text("budget", `Known-infeasible roots are excluded. Known ${known}; hard limit ${limit}.`);
+}
+
+function renderDiff(diff, reuse) {
+  const node = byId("diff");
+  node.replaceChildren();
+  if (!diff) { node.textContent = "No replan diff yet."; }
+  else {
+    const strong = document.createElement("strong"); strong.textContent = `${routeName(diff.primary_before)} → ${routeName(diff.primary_after)}`;
+    const detail = document.createElement("p"); detail.textContent = `Added: ${diff.added_route_ids.map(routeName).join(", ") || "none"}. Removed: ${diff.removed_route_ids.map(routeName).join(", ") || "none"}. Cause: ${diff.causal_refs.join(", ")}.`;
+    node.append(strong, detail);
+  }
+  const host = byId("reuse"); host.replaceChildren();
+  if (reuse) {
+    const labels = [reuse.no_new_llm ? "No new LLM or embeddings" : "Provider refresh used", reuse.evidence_reused ? "Evidence reused" : "Evidence refreshed", `chat ${reuse.chat_attempts} · embedding ${reuse.embedding_attempts}`];
+    labels.forEach((label, index) => { const chip = document.createElement("span"); chip.className = `chip ${index < 2 ? "good" : ""}`; chip.textContent = label; host.append(chip); });
+  }
+}
+
+async function loadCampaign(id) {
+  try { renderCampaign(await request(`/api/workspace/campaigns/${encodeURIComponent(id)}`)); status("Campaign loaded."); }
+  catch (error) { status(error.message, true); }
+}
+
+function commandPayload(type, festivalId, version, key) {
+  const decision = ["mark_submitted", "record_rejection"].includes(type);
+  return {type, payload: decision ? {festival_id: festivalId, source_refs: [`human:workspace:${key}`]} : {festival_id: festivalId}, expected_version: version, idempotency_key: key, actor: {kind: "human", actor_ref: "human:workspace"}, invalidation_class: "C"};
+}
+
+async function applyEvent(type) {
+  if (!current || !confirm(`Record ${type.replaceAll("_", " ")} as a real campaign event?`)) return;
+  const key = crypto.randomUUID();
+  const payload = commandPayload(type, byId("festival").value, current.snapshot.campaign_version, key);
+  try {
+    const result = await request(`/api/workspace/campaigns/${encodeURIComponent(activeCampaignId)}/commands`, {method: "POST", body: JSON.stringify(payload)});
+    await loadCampaign(activeCampaignId); await listCampaigns(); status(`Event recorded; strategy ${result.strategy_status}.`);
+  } catch (error) { status(error.message, true); }
+}
+
+function scenarioCommands(kind, festivalId, version) {
+  const actor = {kind: "human", actor_ref: "human:workspace-scenario"};
+  if (kind === "reject") {
+    const opportunity = current.snapshot.opportunities.find((item) => item.festival_id === festivalId);
+    const commands = [];
+    if (opportunity && opportunity.submission_state === "not_submitted") {
+      commands.push({...commandPayload("mark_submitted", festivalId, version, crypto.randomUUID()), actor});
+      version += 1;
+    }
+    commands.push({...commandPayload("record_rejection", festivalId, version, crypto.randomUUID()), actor});
+    return commands;
+  }
+  if (kind === "strict") return [{type: "set_constraint", payload: {constraint: {constraint_id: "scenario-preservation-mode", constraint_type: "preservation_mode", strength: "preference", value: "strict", locked: false, active: true, candidate_expanding: false, source_ref: "human:workspace-scenario"}}, expected_version: version, idempotency_key: crypto.randomUUID(), actor, invalidation_class: "C"}];
+  const screeningId = `scenario-screening-${crypto.randomUUID()}`;
+  const occurred = new Date().toISOString();
+  return [
+    {type: "schedule_screening", payload: {screening_id: screeningId, festival_id: festivalId, venue: "Hypothetical public screening", scheduled_at: occurred, access: "public", source_refs: ["human:workspace-scenario"]}, expected_version: version, idempotency_key: crypto.randomUUID(), actor, invalidation_class: "C"},
+    {type: "confirm_screening", payload: {screening_id: screeningId, occurred_at: occurred, access: "public", source_refs: ["human:workspace-scenario"]}, expected_version: version + 1, idempotency_key: crypto.randomUUID(), actor, invalidation_class: "B"},
+  ];
+}
+
+async function simulate(kind) {
+  if (!current) return;
+  const beforeVersion = current.snapshot.campaign_version;
+  try {
+    const result = await request(`/api/workspace/campaigns/${encodeURIComponent(activeCampaignId)}/simulate`, {method: "POST", body: JSON.stringify({commands: scenarioCommands(kind, byId("festival").value, beforeVersion)})});
+    const host = byId("scenario-result"); host.replaceChildren();
+    const p = document.createElement("p");
+    p.textContent = result.requires_provider_refresh ? "This scenario needs refreshed evidence." : result.diff ? `${routeName(result.diff.primary_before)} → ${routeName(result.diff.primary_after)}. Discarded; campaign unchanged.` : "No route change. Discarded; campaign unchanged.";
+    host.append(p);
+    status(`Scenario complete. Real campaign remains version ${beforeVersion}.`);
+  } catch (error) { status(error.message, true); }
+}
+
+byId("create").addEventListener("click", createCampaign);
+document.querySelectorAll(".event").forEach((button) => button.addEventListener("click", () => applyEvent(button.dataset.command)));
+document.querySelectorAll(".scenario").forEach((button) => button.addEventListener("click", () => simulate(button.dataset.scenario)));
+bootstrap().catch((error) => status(error.message, true));
+</script>
+</body>
+</html>

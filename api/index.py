@@ -21,9 +21,16 @@ from pydantic import BaseModel, Field  # noqa: E402
 
 from app import config  # noqa: E402
 from app.agent import graph, prompts, scoring  # noqa: E402
+from api.campaign_routes import (  # noqa: E402
+    CampaignApiException,
+    campaign_api_exception_response,
+    campaign_validation_error_response,
+    router as campaign_router,
+)
 from app.stores import corpus, supabase_store  # noqa: E402
 
 app = FastAPI(title="The Distributor", description="AI agent for film festival strategy")
+app.include_router(campaign_router)
 
 
 class ExecuteRequest(BaseModel):
@@ -32,9 +39,12 @@ class ExecuteRequest(BaseModel):
 
 @app.exception_handler(RequestValidationError)
 async def request_validation_error(
-    _request: Request, _exc: RequestValidationError
+    request: Request, exc: RequestValidationError
 ) -> JSONResponse:
     """Keep malformed request bodies inside the course's exact error contract."""
+
+    if request.url.path.startswith("/api/workspace/"):
+        return campaign_validation_error_response(exc)
 
     return JSONResponse(
         {
@@ -44,6 +54,13 @@ async def request_validation_error(
             "steps": [],
         }
     )
+
+
+@app.exception_handler(CampaignApiException)
+async def campaign_api_error(
+    _request: Request, exc: CampaignApiException
+) -> JSONResponse:
+    return campaign_api_exception_response(exc)
 
 
 def _load_json(name: str, default: Any) -> Any:

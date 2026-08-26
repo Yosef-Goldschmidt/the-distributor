@@ -235,6 +235,58 @@ begin
 end;
 $$;
 
+-- Match app.campaign.contracts.canonical_json exactly for aggregate hashes.
+-- jsonb::text includes structural spaces and cannot be hashed directly.
+create or replace function campaign_canonical_json(p_value jsonb)
+returns text
+language plpgsql
+immutable
+strict
+parallel safe
+as $$
+declare
+  v_result text;
+begin
+  if jsonb_typeof(p_value) = 'object' then
+    select '{' || coalesce(
+      string_agg(
+        to_jsonb(item.key)::text || ':' || campaign_canonical_json(item.value),
+        ',' order by item.key collate "C"
+      ),
+      ''
+    ) || '}'
+    into v_result
+    from jsonb_each(p_value) item;
+    return v_result;
+  end if;
+  if jsonb_typeof(p_value) = 'array' then
+    select '[' || coalesce(
+      string_agg(campaign_canonical_json(item.value), ',' order by item.ordinality),
+      ''
+    ) || ']'
+    into v_result
+    from jsonb_array_elements(p_value) with ordinality item(value, ordinality);
+    return v_result;
+  end if;
+  return p_value::text;
+end;
+$$;
+
+create or replace function campaign_utc_text(p_value timestamptz)
+returns text
+language sql
+immutable
+strict
+parallel safe
+as $$
+  select case
+    when date_trunc('second', p_value) = p_value then
+      to_char(p_value at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')
+    else
+      to_char(p_value at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')
+  end;
+$$;
+
 create or replace function campaign_snapshot_json(
   p_workspace_id text,
   p_campaign_id text
@@ -263,8 +315,14 @@ as $$
           'access', s.access,
           'country', s.country,
           'region', s.region,
-          'scheduled_at', s.scheduled_at,
-          'occurred_at', s.occurred_at,
+          'scheduled_at', case
+            when s.scheduled_at is null then null
+            else campaign_utc_text(s.scheduled_at)
+          end,
+          'occurred_at', case
+            when s.occurred_at is null then null
+            else campaign_utc_text(s.occurred_at)
+          end,
           'source_refs', s.source_refs
         ) order by coalesce(s.occurred_at, s.scheduled_at), s.id
       )
@@ -296,7 +354,9 @@ as $$
           'offer_state', co.offer_state,
           'policy_state', co.policy_state,
           'verification_items', co.verification_items_json
-        ) order by co.festival_id
+        ) order by
+          coalesce((co.evidence_json -> 'retrieved' ->> 'retrieval_rank')::integer, 2147483647),
+          co.festival_id
       )
       from campaign_opportunities co
       where co.campaign_id = c.id
@@ -308,7 +368,11 @@ as $$
         where sv.id = c.active_strategy_version_id
       ),
       (
-        select jsonb_agg(co.evidence_json order by co.festival_id)
+        select jsonb_agg(
+          co.evidence_json order by
+            coalesce((co.evidence_json -> 'retrieved' ->> 'retrieval_rank')::integer, 2147483647),
+            co.festival_id
+        )
         from campaign_opportunities co
         where co.campaign_id = c.id
       ),
@@ -388,6 +452,117 @@ begin
     ), '[]'::jsonb),
     'strategy_stale', v_stale
   );
+end;
+$$;
+
+create or replace function create_campaign_from_snapshot(
+  p_workspace_id text,
+  p_snapshot jsonb
+)
+returns jsonb
+language plpgsql
+volatile
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  v_campaign_id text := p_snapshot ->> 'campaign_id';
+  v_film_project_id text := 'film:' || (p_snapshot ->> 'campaign_id');
+begin
+  if not exists (select 1 from workspaces where id = p_workspace_id) then
+    raise exception using errcode = 'P0002', message = 'workspace_not_found';
+  end if;
+  if p_snapshot ->> 'workspace_id' is distinct from p_workspace_id
+     or coalesce((p_snapshot ->> 'campaign_version')::integer, -1) <> 0
+     or jsonb_typeof(p_snapshot -> 'candidates') is distinct from 'array'
+     or jsonb_typeof(p_snapshot -> 'opportunities') is distinct from 'array'
+     or jsonb_array_length(p_snapshot -> 'candidates') < 1
+     or jsonb_array_length(p_snapshot -> 'candidates') > 12
+     or jsonb_array_length(p_snapshot -> 'candidates')
+        <> jsonb_array_length(p_snapshot -> 'opportunities') then
+    raise exception using errcode = '22023', message = 'invalid_initial_campaign_snapshot';
+  end if;
+
+  insert into film_projects (
+    id, workspace_id, title, profile_json, profile_hash
+  ) values (
+    v_film_project_id,
+    p_workspace_id,
+    coalesce(p_snapshot -> 'profile' -> 'title' ->> 'value', 'Untitled film'),
+    p_snapshot -> 'profile',
+    p_snapshot -> 'profile' ->> 'profile_hash'
+  );
+
+  insert into campaigns (
+    id, film_project_id, lifecycle, version, readiness,
+    premiere_ledger_json, ledger_hash, aggregate_hash,
+    active_strategy_version_id, strategy_stale
+  ) values (
+    v_campaign_id,
+    v_film_project_id,
+    p_snapshot ->> 'lifecycle',
+    0,
+    p_snapshot ->> 'readiness',
+    p_snapshot -> 'premiere_ledger',
+    p_snapshot -> 'premiere_ledger' ->> 'ledger_hash',
+    p_snapshot ->> 'aggregate_hash',
+    null,
+    true
+  );
+
+  insert into campaign_opportunities (
+    id, campaign_id, festival_id, submission_state, offer_state,
+    policy_state, evidence_json, creative_scores_json, risk_json,
+    verification_items_json, evidence_hash, creative_hash, risk_hash
+  )
+  select
+    opportunity.value ->> 'opportunity_id',
+    v_campaign_id,
+    candidate.value ->> 'festival_id',
+    opportunity.value ->> 'submission_state',
+    opportunity.value ->> 'offer_state',
+    opportunity.value ->> 'policy_state',
+    candidate.value,
+    candidate.value -> 'creative',
+    candidate.value -> 'risk',
+    coalesce(opportunity.value -> 'verification_items', '[]'::jsonb),
+    candidate.value ->> 'component_hash',
+    candidate.value -> 'creative' ->> 'creative_key',
+    candidate.value -> 'risk' ->> 'risk_key'
+  from jsonb_array_elements(p_snapshot -> 'candidates') candidate
+  join jsonb_array_elements(p_snapshot -> 'opportunities') opportunity
+    on opportunity.value ->> 'festival_id' = candidate.value ->> 'festival_id';
+
+  insert into campaign_constraints (
+    id, campaign_id, type, strength, payload_json, locked, active, source
+  )
+  select
+    item.value ->> 'constraint_id', v_campaign_id,
+    item.value ->> 'constraint_type', item.value ->> 'strength',
+    jsonb_build_object(
+      'value', item.value -> 'value',
+      'candidate_expanding', item.value -> 'candidate_expanding'
+    ),
+    (item.value ->> 'locked')::boolean,
+    (item.value ->> 'active')::boolean,
+    item.value ->> 'source_ref'
+  from jsonb_array_elements(coalesce(p_snapshot -> 'constraints', '[]'::jsonb)) item;
+
+  insert into screenings (
+    id, campaign_id, festival_id, country, region, scheduled_at,
+    occurred_at, state, access, source_refs, evidence_status
+  )
+  select
+    item.value ->> 'screening_id', v_campaign_id,
+    nullif(item.value ->> 'festival_id', ''),
+    item.value ->> 'country', item.value ->> 'region',
+    nullif(item.value ->> 'scheduled_at', '')::timestamptz,
+    nullif(item.value ->> 'occurred_at', '')::timestamptz,
+    item.value ->> 'state', item.value ->> 'access',
+    coalesce(item.value -> 'source_refs', '[]'::jsonb), 'asserted'
+  from jsonb_array_elements(coalesce(p_snapshot -> 'screenings', '[]'::jsonb)) item;
+
+  return get_campaign_aggregate(p_workspace_id, v_campaign_id);
 end;
 $$;
 
@@ -1171,7 +1346,9 @@ begin
   v_after_hash := encode(
     digest(
       convert_to(
-        jsonb_set(v_snapshot, '{aggregate_hash}', to_jsonb(repeat('0', 64)))::text,
+        campaign_canonical_json(
+          jsonb_set(v_snapshot, '{aggregate_hash}', to_jsonb(repeat('0', 64)))
+        ),
         'UTF8'
       ),
       'sha256'
@@ -1365,7 +1542,9 @@ begin
   v_hash := encode(
     digest(
       convert_to(
-        jsonb_set(v_snapshot, '{aggregate_hash}', to_jsonb(repeat('0', 64)))::text,
+        campaign_canonical_json(
+          jsonb_set(v_snapshot, '{aggregate_hash}', to_jsonb(repeat('0', 64)))
+        ),
         'UTF8'
       ),
       'sha256'
@@ -1378,11 +1557,15 @@ end;
 $$;
 
 revoke all on function campaign_snapshot_json(text, text) from public, anon, authenticated;
+revoke all on function campaign_canonical_json(jsonb) from public, anon, authenticated;
+revoke all on function campaign_utc_text(timestamptz) from public, anon, authenticated;
 revoke all on function get_campaign_aggregate(text, text) from public, anon, authenticated;
+revoke all on function create_campaign_from_snapshot(text, jsonb) from public, anon, authenticated;
 revoke all on function rederive_campaign_premiere_ledger(text) from public, anon, authenticated;
 revoke all on function apply_campaign_command(text, text, integer, text, jsonb) from public, anon, authenticated;
 revoke all on function activate_campaign_strategy(text, text, integer, jsonb) from public, anon, authenticated;
 
 grant execute on function get_campaign_aggregate(text, text) to service_role;
+grant execute on function create_campaign_from_snapshot(text, jsonb) to service_role;
 grant execute on function apply_campaign_command(text, text, integer, text, jsonb) to service_role;
 grant execute on function activate_campaign_strategy(text, text, integer, jsonb) to service_role;

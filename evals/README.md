@@ -1,5 +1,18 @@
 # Behavioral evaluations
 
+Campaign Workspace has a separate, fully offline deterministic gate:
+
+```bash
+.venv/bin/python evals/run_campaign.py
+```
+
+It evaluates planner archetypes A–E in all preservation modes, deterministic
+repeatability, hard constraints, budget states, premiere screening/correction
+semantics, zero-provider rejection replanning, scenario no-write behavior,
+capability-scoped repository isolation, and corpus coverage. It performs no
+provider calls or external writes and continues to classify Sitges as a known
+corpus-coverage issue.
+
 The runner evaluates an isolated `git archive` of the current `HEAD`. It never
 imports production code from uncommitted working-tree changes.
 

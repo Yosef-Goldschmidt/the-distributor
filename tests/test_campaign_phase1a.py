@@ -148,7 +148,7 @@ def _profile_without_assertion():
     return _snapshot().profile.model_copy(update={"premiere_assertions": ()})
 
 
-def test_additive_migration_defines_exact_eight_tables_and_two_atomic_rpcs() -> None:
+def test_additive_migration_defines_eight_tables_initial_creation_and_atomic_state_rpcs() -> None:
     sql = MIGRATION.read_text()
     tables = re.findall(r"^create table if not exists (\w+)", sql, flags=re.MULTILINE)
     assert tables == [
@@ -164,6 +164,12 @@ def test_additive_migration_defines_exact_eight_tables_and_two_atomic_rpcs() -> 
     assert re.search(r"\bdrop\b", sql, flags=re.IGNORECASE) is None
     assert "create or replace function apply_campaign_command" in sql
     assert "create or replace function activate_campaign_strategy" in sql
+    assert "create or replace function create_campaign_from_snapshot" in sql
+    assert "invalid_initial_campaign_snapshot" in sql
+    assert "create or replace function campaign_canonical_json" in sql
+    assert "create or replace function campaign_utc_text" in sql
+    assert sql.count("campaign_canonical_json(") >= 4
+    assert "jsonb_set(v_snapshot, '{aggregate_hash}'" in sql
     command_rpc = sql.index("create or replace function apply_campaign_command")
     activation_rpc = sql.index("create or replace function activate_campaign_strategy")
     assert command_rpc < activation_rpc
@@ -1091,6 +1097,22 @@ class _FakeSupabaseClient:
         return _RpcCall(self.response_data)
 
 
+class _FailingRpcCall:
+    def __init__(self, payload: dict[str, Any]) -> None:
+        self.payload = payload
+
+    def execute(self):
+        raise RuntimeError(self.payload)
+
+
+class _FailingSupabaseClient:
+    def __init__(self, payload: dict[str, Any]) -> None:
+        self.payload = payload
+
+    def rpc(self, _name: str, _params: dict[str, Any]):
+        return _FailingRpcCall(self.payload)
+
+
 def test_supabase_repository_command_uses_one_rpc_not_application_transactions() -> None:
     local = _repository()
     command = _command("lock_opportunity", {"festival_id": "hot-docs"})
@@ -1112,6 +1134,39 @@ def test_supabase_repository_command_uses_one_rpc_not_application_transactions()
     assert [name for name, _ in client.calls] == ["apply_campaign_command"]
     assert client.calls[0][1]["p_expected_version"] == 3
     assert client.calls[0][1]["p_workspace_id"] == "workspace-golden"
+
+
+@pytest.mark.parametrize(
+    ("payload", "expected"),
+    [
+        ({"message": "campaign_not_found"}, CampaignNotFound),
+        ({"message": "idempotency_conflict"}, IdempotencyConflict),
+        (
+            {"message": "invalid_rejection_transition"},
+            InvalidTransition,
+        ),
+    ],
+)
+def test_supabase_repository_normalizes_expected_rpc_errors(
+    payload: dict[str, Any], expected: type[Exception]
+) -> None:
+    repository = SupabaseCampaignRepository(_FailingSupabaseClient(payload))
+    with pytest.raises(expected):
+        repository._rpc("apply_campaign_command", {})
+
+
+def test_supabase_repository_preserves_current_version_from_rpc_conflict() -> None:
+    repository = SupabaseCampaignRepository(
+        _FailingSupabaseClient(
+            {"message": "version_conflict", "details": "7"}
+        )
+    )
+    with pytest.raises(VersionConflict) as exc_info:
+        repository._rpc(
+            "apply_campaign_command", {"p_expected_version": 6}
+        )
+    assert exc_info.value.expected_version == 6
+    assert exc_info.value.current_version == 7
 
 
 def test_supabase_repository_fails_closed_without_service_role_key(monkeypatch) -> None:

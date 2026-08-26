@@ -26,7 +26,12 @@ from app.campaign.models import (
     FrozenCandidateEvidence,
     StrategyDiff,
 )
-from app.campaign.state import CampaignStateReducer, StateReduction, VersionConflict
+from app.campaign.state import (
+    CampaignStateReducer,
+    InvalidTransition,
+    StateReduction,
+    VersionConflict,
+)
 
 
 class CampaignRepositoryError(RuntimeError):
@@ -101,6 +106,21 @@ class CommandApplication:
 
 
 class CampaignRepository(Protocol):
+    def resolve_workspace(self, capability_digest: str) -> str: ...
+
+    def create_workspace(
+        self,
+        workspace_id: str,
+        capability_digest: str,
+        *,
+        display_name: str,
+        company_id: str | None = None,
+    ) -> None: ...
+
+    def save_campaign(self, workspace_id: str, snapshot: CampaignSnapshot) -> None: ...
+
+    def list_campaigns(self, workspace_id: str) -> tuple[CampaignAggregate, ...]: ...
+
     def load_campaign(self, workspace_id: str, campaign_id: str) -> CampaignAggregate: ...
 
     def apply_command(
@@ -160,6 +180,17 @@ class InMemoryCampaignRepository:
                 raise CampaignRepositoryError("capability digest must be unique")
             self._workspace_digests[workspace_id] = capability_digest
 
+    def create_workspace(
+        self,
+        workspace_id: str,
+        capability_digest: str,
+        *,
+        display_name: str,
+        company_id: str | None = None,
+    ) -> None:
+        del display_name, company_id
+        self.register_workspace(workspace_id, capability_digest)
+
     def resolve_workspace(self, capability_digest: str) -> str:
         with self._lock:
             for workspace_id, stored in self._workspace_digests.items():
@@ -189,6 +220,15 @@ class InMemoryCampaignRepository:
         with self._lock:
             stored = self._stored_for_workspace(workspace_id, campaign_id)
             return self._aggregate(stored)
+
+    def list_campaigns(self, workspace_id: str) -> tuple[CampaignAggregate, ...]:
+        with self._lock:
+            self._require_workspace(workspace_id)
+            return tuple(
+                self._aggregate(stored)
+                for campaign_id, stored in sorted(self._campaigns.items())
+                if stored.snapshot.workspace_id == workspace_id
+            )
 
     def apply_command(
         self, workspace_id: str, campaign_id: str, command: CampaignCommand
@@ -425,6 +465,54 @@ class SupabaseCampaignRepository:
             raise WorkspaceNotFound("workspace capability is not recognized")
         return str(rows[0]["id"])
 
+    def create_workspace(
+        self,
+        workspace_id: str,
+        capability_digest: str,
+        *,
+        display_name: str,
+        company_id: str | None = None,
+    ) -> None:
+        self._client.table("workspaces").insert(
+            {
+                "id": workspace_id,
+                "company_id": company_id,
+                "capability_digest": capability_digest,
+                "display_name": display_name,
+            }
+        ).execute()
+
+    def save_campaign(self, workspace_id: str, snapshot: CampaignSnapshot) -> None:
+        self._rpc(
+            "create_campaign_from_snapshot",
+            {
+                "p_workspace_id": workspace_id,
+                "p_snapshot": snapshot.model_dump(mode="json"),
+            },
+        )
+
+    def list_campaigns(self, workspace_id: str) -> tuple[CampaignAggregate, ...]:
+        projects = (
+            self._client.table("film_projects")
+            .select("id")
+            .eq("workspace_id", workspace_id)
+            .execute()
+        ).data or []
+        project_ids = [str(item["id"]) for item in projects]
+        if not project_ids:
+            return ()
+        campaigns = (
+            self._client.table("campaigns")
+            .select("id")
+            .in_("film_project_id", project_ids)
+            .order("created_at")
+            .execute()
+        ).data or []
+        return tuple(
+            self.load_campaign(workspace_id, str(item["id"]))
+            for item in campaigns
+        )
+
     def load_campaign(self, workspace_id: str, campaign_id: str) -> CampaignAggregate:
         payload = self._rpc(
             "get_campaign_aggregate",
@@ -468,7 +556,53 @@ class SupabaseCampaignRepository:
         return self._parse_aggregate(payload)
 
     def _rpc(self, name: str, params: Mapping[str, Any]) -> Any:
-        response = self._client.rpc(name, dict(params)).execute()
+        try:
+            response = self._client.rpc(name, dict(params)).execute()
+        except Exception as exc:  # noqa: BLE001 - normalize PostgREST SQL errors
+            payload = exc.args[0] if exc.args and isinstance(exc.args[0], Mapping) else {}
+            message = str(payload.get("message") or getattr(exc, "message", "") or exc)
+            detail = str(payload.get("details") or getattr(exc, "details", "") or "")
+            if "workspace_not_found" in message:
+                raise WorkspaceNotFound("workspace capability is not recognized") from exc
+            if "campaign_not_found" in message:
+                raise CampaignNotFound("campaign not found") from exc
+            if "idempotency_conflict" in message:
+                raise IdempotencyConflict(
+                    "idempotency key was already committed for another command"
+                ) from exc
+            if "version_conflict" in message:
+                expected = int(params.get("p_expected_version", -1))
+                current = int(detail) if detail.isdigit() else max(expected, 0)
+                raise VersionConflict(expected, current) from exc
+            if "strategy_activation_conflict" in message:
+                raise StrategyActivationConflict(
+                    "campaign changed after strategy input was captured"
+                ) from exc
+            transition_codes = (
+                "campaign_closed",
+                "constraint_deactivation_requires_remove",
+                "locked_constraint",
+                "constraint_not_removable",
+                "invalid_opportunity_policy_transition",
+                "invalid_submission_transition",
+                "invalid_rejection_transition",
+                "invalid_invitation_transition",
+                "invalid_offer_transition",
+                "invalid_withdrawal_transition",
+                "invalid_screening_confirmation",
+                "invalid_screening_cancellation",
+                "verification_item_not_found",
+                "correction_target_not_found",
+                "correction_screening_not_found",
+                "ambiguous_profile_correction",
+                "ambiguous_correction_target",
+            )
+            transition = next(
+                (code for code in transition_codes if code in message), None
+            )
+            if transition:
+                raise InvalidTransition(transition) from exc
+            raise CampaignRepositoryError(f"{name} failed") from exc
         if response.data is None:
             raise CampaignRepositoryError(f"{name} returned no authoritative aggregate")
         return response.data
