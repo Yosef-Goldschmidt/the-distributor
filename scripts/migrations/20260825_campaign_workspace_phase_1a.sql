@@ -295,7 +295,7 @@ returns jsonb
 language sql
 stable
 security definer
-set search_path = public, pg_temp
+set search_path = public, extensions, pg_temp
 as $$
   select jsonb_build_object(
     'schema_version', 1,
@@ -395,7 +395,7 @@ returns jsonb
 language plpgsql
 stable
 security definer
-set search_path = public, pg_temp
+set search_path = public, extensions, pg_temp
 as $$
 declare
   v_snapshot jsonb;
@@ -463,7 +463,7 @@ returns jsonb
 language plpgsql
 volatile
 security definer
-set search_path = public, pg_temp
+set search_path = public, extensions, pg_temp
 as $$
 declare
   v_campaign_id text := p_snapshot ->> 'campaign_id';
@@ -571,7 +571,7 @@ returns jsonb
 language plpgsql
 volatile
 security definer
-set search_path = public, pg_temp
+set search_path = public, extensions, pg_temp
 as $$
 declare
   v_profile jsonb;
@@ -864,7 +864,7 @@ returns jsonb
 language plpgsql
 volatile
 security definer
-set search_path = public, pg_temp
+set search_path = public, extensions, pg_temp
 as $$
 declare
   v_campaign campaigns%rowtype;
@@ -1398,7 +1398,7 @@ returns jsonb
 language plpgsql
 volatile
 security definer
-set search_path = public, pg_temp
+set search_path = public, extensions, pg_temp
 as $$
 declare
   v_campaign campaigns%rowtype;

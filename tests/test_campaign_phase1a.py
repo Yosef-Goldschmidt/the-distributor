@@ -168,6 +168,7 @@ def test_additive_migration_defines_eight_tables_initial_creation_and_atomic_sta
     assert "invalid_initial_campaign_snapshot" in sql
     assert "create or replace function campaign_canonical_json" in sql
     assert "create or replace function campaign_utc_text" in sql
+    assert sql.count("set search_path = public, extensions, pg_temp") == 6
     assert sql.count("campaign_canonical_json(") >= 4
     assert "jsonb_set(v_snapshot, '{aggregate_hash}'" in sql
     command_rpc = sql.index("create or replace function apply_campaign_command")
