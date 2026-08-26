@@ -21,6 +21,7 @@ from app.campaign.auth import (
     generate_capability,
 )
 from app.campaign.contracts import (
+    VOLATILE_DISPLAY_FIELDS,
     campaign_snapshot_hash,
     parse_campaign_command,
 )
@@ -171,6 +172,16 @@ def test_additive_migration_defines_eight_tables_initial_creation_and_atomic_sta
     assert sql.count("set search_path = public, extensions, pg_temp") == 6
     assert sql.count("campaign_canonical_json(") >= 4
     assert "jsonb_set(v_snapshot, '{aggregate_hash}'" in sql
+    canonical_function = sql[
+        sql.index("create or replace function campaign_canonical_json") :
+        sql.index("create or replace function campaign_utc_text")
+    ]
+    sql_exclusions = canonical_function.split("where item.key not in (", 1)[1]
+    sql_exclusions = sql_exclusions.split(");", 1)[0]
+    assert set(re.findall(r"'([a-z_]+)'", sql_exclusions)) == {
+        "aggregate_hash",
+        *VOLATILE_DISPLAY_FIELDS,
+    }
     command_rpc = sql.index("create or replace function apply_campaign_command")
     activation_rpc = sql.index("create or replace function activate_campaign_strategy")
     assert command_rpc < activation_rpc

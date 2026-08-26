@@ -235,8 +235,10 @@ begin
 end;
 $$;
 
--- Match app.campaign.contracts.canonical_json exactly for aggregate hashes.
--- jsonb::text includes structural spaces and cannot be hashed directly.
+-- Match app.campaign.contracts.campaign_snapshot_hash exactly. The Python
+-- contract excludes the aggregate hash itself and volatile display copy at
+-- every nesting level; jsonb::text also includes structural spaces and cannot
+-- be hashed directly.
 create or replace function campaign_canonical_json(p_value jsonb)
 returns text
 language plpgsql
@@ -256,7 +258,16 @@ begin
       ''
     ) || '}'
     into v_result
-    from jsonb_each(p_value) item;
+    from jsonb_each(p_value) item
+    where item.key not in (
+      'aggregate_hash',
+      'submission_action',
+      'question',
+      'description',
+      'message',
+      'display_name',
+      'festival_name'
+    );
     return v_result;
   end if;
   if jsonb_typeof(p_value) = 'array' then
