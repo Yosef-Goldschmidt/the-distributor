@@ -122,7 +122,7 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         normalized = re.sub(r"[^a-z0-9]+", " ", value.lower()).strip()
 
         def category(item: str) -> str:
-            if re.search(r"\b(?:premiere|screening)\b", item):
+            if re.search(r"\b(?:premieres?|screenings?)\b", item):
                 return "premiere"
             if re.search(r"\bruntime\b", item):
                 return "runtime"
@@ -146,7 +146,7 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         missing_info[:] = [
             item
             for item in missing_info
-            if not re.search(r"\b(?:premiere|screening)\b", str(item), flags=re.I)
+            if not re.search(r"\b(?:premieres?|screenings?)\b", str(item), flags=re.I)
         ]
         if len(missing_info) != before:
             adjustments.append(
@@ -192,6 +192,34 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         adjustments.append("conflicting completion/release statements surfaced")
 
     premiere_evidence = input_evidence["premiere"]
+    brief_mentions_premiere_facts = bool(
+        re.search(
+            r"\b(?:premiere(?:d|s)?|screen(?:ed|ing|ings)?|"
+            r"show(?:n|ing|ings)?|exhibit(?:ed|ion|ions)?|"
+            r"release(?:d)?|online|stream(?:ed|ing)?|youtube|vimeo|ticketed)\b",
+            user_prompt,
+            flags=re.I,
+        )
+    )
+    analyzer_marks_premiere_state_missing = any(
+        re.search(
+            r"\bpremiere\s+status\b|\bscreening\s+history\b|"
+            r"\b(?:whether|if)\b.{0,50}\b(?:screened|premiered)\b",
+            str(item),
+            flags=re.I,
+        )
+        for item in missing_info
+    )
+    analyzer_premiere_facts_are_grounded = (
+        brief_mentions_premiere_facts
+        and (
+            bool(profile["premiere_history"])
+            or (
+                profile.get("premiere_status") != "unknown"
+                and not analyzer_marks_premiere_state_missing
+            )
+        )
+    )
     film_country_text = str(profile.get("country") or "").strip()
     if (
         premiere_evidence["positive_screening"]
@@ -219,7 +247,13 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         adjustments.append(
             "conflicting premiere/screening statements forced premiere_status to unknown"
         )
-    elif not premiere_evidence["evidence_present"] or premiere_evidence["explicitly_unknown"]:
+    elif (
+        premiere_evidence["explicitly_unknown"]
+        or (
+            not premiere_evidence["evidence_present"]
+            and not analyzer_premiere_facts_are_grounded
+        )
+    ):
         if profile.get("premiere_status") != "unknown":
             adjustments.append(
                 "premiere_status forced to unknown because the request supplied no positive premiere evidence"
@@ -232,6 +266,10 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         profile["premiere_status"] = "unknown"
         add_missing(
             "premiere status (high-impact: confirm whether and where the film has screened publicly)"
+        )
+    elif not premiere_evidence["evidence_present"]:
+        adjustments.append(
+            "grounded FilmAnalyzer premiere state preserved when the conservative phrase parser had no exact match"
         )
     elif premiere_evidence["international_premiere_available"]:
         if profile.get("premiere_status") != "international_premiere_available":
@@ -1348,7 +1386,7 @@ def normalise_roadmap(
     open_questions = []
     missing_items = (profile or {}).get("missing_info", []) or []
     critical_pattern = re.compile(
-        r"\b(?:premiere|screening|runtime|format|completion|release|picture lock|final cut)\b",
+        r"\b(?:premieres?|screenings?|runtime|format|completion|release|picture lock|final cut)\b",
         flags=re.I,
     )
     missing_items = sorted(
@@ -1358,7 +1396,7 @@ def normalise_roadmap(
     missing_items = [item for _, item in missing_items]
     for missing in missing_items[:4]:
         missing_text = str(missing).strip()
-        if re.search(r"\b(?:premiere|screening)\b", missing_text, flags=re.I):
+        if re.search(r"\b(?:premieres?|screenings?)\b", missing_text, flags=re.I):
             question = (
                 "High-impact: confirm every prior public screening and the film's remaining "
                 f"premiere status ({missing_text})."
