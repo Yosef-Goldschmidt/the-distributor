@@ -31,12 +31,25 @@ FESTIVAL = {
     "strategic_value": "International documentary launch.",
 }
 
+CASE_ONE_BRIEF = (
+    "The film has had no public, festival, press, market, educational, broadcast, "
+    "streaming, or online screenings anywhere. It has only been viewed privately by "
+    "the production team. Its world, international, and territorial premieres are available."
+)
+
+CASE_TWO_BRIEF = (
+    "The film had a ticketed public screening in São Paulo on 12 May 2026 and an "
+    "unrestricted worldwide YouTube publication on 10 June 2026. It has not screened "
+    "at any film festival. The world premiere has already been consumed."
+)
+
 
 class PipelineLLM:
     def __init__(self, analyzer_result: dict[str, Any], trace: modules.Trace) -> None:
         self.analyzer_result = analyzer_result
         self.trace = trace
         self.payloads: dict[str, dict[str, Any]] = {}
+        self.normalized_profile: dict[str, Any] = {}
         self.usage = {
             "calls": 0,
             "attempts": 0,
@@ -145,7 +158,8 @@ def _run_chain(
         profile: dict[str, Any],
         memory: dict[str, Any],
     ) -> list[dict[str, Any]]:
-        del profile, memory
+        del memory
+        llm.normalized_profile = deepcopy(profile)
         local_trace.add("FestivalSearch", {"source": "test"}, {"count": 1})
         return [deepcopy(FESTIVAL)]
 
@@ -171,11 +185,11 @@ def _has_premiere_question(values: list[Any]) -> bool:
 
 def test_world_premiere_available_survives_the_full_production_chain() -> None:
     result, llm, risk = _run_chain(
-        "The film has not had any screenings that were open to the public.",
+        CASE_ONE_BRIEF,
         _base_analyzer_result(
             premiere_status="world_premiere_available",
             premiere_history=[],
-            missing_info=[],
+            missing_info=["Preferred premiere window or target festivals"],
         ),
     )
 
@@ -186,6 +200,15 @@ def test_world_premiere_available_survives_the_full_production_chain() -> None:
         and "premiere_status" in step["response"]
     )
     assert analyzer_step["response"]["premiere_status"] == "world_premiere_available"
+    assert analyzer_step["response"]["premiere_history"] == []
+    assert analyzer_step["response"]["missing_info"] == [
+        "Preferred premiere window or target festivals"
+    ]
+    assert llm.normalized_profile["premiere_status"] == "world_premiere_available"
+    assert llm.normalized_profile["premiere_history"] == []
+    assert llm.normalized_profile["missing_info"] == [
+        "Preferred premiere window or target festivals"
+    ]
     assert llm.payloads["MatchScorer"]["film"]["premiere_status"] == (
         "world_premiere_available"
     )
@@ -193,32 +216,37 @@ def test_world_premiere_available_survives_the_full_production_chain() -> None:
         "world_premiere_available"
     )
     assert "still holds its world premiere" in risk["risk_note"]
-    assert not _has_premiere_question(
-        llm.payloads["RoadmapBuilder"]["film"]["missing_info"]
-    )
-    assert not any(
-        question.startswith("High-impact:")
-        for question in result["meta"]["roadmap"]["open_questions"]
-    )
+    ranked = result["meta"]["ranked_festivals"][0]
+    assert ranked["premiere_risk"] == "none"
+    assert ranked["premiere_penalty"] == 0
+    assert llm.payloads["RoadmapBuilder"]["film"]["missing_info"] == [
+        "Preferred premiere window or target festivals"
+    ]
+    open_questions = result["meta"]["roadmap"]["open_questions"]
+    assert open_questions == [
+        "Provide or confirm the missing film information: Preferred premiere window or "
+        "target festivals."
+    ]
+    assert "confirm every prior public screening" not in result["response"]
+    assert "remaining premiere status" not in result["response"]
 
 
 def test_screening_and_online_release_do_not_collapse_to_generic_unknown() -> None:
     result, llm, risk = _run_chain(
-        "A paying audience saw the film in São Paulo, and the complete film can be "
-        "watched worldwide without a login on YouTube.",
+        CASE_TWO_BRIEF,
         _base_analyzer_result(
             premiere_status="already_premiered",
             premiere_history=[
                 {
-                    "festival": "Ticketed public screening",
+                    "festival": "Ticketed public screening in São Paulo",
                     "country": "Brazil",
-                    "date": None,
+                    "date": "2026-05-12",
                     "event_kind": "screening",
                 },
                 {
-                    "festival": "YouTube",
+                    "festival": "Worldwide public YouTube release",
                     "country": None,
-                    "date": None,
+                    "date": "2026-06-10",
                     "event_kind": "online_availability",
                 },
             ],
@@ -234,6 +262,11 @@ def test_screening_and_online_release_do_not_collapse_to_generic_unknown() -> No
     )
     assert analyzer_step["response"]["premiere_status"] == "already_premiered"
     assert len(analyzer_step["response"]["premiere_history"]) == 2
+    assert analyzer_step["response"]["missing_info"] == []
+    assert llm.normalized_profile["premiere_status"] == "already_premiered"
+    assert len(llm.normalized_profile["premiere_history"]) == 2
+    assert llm.normalized_profile["missing_info"] == []
+    assert "contradictions" not in llm.normalized_profile["_validation"]
     assert llm.payloads["MatchScorer"]["film"]["premiere_status"] == "already_premiered"
     assert llm.payloads["RoadmapBuilder"]["film"]["premiere_status"] == "already_premiered"
     assert "Unrestricted public online availability is recorded" in risk["risk_note"]
@@ -241,6 +274,12 @@ def test_screening_and_online_release_do_not_collapse_to_generic_unknown() -> No
     assert not _has_premiere_question(
         llm.payloads["RoadmapBuilder"]["film"]["missing_info"]
     )
+    open_questions = result["meta"]["roadmap"]["open_questions"]
+    assert any("premiere rules for Fixture World Festival" in item for item in open_questions)
+    assert not any("prior public screening" in item for item in open_questions)
+    assert not any("conflicting statements" in item for item in open_questions)
+    assert "world premiere is already consumed" in result["response"]
+    assert "screening history" not in result["response"]
 
 
 def test_genuinely_missing_premiere_information_remains_unknown() -> None:

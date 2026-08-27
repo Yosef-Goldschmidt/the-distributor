@@ -36,6 +36,21 @@ def _truncate(text: Any, limit: int) -> Any:
     return text[: limit - 1].rstrip() + "…"
 
 
+def _is_premiere_state_missing(value: Any) -> bool:
+    text = re.sub(r"[^a-z0-9]+", " ", str(value).casefold()).strip()
+    return bool(
+        re.search(
+            r"\b(?:premiere(?:\s+screening)?|screening(?:\s+premiere)?)\s+status\b"
+            r"|\b(?:premiere|screening)\s+history\b"
+            r"|\bprior\s+public\s+screenings?\b"
+            r"|\b(?:whether|if|where|when)\b.{0,50}\b(?:screened|premiered)\b"
+            r"|\b(?:world|international|territorial|remaining)\s+premiere\s+"
+            r"(?:availability|rights|status)\b",
+            text,
+        )
+    )
+
+
 # --------------------------------------------------------------------- Planner
 def planner(trace: Trace, user_prompt: str) -> dict[str, Any]:
     """Build the complete domain workflow without spending an LLM call.
@@ -122,7 +137,7 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         normalized = re.sub(r"[^a-z0-9]+", " ", value.lower()).strip()
 
         def category(item: str) -> str:
-            if re.search(r"\b(?:premieres?|screenings?)\b", item):
+            if _is_premiere_state_missing(item):
                 return "premiere"
             if re.search(r"\bruntime\b", item):
                 return "runtime"
@@ -146,7 +161,7 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         missing_info[:] = [
             item
             for item in missing_info
-            if not re.search(r"\b(?:premieres?|screenings?)\b", str(item), flags=re.I)
+            if not _is_premiere_state_missing(item)
         ]
         if len(missing_info) != before:
             adjustments.append(
@@ -202,13 +217,7 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         )
     )
     analyzer_marks_premiere_state_missing = any(
-        re.search(
-            r"\bpremiere\s+status\b|\bscreening\s+history\b|"
-            r"\b(?:whether|if)\b.{0,50}\b(?:screened|premiered)\b",
-            str(item),
-            flags=re.I,
-        )
-        for item in missing_info
+        _is_premiere_state_missing(item) for item in missing_info
     )
     analyzer_premiere_facts_are_grounded = (
         brief_mentions_premiere_facts
@@ -1386,17 +1395,23 @@ def normalise_roadmap(
     open_questions = []
     missing_items = (profile or {}).get("missing_info", []) or []
     critical_pattern = re.compile(
-        r"\b(?:premieres?|screenings?|runtime|format|completion|release|picture lock|final cut)\b",
+        r"\b(?:runtime|format|completion|release|picture lock|final cut)\b",
         flags=re.I,
     )
     missing_items = sorted(
         enumerate(missing_items),
-        key=lambda item: (not bool(critical_pattern.search(str(item[1]))), item[0]),
+        key=lambda item: (
+            not (
+                _is_premiere_state_missing(item[1])
+                or bool(critical_pattern.search(str(item[1])))
+            ),
+            item[0],
+        ),
     )
     missing_items = [item for _, item in missing_items]
     for missing in missing_items[:4]:
         missing_text = str(missing).strip()
-        if re.search(r"\b(?:premieres?|screenings?)\b", missing_text, flags=re.I):
+        if _is_premiere_state_missing(missing_text):
             question = (
                 "High-impact: confirm every prior public screening and the film's remaining "
                 f"premiere status ({missing_text})."
@@ -1491,7 +1506,7 @@ def normalise_roadmap(
         premiere_status = (profile or {}).get("premiere_status")
         if premiere_status == "already_premiered":
             summary_parts = [
-                "No new premiere target is selected because the film is already premiered; "
+                "No new premiere target is selected because the film's world premiere is already consumed; "
                 "the roadmap uses only remaining territorial eligibility."
             ]
         elif premiere_status == "unknown":

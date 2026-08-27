@@ -101,6 +101,8 @@ def analyse_critical_input(text: str) -> dict[str, Any]:
     ]
     public_online_patterns = [
         r"\bunrestricted\s+(?:public\s+)?online\s+availability\b",
+        r"\bunrestricted\s+(?:worldwide\s+)?(?:public\s+)?"
+        r"(?:youtube|vimeo|online|streaming)\s+(?:availability|publication|release|access)\b",
         r"\b(?:publicly|freely)\s+available\s+online\b",
         r"\bavailable\s+online\s+(?:to\s+(?:the\s+)?public|to\s+anyone|without\s+restriction|without\s+restrictions|unrestricted)\b",
         r"\bavailable\s+to\s+(?:the\s+)?public\s+online\b",
@@ -120,7 +122,22 @@ def analyse_critical_input(text: str) -> dict[str, Any]:
         r"\b(?:do\s+not|don't)\s+know\s+(?:whether|if).{0,40}\b(?:screened|premiered)\b",
         r"\bnot\s+sure\s+(?:whether|if).{0,40}\b(?:screened|premiered)\b",
     ]
-    premiere_negative = any(re.search(pattern, normalized) for pattern in premiere_negative_patterns)
+    festival_only_screening_denials = [
+        r"\b(?:(?:it|the\s+film)\s+)?(?:(?:has|have|had|was|were)\s+)?"
+        r"(?:not\s+(?:yet\s+)?|never\s+)(?:been\s+)?"
+        r"(?:publicly\s+)?(?:screened|shown|premiered)\s+(?:at|in)\s+"
+        r"(?:any\s+|a\s+|the\s+)?(?:film\s+)?festivals?\b",
+        r"\bno\s+(?:film[- ]?)?festival\s+(?:screenings?|premieres?)\b",
+        r"\bno\s+(?:screenings?|premieres?)\s+(?:at|in)\s+"
+        r"(?:any\s+|a\s+|the\s+)?(?:film\s+)?festivals?\b",
+    ]
+    premiere_fact_source = normalized
+    for pattern in festival_only_screening_denials:
+        premiere_fact_source = re.sub(pattern, "", premiere_fact_source)
+    premiere_negative = any(
+        re.search(pattern, premiere_fact_source)
+        for pattern in premiere_negative_patterns
+    )
     public_online = any(re.search(pattern, normalized) for pattern in public_online_patterns)
     premiere_international = bool(
         re.search(
@@ -129,7 +146,7 @@ def analyse_critical_input(text: str) -> dict[str, Any]:
             normalized,
         )
     )
-    positive_source = normalized
+    positive_source = premiere_fact_source
     for pattern in premiere_negative_patterns:
         positive_source = re.sub(pattern, "", positive_source)
     premiere_positive = any(
