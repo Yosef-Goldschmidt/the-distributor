@@ -1,282 +1,315 @@
 # The Distributor
 
-An AI agent that builds **film festival submission strategies** for independent film
-distribution companies.
+The Distributor is a film-festival strategy agent for independent distributors. It turns a
+film brief into a grounded submission plan, then lets a distributor keep that plan current
+as submissions, screenings, and outcomes change.
 
-## Submission
+We built it around a simple rule: language models interpret film and festival context, while
+code owns facts, arithmetic, state transitions, and validation.
+
+## Live Demo
 
 - **Production:** [the-distributor-deploy.vercel.app](https://the-distributor-deploy.vercel.app/)
-- **Public GitHub:** [Yosef-Goldschmidt/the-distributor](https://github.com/Yosef-Goldschmidt/the-distributor)
+- **GitHub:** [Yosef-Goldschmidt/the-distributor](https://github.com/Yosef-Goldschmidt/the-distributor)
 - **Submission branch:** `main`
 
-Give it a film — synopsis, genre, themes, country, director profile, premiere status —
-and it returns a ranked festival roadmap: what to submit first, what to prioritise next,
-where to leverage the company's existing relationships, and what to avoid because of
-premiere or deadline risk. Every recommendation carries a 0–100 match score, the evidence
-behind it, and its risks.
+## The Problem
 
-Built by Yosef Goldschmidt and Reuven Shpitz.
+Choosing film festivals is not just a ranking problem. A distributor has to balance creative
+fit, deadlines, fees, past relationships, programming priorities, and premiere rules. Those
+choices are connected: a public screening that helps one route can make another route
+ineligible, and a rejection can change which remaining sequence makes sense.
 
-The public **Quick Strategy** experience remains the course-compatible one-shot agent.
-An additive **Campaign Workspace** at `/campaign` turns the same evidence pipeline into a
-durable, event-driven campaign: it tracks premiere state and human decisions, constructs a
-directed compatibility graph, selects a globally coherent launch route, versions every
-strategy, reuses valid evidence on deterministic replans, and compares no-write scenarios.
+The information is also uneven. Some facts come from structured records, some from the
+distributor's history, and some festival rules are incomplete or need to be checked again.
+A useful tool therefore has to recommend a route without presenting uncertainty as fact.
 
----
+## What the Agent Does
 
-## Architecture — Plan-and-Execute
+The user supplies a free-text film brief with details such as format, genre, themes, country,
+director background, runtime, premiere history, and availability. The agent then:
 
+1. extracts only the film facts supported by the brief;
+2. retrieves relevant festivals and the distributor's relationship history;
+3. checks deadlines, accepted formats, and premiere risk;
+4. scores the grounded candidates;
+5. produces a primary submission route, alternatives, actions, risks, and questions that
+   still require verification; and
+6. returns an ordered execution trace showing how the result was assembled.
+
+The score is a decision aid, not an acceptance probability. Each recommendation keeps its
+source or submission link, deadline confidence, and the evidence behind its placement.
+
+## Two Ways to Use It
+
+### Quick Strategy (`/`)
+
+Quick Strategy is the required course interface and the fastest way to use the system. Paste
+one film brief and receive a one-shot roadmap with a human-readable festival summary,
+recommendation buckets, deadlines, confidence, reasons, actions, and risks. Technical
+provenance and the complete execution trace remain available in a collapsed disclosure, so
+the main reading path stays focused on the decision.
+
+### Campaign Workspace (`/campaign`)
+
+Campaign Workspace is additive; it does not replace Quick Strategy. It creates a private,
+persistent workspace for a film and tracks the campaign over time. The distributor records
+real events through explicit controls, and the system versions the strategy after each valid
+change.
+
+For example, if Festival A is the active primary and the distributor records a rejection,
+the event is added to the campaign history, Festival A is excluded from the active route,
+and the planner recomputes the best route from the remaining evidence. Festival B may become
+the new primary, and the workspace explains what changed between the two strategy versions.
+When the existing evidence is still valid, this operational replan requires zero chat calls
+and zero embedding requests.
+
+The same workspace can test one to three hypothetical events, such as a public screening,
+on an in-memory copy. The result is clearly marked as a scenario and never changes the real
+campaign.
+
+## Agent Architecture
+
+![The Distributor agent architecture](assets/architecture.png)
+
+The Quick Strategy execution order is:
+
+```text
+Film brief
+  -> Planner
+  -> Executor
+  -> FilmAnalyzer
+  -> CompanyMemory
+  -> FestivalSearch
+  -> RiskChecker
+  -> MatchScorer
+  -> RoadmapBuilder
+  -> Replanner
+  -> Final strategy
 ```
-User prompt → Planner → Executor (evidence chain) → Replanner → Validated roadmap
-                                      RoadmapBuilder ↑  (one targeted rewrite if invalid)
-```
 
-| Module | Type | Role |
-| --- | --- | --- |
-| `Planner` | deterministic control | Declares the complete domain evidence chain; required tasks cannot be omitted |
-| `Executor` | orchestrator | Runs the chain in dependency order under a serverless time budget |
-| `FilmAnalyzer` | LLM | Extracts supported film facts, premiere history, unknowns and the retrieval query |
-| `CompanyMemory` | retrieval tool | Loads full company history before candidate generation |
-| `FestivalSearch` | hybrid retrieval tool | Traced embedding + Pinecone semantics + local lexical relevance + company-memory and prestige reserves + Supabase facts + explicit fallback provenance + entity deduplication |
-| `RiskChecker` | deterministic domain rules | Validates exact/projected deadlines, format eligibility and premiere scope with confidence labels |
-| `MatchScorer` | LLM + code | LLM rates four creative dimensions; code validates/repairs structure and adds company/deadline evidence, guardrails, weights and penalties |
-| `RoadmapBuilder` | LLM | Selects supplied evidence to foreground and unresolved facts; code owns narrative, actions and sequencing |
-| `Replanner` | deterministic validator | Checks completeness, uniqueness, evidence references, assigned buckets and the single premiere target |
+| Module | Responsibility |
+| --- | --- |
+| `Planner` | Deterministically declares the required work so a domain step cannot be omitted. |
+| `Executor` | Runs the evidence chain in dependency order and records the trace. |
+| `FilmAnalyzer` | Extracts supported film facts, premiere history, unknowns, and a retrieval query; deterministic adaptation normalizes the result. |
+| `CompanyMemory` | Retrieves the distributor's recorded festival history and relationship strength. |
+| `FestivalSearch` | Combines vector retrieval, local lexical search, company history, prestige reserves, structured festival facts, fallback provenance, and entity deduplication. |
+| `RiskChecker` | Deterministically checks deadlines, format compatibility, and festival-side premiere eligibility with confidence labels. |
+| `MatchScorer` | Uses an LLM for four qualitative fit ratings, then validates the structure and computes the final score in code. |
+| `RoadmapBuilder` | Selects which supplied evidence and unresolved questions to foreground; deterministic code owns the final actions, narrative, sequence, and calendar. |
+| `Replanner` | Deterministically validates the roadmap and permits one targeted roadmap correction when required. |
 
-These names are identical in the architecture diagram (`/api/model_architecture`), in the
-`steps` trace returned by `/api/execute`, and in `/api/agent_info`.
+A normal Quick Strategy run makes three LLM chat calls: `FilmAnalyzer`, `MatchScorer`, and
+`RoadmapBuilder`. When vector retrieval is configured, it also makes one query-embedding
+request. A structural validation failure can trigger a narrowly scoped repair instead of
+rerunning the whole pipeline.
 
-**Cost:** three chat calls per normal run (`FilmAnalyzer`, `MatchScorer`,
-`RoadmapBuilder`) plus one embedding request. A failed roadmap validation can add one
-targeted `RoadmapBuilder` rewrite; malformed `MatchScorer` structure can add one targeted
-repair call. Analysis and retrieval are never repeated. Chat and embedding model attempts,
-including parameter fallbacks, errors and retries, are traced separately. The run has a
-260-second application deadline, leaving headroom below Vercel's 300-second function limit.
-Query embeddings have a separate 20-second timeout and fall back to local TF-IDF rather than
-holding the entire run open.
+## Why We Split the System This Way
 
-### Campaign Workspace — deterministic incremental planning
+LLMs are useful where the input is semantic: understanding a synopsis, comparing themes,
+and explaining why a festival fits. They are less reliable for arithmetic, dates, state
+machines, and enforcing contracts. We keep those parts deterministic so the same facts lead
+to the same operational result.
 
-Campaign planning is additive to the module chain above; it does not replace or rename any
-Quick Strategy module. `LegacyEvidenceAdapter` is the only raw-dictionary boundary. It
-converts the existing analyzer, CompanyMemory, retrieval, risk and guarded scoring outputs
-into frozen typed evidence. `CampaignPlanner` accepts only `PlanningInput` and performs no
-provider or database call.
+Retrieval happens before scoring or roadmap writing. Later modules can select from supplied
+evidence, but they cannot silently create a new festival fact. The final trace preserves the
+source of recommendations and labels local or remote fallbacks accurately.
 
-The campaign layer adds:
+We also separate two questions that are easy to confuse:
 
-- a capability-scoped aggregate, deterministic reducer, premiere ledger and append-only
-  events;
-- a complete directed tri-state festival compatibility graph and a deterministic planner
-  with one primary launch, at most two alternatives, explicit preservation diagnostics,
-  verification gates, clarification and exact hard/soft budget semantics;
-- immutable strategy versions, structured `StrategyDiff` values and explicit
-  `ReuseManifest` hashes;
-- A/B/C invalidation: A refreshes identity-dependent legacy evidence, B reruns
-  ledger/risk/graph/planning, and C reruns planning/clarification only;
-- an in-memory scenario engine that applies one to three of the same typed commands, uses
-  the same B/C path, returns a diff and discards the clone without a database write.
+- **What happened to the film?** Explicit screenings and online releases determine whether
+  the film's premiere opportunity is available, consumed, or genuinely unknown.
+- **What does a festival allow?** Each festival can be eligible, ineligible, or require rule
+  verification based on the evidence available for that festival.
 
-For a valid B/C cache, operational replans are deterministic and make zero chat and zero
-embedding attempts. A cache mismatch never silently falls back to a provider: the strategy
-remains stale and exposes the miss.
+Uncertain festival rules never erase a confirmed film-history fact. If the brief explicitly
+says there were no public screenings, that remains known downstream. If it reports a public
+screening or unrestricted online release, the occurrence remains recorded even when a
+festival's treatment of that event still needs verification.
 
-### Scoring
+Campaign replanning follows the same division of responsibility. It invalidates only the
+artifacts affected by a change: film-identity changes refresh evidence, premiere events
+refresh premiere risk and compatibility, and operational outcomes such as rejection reuse
+the existing evidence and update the plan.
 
-The LLM never invents the number. It rates four creative dimensions 0–5 with a short
-evidence phrase. Company relationship strength is computed from recorded screenings,
-recency and awards; deadline urgency is computed from structured dates. Then
-`app/agent/scoring.py` owns the weights and the arithmetic:
+## Campaign Workspace Architecture
+
+A campaign is a capability-scoped aggregate stored in Supabase. It contains the film facts,
+human-recorded events, premiere ledger, candidate evidence, active strategy, and immutable
+strategy history. A deterministic reducer is the only path for applying campaign commands.
+
+The premiere ledger derives film-side state from the brief and recorded screening events.
+A directed compatibility graph separately represents whether one festival screening can
+follow another as compatible, incompatible, or requiring verification. The deterministic
+`CampaignPlanner` consumes a frozen planning input, chooses one primary and up to two
+alternatives, applies hard gates, and reports which options are preserved, lost, or still
+uncertain.
+
+Human events remain human-owned. The workspace can record submissions, rejections,
+screenings, corrections, locks, and exclusions, but it does not submit to festivals or
+invent outcomes. Each accepted command creates a new strategy version and a structured
+summary of the change. The scenario engine uses the same event and planning logic on a
+discarded clone, with no repository write.
+
+## Scoring and Decision Logic
+
+`MatchScorer` asks the LLM for four 0–5 qualitative ratings with short evidence phrases.
+Company relationship and deadline urgency come from structured data, and code validates the
+ratings before applying these weights:
 
 | Dimension | Weight |
 | --- | ---: |
 | Thematic fit | 25 |
 | Genre fit | 15 |
-| Past lineup / winner similarity | 20 |
+| Past lineup or winner similarity | 20 |
 | Company relationship history | 15 |
 | Strategic value | 15 |
-| Deadline urgency (computed in code) | 10 |
+| Deadline urgency | 10 |
 
-Premiere risk is applied as a penalty (`high` −15, `medium` −7), not as a score component.
-Exact `final_deadline` values override recurring month shorthand; stale cycles are projected
-explicitly and marked with confidence. Raw rules such as `World - Spain` are interpreted as
-territorial and uncertain, not silently collapsed into strict world-premiere requirements.
-Runtime ranges found only in descriptive enrichment are surfaced as verification warnings;
-they do not override structured accepted-format data or become hard eligibility rules.
-The roadmap chooses one launch target as the intended first public festival screening.
-Mutually exclusive premiere paths are labelled as alternatives; all compatible screenings
-must follow the target even when their submission deadlines come earlier. Festivals whose
-programming identity was inferred rather than established
-(`identity_confidence: "low"`) have their lineup-similarity rating capped, and strategic
-value is capped by tier. These guardrails reduce unsupported score inflation, but they do
-not claim to prove the semantic truth of every LLM-written phrase. `RoadmapBuilder` may
-choose which supplied score evidence to emphasize and which facts to ask the distributor
-to confirm, but deterministic code writes the summary, each action and the chronological
-calendar and rejects structurally ungrounded evidence references.
-Buckets are then assigned deterministically: **Submit First**, **Prioritize Next**,
-**Leverage**, **Hold / Avoid**. These buckets prioritize submission work; the separate
-premiere-sequence label governs whether an accepted screening can follow the selected target
-or remains a mutually exclusive alternative.
+Premiere risk is an explicit penalty rather than a seventh score component: high risk
+subtracts 15 points and medium risk subtracts 7. The system also guards against unsupported
+creative evidence and distinguishes an exact current deadline from a projected annual
+cycle. The resulting buckets are **Submit First**, **Prioritize Next**, **Leverage**, and
+**Hold / Avoid**.
 
----
+## Evidence, Uncertainty, and Traceability
+
+The system distinguishes structured facts, descriptive enrichment, company history, model
+interpretation, and unresolved rules. Confidence labels stay attached to deadlines and
+eligibility checks. A recommendation that still depends on a premiere rule is presented as
+provisional rather than eligible.
+
+`POST /api/execute` returns a `steps` array with the ordered module invocations. It includes
+planning, retrieval, model attempts, deterministic checks, scoring, and validation. The UI
+keeps this detail available under **Evidence & technical details** without letting raw IDs,
+provider metrics, or provenance strings dominate the strategy.
+
+## Example: From Brief to Replan
+
+Consider a documentary whose brief explicitly says it has had no public screenings:
+
+1. `FilmAnalyzer` records the world-premiere opportunity as available.
+2. Retrieval produces a grounded candidate set from festival facts and company history.
+3. `RiskChecker` evaluates each festival's own rules without changing the known film fact.
+4. The scorer and roadmap select a primary route and explain any rule that still needs
+   verification.
+5. The distributor creates a Campaign Workspace from that evidence.
+6. After a real rejection, the distributor records the outcome through a human control.
+7. The campaign reuses unchanged evidence, excludes the rejected route, and activates the
+   best remaining plan with a visible strategy diff.
+8. A later public-screening scenario shows whether the primary would become ineligible,
+   remain viable under supported rules, or require a specific rule check. Closing the
+   scenario leaves the real campaign untouched.
+
+## Evaluation
+
+The repository includes an offline test suite covering the public API contract, the full
+Quick Strategy pipeline, retrieval fallbacks, premiere-state propagation, scoring and
+roadmap invariants, campaign isolation, event transitions, incremental replanning, and
+non-mutating scenarios. On the final documentation pass it completed with **212 tests and 5
+subtests passing**.
+
+`evals/run_campaign.py` is a second deterministic gate. It checks planner archetypes across
+preservation modes, budget and premiere semantics, rejection replanning, correction
+behavior, repository isolation, corpus coverage, and scenario no-write behavior. The final
+run passed with zero provider calls and zero external writes.
+
+## Scope and Limitations
+
+- Festival dates and rules change. Projected dates and uncertain premiere wording are
+  labelled for verification against the linked official source.
+- A match score supports prioritization; it is not a prediction of selection or an
+  acceptance guarantee.
+- The quality of film analysis depends on the facts included in the brief. Missing or
+  contradictory premiere information is surfaced as a clarification instead of guessed.
+- Campaign Workspace records distributor decisions; it does not submit films, monitor
+  festival websites, or infer real-world outcomes automatically.
+- The festival corpus is intentionally bounded. A relevant festival outside the corpus
+  will not appear until the dataset is updated.
+
+## Data and Integrations
+
+The repository contains **355 festivals** in `data/festivals.json` and aggregated company
+history for **171 festivals** in `data/company.json`. The import process strips contact
+details and other unnecessary private fields, replaces catalogue titles with stable
+pseudonyms by default, and preserves the relationship structure used by the agent.
+Descriptive enrichment is kept separate from structured festival facts and carries its own
+confidence level.
+
+- **LLMod.ai** provides the OpenAI-compatible chat and optional embedding interface.
+- **Pinecone** provides vector retrieval when configured.
+- **Supabase** provides structured festival and company-memory reads, best-effort run logs,
+  and persistent Campaign Workspace storage.
+- **Local JSON and lexical retrieval** provide labelled Quick Strategy fallbacks when remote
+  retrieval is unavailable.
+- **Vercel** hosts the production FastAPI application and static interfaces.
 
 ## API
 
-| Endpoint | Description |
+### Required Course API
+
+| Endpoint | Purpose |
 | --- | --- |
-| `GET /` | GUI (no authentication) |
-| `GET /api/team_info` | Student details |
-| `GET /api/agent_info` | Description, purpose, prompt template, prompt examples with full responses and steps |
-| `GET /api/model_architecture` | Architecture diagram (`image/png`) |
-| `POST /api/execute` | `{"prompt": "..."}` → exactly `{"status", "error", "response", "steps"}` |
-| `GET /api/health` | Which integrations are configured (diagnostics) |
-| `GET /campaign` | Compact Campaign Workspace page; Quick Strategy at `/` remains public |
-| `POST /api/workspace/bootstrap` | Resolve or create a private capability-scoped demo workspace |
-| `GET/POST /api/workspace/campaigns` | List campaigns or create one from structured/free-text film evidence |
-| `GET /api/workspace/campaigns/{id}` | Authoritative aggregate, active plan, latest diff, evidence and trace summary |
-| `POST /api/workspace/campaigns/{id}/commands` | Apply one typed human command and synchronously replan |
-| `POST /api/workspace/campaigns/{id}/replan` | Retry the current stale version without a state event |
-| `POST /api/workspace/campaigns/{id}/simulate` | Compare one to three commands on a discarded in-memory clone |
-| `GET /api/workspace/campaigns/{id}/strategies/{no}` | Inspect an immutable historical strategy |
+| `GET /api/team_info` | Returns the submitted team metadata. |
+| `GET /api/agent_info` | Returns the agent description, prompt template, and examples. |
+| `GET /api/model_architecture` | Returns the architecture diagram as `image/png`. |
+| `POST /api/execute` | Runs Quick Strategy for `{"prompt": "..."}`. |
 
-`steps` is the ordered list of module invocations, each `{module, prompt, response}`. It
-covers every actual chat or embedding model attempt (including retries, errors and
-rejected-parameter fallbacks)
-plus planning, retrieval, deterministic validation and scoring, so the whole execution is
-auditable. A run that fails part-way still returns the trace collected up to that point.
+`POST /api/execute` always uses the exact top-level response contract:
 
-The response always carries exactly those four fields, including malformed-input and
-partially traced runtime errors. The bundled GUI derives its candidate table and attempt
-counts from `steps`; it does not require a private extension to the contract. The public
-endpoint rejects prompts over 12,000 characters before any paid service is called.
+```json
+{
+  "status": "...",
+  "error": null,
+  "response": "...",
+  "steps": []
+}
+```
 
----
+The root interface is `GET /`. `GET /api/health` reports configuration diagnostics without
+changing the course contract.
 
-## Local development
+### Campaign API
+
+| Endpoint | Purpose |
+| --- | --- |
+| `GET /campaign` | Opens Campaign Workspace. |
+| `POST /api/workspace/bootstrap` | Resolves or creates a private capability-scoped workspace. |
+| `GET/POST /api/workspace/campaigns` | Lists campaigns or creates a campaign from film evidence. |
+| `GET /api/workspace/campaigns/{campaign_id}` | Returns the current aggregate, active plan, diff, evidence, and trace summary. |
+| `POST /api/workspace/campaigns/{campaign_id}/commands` | Applies one typed human event and replans. |
+| `POST /api/workspace/campaigns/{campaign_id}/replan` | Retries planning for the current state without adding an event. |
+| `POST /api/workspace/campaigns/{campaign_id}/simulate` | Runs one to three hypothetical events on a discarded clone. |
+| `GET /api/workspace/campaigns/{campaign_id}/strategies/{strategy_no}` | Returns one immutable strategy version. |
+
+## Local Development
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt uvicorn pillow
-cp .env.example .env          # then fill in the keys
+cp .env.example .env
 uvicorn api.index:app --reload --port 8000
 ```
 
-Open <http://localhost:8000>.
+Open [http://localhost:8000](http://localhost:8000). Quick Strategy can fall back to the
+local festival and company files for retrieval, but LLM-backed analysis requires valid
+LLMod.ai credentials. Persistent Campaign Workspace use also requires the Supabase values
+documented in `.env.example`.
 
-Without credentials the agent still starts: retrieval falls back to a local TF-IDF search
-over `data/festivals.json` and company memory falls back to `data/company.json`. Only the
-chat calls genuinely require a key. Every fallback is labelled in the trace; vector and
-festival-fact fallbacks are also repeated in the final grounding rather than being presented
-as Pinecone or Supabase evidence.
+## Tests
 
-`/api/health` reports exactly which integrations are live.
-
-Campaign Workspace persistence deliberately fails closed unless both `SUPABASE_URL` and
-the server-only `SUPABASE_SERVICE_ROLE_KEY` are configured. New deployments must apply the
-additive `scripts/migrations/20260825_campaign_workspace_phase_1a.sql` migration to the
-intended Supabase project. It creates no browser policies. Set `CAMPAIGN_ALLOWED_ORIGINS`
-to an exact comma-separated list such as
-`http://localhost:8000,https://your-app.vercel.app`; wildcard, missing and `null` origins
-are rejected for JSON mutations. The raw 256-bit workspace capability is sent only in a
-`Secure`, `HttpOnly`, `SameSite=Lax` cookie; only its SHA-256 digest is stored.
-
-### Offline test (spends nothing)
+Both verification paths are offline and spend no LLM budget:
 
 ```bash
 .venv/bin/python -m pytest -q
 .venv/bin/python evals/run_campaign.py
 ```
 
-The suite spends no LLM budget. It covers the end-to-end pipeline and API contract,
-corpus-wide date/premiere invariants, company-memory integrity, hybrid retrieval and entity
-deduplication, explainable scoring guardrails, roadmap uniqueness, per-attempt LLM tracing,
-planner archetypes A–E, budget/premiere semantics, two-capability isolation, zero-provider
-B/C replanning, correction behavior and scenario no-write behavior. The campaign evaluation
-runner is offline and reports Sitges separately as a known corpus-coverage issue.
+## Team
 
----
+**The Distributor** — group `1_2`
 
-## Data
-
-The structured festival and company-history facts come from the distribution company's own
-working spreadsheet. Descriptive enrichment is kept separate, confidence-labelled and is
-not treated as an official rules source.
-
-| File | Rows | Origin |
-| --- | ---: | --- |
-| `data/festivals.json` | 355 festivals | `Adam Chart` sheet — tier (A/B+/B/C), category, focus, city/country, festival dates, deadline month + recorded deadline dates, premiere requirements, fees, status, website |
-| `data/company.json` | 171 festivals with history | `BAKARA` sheet — 11,119 screening records (2008–2027, 853 anonymised catalogue titles, awards) aggregated per festival |
-| `data/enrichment/` | 355 entries | Curated **descriptive** text only: programming identity, award patterns, theme tags, practical notes, each labelled `high` / `medium` / `low` confidence |
-
-The enrichment never overwrites a fact from the workbook — it only fills `focus`,
-`award_patterns`, `notes`, `themes` and `notable_past_selections`, which is what the
-vector index needs in order to match a film to a festival's taste. Contact names,
-e-mail addresses, invoice numbers and fees from the workbook are **not** imported.
-
-The runtime treats the workbook as time-versioned evidence, not as a live rules service.
-Recorded dates and raw premiere shorthand retain provenance; annual projections and ambiguous
-rules are surfaced as estimates that must be checked on the festival's official site. One
-known duplicate festival entity in the source is collapsed during retrieval without mutating
-or re-seeding either backing store.
-
-### Rebuilding the data
-
-```bash
-python scripts/import_excel.py "/path/to/workbook.xlsx"   # sheets -> festivals.json + company.json
-python scripts/merge_enrichment.py                        # fold in data/enrichment/part_*.json
-python scripts/seed_pinecone.py                           # embed + upsert the corpus
-python scripts/seed_supabase.py                           # push festivals + company memory
-python scripts/make_architecture.py                       # regenerate assets/architecture.png (needs pillow)
-python scripts/generate_example.py                        # record live /api/agent_info examples
-python scripts/dry_run.py "an environmental documentary"  # retrieval-only check, no LLM cost
-```
-
-Run `scripts/schema.sql` in the Supabase SQL editor before `seed_supabase.py`.
-
-### Anonymisation
-
-`import_excel.py` anonymises the distribution company by default: the company name becomes
-fictional and every catalogue title is replaced by a stable pseudonym, while the festival
-facts and the relationship structure (which festival, how many screenings, which years,
-which awards) are preserved exactly. The title mapping is written to
-`data/anonymisation_map.json`, which is git-ignored. Pass `--real-company` for an internal
-build that keeps the real names.
-
----
-
-## Deployment (Vercel)
-
-1. Push this repository to GitHub.
-2. Import it in Vercel with **Framework Preset: Other**. This preserves the repository's
-   single Python function at `api/index.py`; `vercel.json` serves the campaign page from the
-   emitted static asset and sends the remaining catch-all traffic to the FastAPI app.
-3. Add the environment variables from `.env.example` in **Settings → Environment Variables**.
-   Quick Strategy can use the existing read configuration. Campaign Workspace additionally
-   requires the server-only `SUPABASE_SERVICE_ROLE_KEY` and exact
-   `CAMPAIGN_ALLOWED_ORIGINS`; neither value is exposed to the browser.
-4. With explicit production-mutation authorization, apply the additive campaign migration
-   once to the target Supabase project. Do not reseed festivals or rebuild Pinecone.
-5. Deploy, then verify Quick Strategy and the capability-scoped campaign smoke path:
-
-```bash
-curl https://<your-app>.vercel.app/api/health
-curl -X POST https://<your-app>.vercel.app/api/execute \
-  -H 'Content-Type: application/json' \
-  -d '{"prompt":"Title: Salt and Ash\nFormat: feature documentary\n..."}'
-```
-
-The FastAPI function is configured for 300 seconds and the agent enforces a 260-second
-LLM deadline. Embedding, Pinecone and Supabase calls have separate 20/20/15-second bounds.
-No runtime step writes to the bundled filesystem; Supabase run logging is best-effort,
-bounded and cannot change a successful agent result into an application error.
-
----
-
-## Before submitting
-
-- [x] Fill in `data/team_info.json` (`group_batch_order_number`, real emails).
-- [x] LLMod.ai runtime connectivity — verified through successful production agent runs.
-- [x] Confirm the current Pinecone and Supabase integrations without re-seeding them.
-- [x] Run `scripts/generate_example.py` so `/api/agent_info` returns real examples.
-- [x] Deploy the submission commit and verify Production health, `/`, and `/campaign`.
+- Reuven Shpitz — `rubndpyz@gmail.com`
+- Yosef Goldschmidt — `GoldenJo66@Gmail.com`
