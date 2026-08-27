@@ -46,6 +46,16 @@
   .response ul { margin: 6px 0; padding-left: 20px; }
   .response li { margin: 3px 0; }
   .response p { margin: 8px 0; }
+  details.film-brief { margin: 0 0 12px; }
+  details.film-brief > summary, details.technical > summary {
+    cursor: pointer; color: var(--accent-2); font-weight: 600;
+  }
+  details.film-brief .q { margin: 10px 0 0; }
+  details.technical > .status { margin: 8px 0 14px; }
+  .technical-notes { margin-bottom: 16px; }
+  .technical-notes h3 { margin-top: 12px; }
+  .technical-heading { margin: 18px 0 10px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+  .technical-metrics { margin: 12px 0 4px; }
   details.step { border: 1px solid var(--line); border-radius: 8px; margin-bottom: 8px; background: var(--panel-2); }
   details.step > summary {
     cursor: pointer; padding: 10px 14px; font-size: 14px; display: flex; gap: 10px; align-items: center;
@@ -62,12 +72,13 @@
   }
   .chips { display: flex; gap: 8px; flex-wrap: wrap; }
   .chip { background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; font-size: 12px; color: var(--muted); }
-  .table-wrap { overflow-x: auto; margin-top: 16px; }
+  .table-wrap { width: 100%; max-width: 100%; overflow-x: auto; margin-top: 16px; }
   table { width: 100%; border-collapse: collapse; font-size: 12px; }
   th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
   th { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .35px; }
   td.score { color: var(--accent); font-weight: 700; }
   .hidden { display: none; }
+  .turn, .card { min-width: 0; }
   .turn { border-left: 2px solid var(--line); padding-left: 14px; margin-bottom: 26px; }
   .turn .q { color: var(--muted); font-size: 13px; margin-bottom: 10px; white-space: pre-wrap; }
   footer { color: var(--muted); font-size: 12px; text-align: center; padding: 8px 0 40px; }
@@ -121,12 +132,68 @@ const $ = (id) => document.getElementById(id);
 const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+const PRESENTATION_LABELS = Object.freeze({
+  submit_first: 'Submit First',
+  prioritize_next: 'Prioritize Next',
+  leverage: 'Leverage',
+  hold_avoid: 'Hold / Avoid',
+  must_follow_target: 'After selected premiere',
+  alternative_only: 'Alternative premiere only',
+  can_follow_target: 'Can follow selected premiere',
+  target: 'Selected premiere target',
+  flexible: 'Flexible',
+  not_applicable: 'Not applicable',
+  not_submitted: 'Not Submitted',
+});
+
+function present(value) {
+  if (value === null || value === undefined || value === '') return '—';
+  return PRESENTATION_LABELS[value]
+    || String(value).replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function humanizeStrategyMarkdown(md) {
+  let text = String(md || '').replace(/identity_confidence\s*:/gi, 'Confidence:');
+  Object.entries(PRESENTATION_LABELS).forEach(([value, label]) => {
+    text = text.replace(new RegExp(`\\b${value}\\b`, 'g'), label);
+  });
+  return text;
+}
+
+function splitStrategyMarkdown(md) {
+  const human = [];
+  const technical = [];
+  let festivalHeading = '';
+  let technicalHeading = '';
+  String(md || '').split('\n').forEach((raw) => {
+    const line = raw.trim();
+    if (line.startsWith('### ')) festivalHeading = line;
+    if (/^- \*\*(Grounding|Score breakdown|Score calculation):\*\*/.test(line)) {
+      if (festivalHeading && festivalHeading !== technicalHeading) {
+        technical.push(festivalHeading);
+        technicalHeading = festivalHeading;
+      }
+      technical.push(line);
+      return;
+    }
+    human.push(raw);
+  });
+  return {
+    human: humanizeStrategyMarkdown(human.join('\n')),
+    technical: technical.join('\n\n'),
+  };
+}
+
 function renderMarkdown(md) {
   const lines = String(md || '').split('\n');
   let html = '', inList = false;
-  const inline = (t) => escapeHtml(t)
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>');
+  const inline = (t) => {
+    const formatted = escapeHtml(t)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>');
+    return formatted.replace(/https?:\/\/[^\s<]+/g, (url) =>
+      `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
+  };
   for (const raw of lines) {
     const line = raw.trim();
     if (!line) { if (inList) { html += '</ul>'; inList = false; } continue; }
@@ -176,7 +243,7 @@ function metaHtml(meta) {
     `Embedding attempts: ${meta.embedding_attempts}`,
     meta.replanner_decision ? `Replanner: ${meta.replanner_decision}` : null,
   ].filter(Boolean);
-  return `<div class="chips">${chips.map((c) => `<span class="chip">${escapeHtml(c)}</span>`).join('')}</div>`;
+  return `<div class="chips technical-metrics">${chips.map((c) => `<span class="chip">${escapeHtml(c)}</span>`).join('')}</div>`;
 }
 
 function traceMeta(steps) {
@@ -214,7 +281,7 @@ function rankingHtml(meta) {
   const rows = meta && meta.ranked_festivals;
   if (!rows || !rows.length) return '';
   return `<div class="table-wrap"><table>
-    <thead><tr><th>Festival</th><th>Score</th><th>Bucket</th><th>Next deadline</th><th>Confidence</th><th>Uncertainty</th></tr></thead>
+    <thead><tr><th>Festival</th><th>Score</th><th>Recommendation</th><th>Deadline</th><th>Confidence</th></tr></thead>
     <tbody>${rows.map((row) => {
       const deadline = row.deadline || {};
       const deadlineLabel = deadline.next_deadline
@@ -223,10 +290,9 @@ function rankingHtml(meta) {
       return `<tr>
         <td>${escapeHtml(row.name || row.id)}</td>
         <td class="score">${escapeHtml(row.score ?? '—')}</td>
-        <td>${escapeHtml(row.bucket || '—')}</td>
+        <td>${escapeHtml(present(row.bucket))}</td>
         <td>${escapeHtml(deadlineLabel)}</td>
-        <td>${escapeHtml(deadline.confidence || 'low')}</td>
-        <td>${escapeHtml((row.uncertainties || []).length)}</td>
+        <td>${escapeHtml(present(deadline.confidence || 'low'))}</td>
       </tr>`;
     }).join('')}</tbody>
   </table></div>`;
@@ -237,19 +303,30 @@ function addTurn(prompt, data) {
   turn.className = 'turn';
   const ok = data.status === 'ok';
   const meta = traceMeta(data.steps);
+  const strategy = splitStrategyMarkdown(data.response);
   turn.innerHTML = `
-    <div class="q">${escapeHtml(prompt)}</div>
+    <details class="film-brief">
+      <summary>Film brief</summary>
+      <div class="q">${escapeHtml(prompt)}</div>
+    </details>
     <div class="card">
       <h2>Agent Response</h2>
       ${ok
-        ? `<div class="response">${renderMarkdown(data.response)}</div>`
+        ? `<div class="response">${renderMarkdown(strategy.human)}</div>`
         : `<p class="status err">${escapeHtml(data.error || 'Unknown error')}</p>`}
-      ${ok ? metaHtml(meta) : ''}
       ${ok ? rankingHtml(meta) : ''}
     </div>
     <div class="card">
-      <h2>Execution Trace (${(data.steps || []).length} steps)</h2>
-      ${stepsHtml(data.steps)}
+      <details class="technical">
+        <summary>Evidence &amp; technical details</summary>
+        <p class="status">Retrieval provenance, detailed score calculations, provider metrics and the full execution trace.</p>
+        ${strategy.technical
+          ? `<div class="response technical-notes">${renderMarkdown(strategy.technical)}</div>`
+          : ''}
+        ${ok ? metaHtml(meta) : ''}
+        <h3 class="technical-heading">Execution Trace (${(data.steps || []).length} steps)</h3>
+        ${stepsHtml(data.steps)}
+      </details>
     </div>`;
   $('output').prepend(turn);
 }
