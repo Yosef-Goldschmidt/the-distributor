@@ -273,6 +273,147 @@ def test_legacy_adapter_builds_complete_typed_boundary_and_rejects_id_drift() ->
         LegacyEvidenceAdapter().adapt(bad, as_of_date=AS_OF, observed_at=OBSERVED)
 
 
+@pytest.mark.parametrize(
+    ("profile_updates", "expected_world", "expected_international"),
+    [
+        (
+            {
+                "premiere_status": "world_premiere_available",
+                "premiere_history": [],
+            },
+            PremiereAvailability.AVAILABLE,
+            PremiereAvailability.AVAILABLE,
+        ),
+        (
+            {
+                "premiere_status": "international_premiere_available",
+                "premiere_history": [
+                    {
+                        "festival": "User-reported public screening",
+                        "country": "Israel",
+                        "date": "2026-01-10",
+                        "home_country": True,
+                    }
+                ],
+                "_film_history_evidence": {
+                    "single_home_country_screening": True
+                },
+            },
+            PremiereAvailability.CONSUMED,
+            PremiereAvailability.AVAILABLE,
+        ),
+        (
+            {
+                "premiere_status": "already_premiered",
+                "premiere_history": [
+                    {
+                        "festival": "Public online availability",
+                        "country": None,
+                        "date": None,
+                        "event_kind": "online_availability",
+                    }
+                ],
+            },
+            PremiereAvailability.CONSUMED,
+            PremiereAvailability.UNKNOWN,
+        ),
+        (
+            {"premiere_status": "unknown", "premiere_history": []},
+            PremiereAvailability.UNKNOWN,
+            PremiereAvailability.UNKNOWN,
+        ),
+        (
+            {
+                "premiere_status": "unknown",
+                "premiere_history": [],
+                "_validation": {
+                    "valid": False,
+                    "adjustments": [],
+                    "contradictions": [{"field": "premiere_status"}],
+                },
+            },
+            PremiereAvailability.UNKNOWN,
+            PremiereAvailability.UNKNOWN,
+        ),
+    ],
+)
+def test_adapter_preserves_film_history_state_separately_from_festival_rules(
+    profile_updates, expected_world, expected_international
+) -> None:
+    bundle = _raw_bundle()
+    profile = {**bundle.profile, **profile_updates}
+    evidence = LegacyEvidenceAdapter().adapt(
+        LegacyEvidenceBundle(
+            profile=profile,
+            retrieval_candidates=bundle.retrieval_candidates,
+            creative_scores=bundle.creative_scores,
+            risks=bundle.risks,
+            ranked_candidates=bundle.ranked_candidates,
+            company_memory=bundle.company_memory,
+        ),
+        as_of_date=AS_OF,
+        observed_at=OBSERVED,
+    )
+    snapshot = snapshot_from_evidence(
+        workspace_id="workspace-history",
+        campaign_id="campaign-history",
+        evidence=evidence,
+    )
+    scopes = {
+        (item.scope.value, item.territory): item.availability
+        for item in snapshot.premiere_ledger.scopes
+    }
+
+    assert scopes[("world", None)] == expected_world
+    assert scopes[("international", None)] == expected_international
+
+
+def test_online_availability_remains_a_verification_gate_after_campaign_risk_refresh() -> None:
+    bundle = _raw_bundle()
+    evidence = LegacyEvidenceAdapter().adapt(
+        LegacyEvidenceBundle(
+            profile={
+                **bundle.profile,
+                "premiere_status": "already_premiered",
+                "premiere_history": [
+                    {
+                        "festival": "Public online availability",
+                        "country": None,
+                        "date": None,
+                        "event_kind": "online_availability",
+                    }
+                ],
+            },
+            retrieval_candidates=bundle.retrieval_candidates,
+            creative_scores=bundle.creative_scores,
+            risks=bundle.risks,
+            ranked_candidates=bundle.ranked_candidates,
+            company_memory=bundle.company_memory,
+        ),
+        as_of_date=AS_OF,
+        observed_at=OBSERVED,
+    )
+    snapshot = snapshot_from_evidence(
+        workspace_id="workspace-online",
+        campaign_id="campaign-online",
+        evidence=evidence,
+    )
+    refreshed = LegacyEvidenceAdapter().refresh_risk(
+        snapshot.candidates,
+        snapshot.profile,
+        snapshot.premiere_ledger,
+        snapshot.screenings,
+        as_of_date=AS_OF,
+    )
+    hot_docs = next(item for item in refreshed if item.festival_id == "hot-docs")
+
+    assert hot_docs.risk.eligible is True
+    assert hot_docs.risk.premiere_risk == "medium"
+    assert any(
+        item.fact_key == "premiere.rule" for item in hot_docs.risk.uncertainties
+    )
+
+
 def test_initial_orchestration_persists_only_typed_planning_input() -> None:
     repository, _orchestrator, initial = _repository_and_orchestrator()
     assert isinstance(initial.planning_input, PlanningInput)
@@ -584,6 +725,106 @@ def test_scenario_equals_real_reducer_planner_result_and_performs_no_write() -> 
     )
     assert real.plan == scenario.hypothetical_plan
     assert real.planning_input == scenario.planning_input
+
+
+def test_explicit_unscreened_fact_survives_rejection_and_non_mutating_screening_scenario() -> None:
+    repository, orchestrator, initial = _repository_and_orchestrator()
+    initial_world = next(
+        item
+        for item in initial.aggregate.snapshot.premiere_ledger.scopes
+        if item.scope.value == "world"
+    )
+    assert initial_world.availability == PremiereAvailability.AVAILABLE
+
+    orchestrator.apply_command_and_replan(
+        "workspace-phase2",
+        "campaign-phase2",
+        _command(
+            "mark_submitted",
+            {"festival_id": "hot-docs", "source_refs": ["human:submission"]},
+            version=0,
+            key="history-submit-hot-docs",
+        ),
+        as_of_date=AS_OF,
+    )
+    rejected = orchestrator.apply_command_and_replan(
+        "workspace-phase2",
+        "campaign-phase2",
+        _command(
+            "record_rejection",
+            {"festival_id": "hot-docs", "source_refs": ["human:rejection"]},
+            version=1,
+            key="history-reject-hot-docs",
+        ),
+        as_of_date=AS_OF,
+    )
+    rejected_world = next(
+        item
+        for item in rejected.aggregate.snapshot.premiere_ledger.scopes
+        if item.scope.value == "world"
+    )
+    assert rejected_world.availability == PremiereAvailability.AVAILABLE
+    assert rejected.aggregate.snapshot.profile.premiere_assertions
+
+    schedule = _command(
+        "schedule_screening",
+        {
+            "screening_id": "scenario-idfa-screening",
+            "festival_id": "idfa",
+            "country": "Netherlands",
+            "region": "Europe",
+            "scheduled_at": "2026-08-25T19:00:00Z",
+            "access": "public",
+            "source_refs": ["human:scenario"],
+        },
+        version=2,
+        key="history-scenario-schedule",
+    )
+    confirm = _command(
+        "confirm_screening",
+        {
+            "screening_id": "scenario-idfa-screening",
+            "occurred_at": "2026-08-25T19:00:00Z",
+            "access": "public",
+            "country": "Netherlands",
+            "region": "Europe",
+            "source_refs": ["human:scenario-proof"],
+        },
+        version=3,
+        key="history-scenario-confirm",
+    )
+    before = repository.load_campaign("workspace-phase2", "campaign-phase2")
+    scenario = CampaignScenarioEngine(orchestrator).simulate(
+        before.snapshot,
+        (schedule, confirm),
+        prior_input=rejected.planning_input,
+        prior_plan=rejected.plan,
+        base_strategy_ref=rejected.strategy_ref,
+        as_of_date=AS_OF,
+        occurred_at=SCREENED,
+        base_events=before.events,
+    )
+    hypothetical_world = next(
+        item
+        for item in scenario.hypothetical_snapshot.premiere_ledger.scopes
+        if item.scope.value == "world"
+    )
+
+    assert hypothetical_world.availability == PremiereAvailability.CONSUMED
+    assert scenario.hypothetical_plan is not None
+    assert scenario.planning_input is not None
+    assert scenario.hypothetical_plan.primary_launch.festival_id == "idfa"
+    hypothetical_primary = next(
+        item
+        for item in scenario.planning_input.candidates
+        if item.festival_id == "idfa"
+    )
+    assert hypothetical_primary.risk.premiere_constraint.scope.value == "none"
+    assert scenario.hypothetical_snapshot.profile.premiere_assertions == (
+        before.snapshot.profile.premiere_assertions
+    )
+    assert repository.load_campaign("workspace-phase2", "campaign-phase2") == before
+    assert scenario.mutated_campaign is False
 
 
 def test_scenario_bounds_and_rendering_expose_no_new_llm_signal() -> None:

@@ -45,6 +45,17 @@ _UNSCREENED_PATTERNS = (
     re.compile(r"\bunscreened\b", re.I),
 )
 
+_DOMESTIC_ONLY_PATTERNS = (
+    re.compile(
+        r"\bonly\s+prior\s+public\s+(?:screening|exhibition).{0,40}\bhome\s+country\b",
+        re.I,
+    ),
+    re.compile(
+        r"\bno\s+prior\s+international\s+public\s+(?:screening|exhibition)\b",
+        re.I,
+    ),
+)
+
 _COUNTRY_ALIASES = {
     "u s": "united states",
     "u s a": "united states",
@@ -97,6 +108,20 @@ def _assertion_evidence(profile: CampaignProfile) -> tuple[tuple[datetime, tuple
         if (
             fact.status in {FactStatus.CONFIRMED, FactStatus.ASSERTED}
             and _is_unscreened_assertion(fact.value)
+        ):
+            assertions.append((fact.observed_at, fact.source_refs))
+    return tuple(sorted(assertions, key=lambda item: item[0]))
+
+
+def _domestic_only_assertion_evidence(
+    profile: CampaignProfile,
+) -> tuple[tuple[datetime, tuple[str, ...]], ...]:
+    assertions: list[tuple[datetime, tuple[str, ...]]] = []
+    for fact in profile.premiere_assertions:
+        if (
+            fact.status in {FactStatus.CONFIRMED, FactStatus.ASSERTED}
+            and fact.value
+            and any(pattern.search(fact.value) for pattern in _DOMESTIC_ONLY_PATTERNS)
         ):
             assertions.append((fact.observed_at, fact.source_refs))
     return tuple(sorted(assertions, key=lambda item: item[0]))
@@ -159,7 +184,6 @@ def _confirmed_public(screening: ScreeningSnapshot) -> bool:
     return bool(
         screening.state == ScreeningState.OCCURRED
         and screening.access == ScreeningAccess.PUBLIC
-        and screening.occurred_at is not None
         and screening.source_refs
     )
 
@@ -169,9 +193,7 @@ def _unresolved_occurrence(screening: ScreeningSnapshot) -> bool:
         return False
     if screening.access == ScreeningAccess.UNKNOWN:
         return True
-    return screening.access == ScreeningAccess.PUBLIC and (
-        screening.occurred_at is None or not screening.source_refs
-    )
+    return screening.access == ScreeningAccess.PUBLIC and not screening.source_refs
 
 
 def _assertion_conflicts(
@@ -180,7 +202,8 @@ def _assertion_conflicts(
 ) -> bool:
     if not _confirmed_public(screening):
         return False
-    assert screening.occurred_at is not None
+    if screening.occurred_at is None:
+        return False
     return any(screening.occurred_at <= observed_at for observed_at, _ in assertions)
 
 
@@ -245,6 +268,7 @@ class PremiereLedger:
             )
         )
         assertions = _assertion_evidence(profile)
+        domestic_only_assertions = _domestic_only_assertion_evidence(profile)
         assertion_refs = _assertion_refs(assertions)
         contradicted_assertion_refs = _contradicted_assertion_refs(profile)
         duplicate_ids, duplicate_refs = _duplicate_contradictions(ordered)
@@ -272,6 +296,7 @@ class PremiereLedger:
                 public,
                 unresolved,
                 assertions,
+                domestic_only_assertions,
                 assertion_refs,
                 contradicted_assertion_refs,
                 duplicate_refs,
@@ -391,6 +416,7 @@ class PremiereLedger:
         public: tuple[ScreeningSnapshot, ...],
         unresolved: tuple[ScreeningSnapshot, ...],
         assertions: tuple[tuple[datetime, tuple[str, ...]], ...],
+        domestic_only_assertions: tuple[tuple[datetime, tuple[str, ...]], ...],
         assertion_refs: tuple[str, ...],
         contradicted_assertion_refs: tuple[str, ...],
         duplicate_refs: tuple[str, ...],
@@ -408,6 +434,27 @@ class PremiereLedger:
         )
         known_location = tuple(row for row in public if _normalise(row.country))
         unknown_location = tuple(row for row in public if not _normalise(row.country))
+        marked_home_country = tuple(
+            row
+            for row in public
+            if any("home-country" in ref.casefold() for ref in row.source_refs)
+        )
+        domestic_assertion_refs = _assertion_refs(domestic_only_assertions)
+        if domestic_only_assertions:
+            unmarked_public = tuple(row for row in public if row not in marked_home_country)
+            if unmarked_public:
+                return self._contradiction(
+                    PremiereScope.INTERNATIONAL,
+                    None,
+                    domestic_assertion_refs + _screening_refs(unmarked_public),
+                    "domestic_only_assertion_conflicts_with_public_occurrence",
+                )
+            return PremiereScopeState(
+                scope=PremiereScope.INTERNATIONAL,
+                availability=PremiereAvailability.AVAILABLE,
+                reason_code="single_home_country_public_only",
+                evidence_refs=domestic_assertion_refs + _screening_refs(public),
+            )
         if public and not film_country:
             return PremiereScopeState(
                 scope=PremiereScope.INTERNATIONAL,

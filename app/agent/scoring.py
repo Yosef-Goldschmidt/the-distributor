@@ -220,6 +220,55 @@ def apply_rating_guardrails(
                     f"{dimension} capped because youth-audience evidence was not established"
                 )
 
+    semantic_evidence = (profile or {}).get("_semantic_evidence", {})
+    semantic_guardrails = (
+        (
+            "women_authorship",
+            re.compile(
+                r"\b(?:films?\s+by\s+women|women|woman|female)[- ]?(?:directed|authored|led|filmmakers?|directors?|authorship)\b",
+                re.I,
+            ),
+            "women's authorship",
+        ),
+        (
+            "indigenous_authorship",
+            re.compile(
+                r"\b(?:films?\s+by\s+indigenous|indigenous)[- ]?(?:directed|authored|led|filmmakers?|directors?|authorship)\b",
+                re.I,
+            ),
+            "Indigenous authorship",
+        ),
+    )
+    semantic_meta: dict[str, dict[str, bool]] = {}
+    for attribute, pattern, label in semantic_guardrails:
+        established = bool(semantic_evidence.get(attribute, {}).get("established"))
+        specialist = bool(pattern.search(identity_text))
+        unsupported_dimensions = [
+            dimension
+            for dimension in LLM_DIMENSIONS
+            if pattern.search(grounded.get(dimension, ""))
+        ]
+        applied = bool(not established and (specialist or unsupported_dimensions))
+        if applied:
+            affected = LLM_DIMENSIONS if specialist else unsupported_dimensions
+            for dimension in affected:
+                if specialist:
+                    guarded[dimension] = min(guarded[dimension], 2.0)
+                else:
+                    guarded[dimension] = 0.0
+                grounded[dimension] = (
+                    f"The supplied film information does not establish {label}; "
+                    "that attribute was excluded from this fit assessment."
+                )
+                adjustments.append(
+                    f"{dimension} guarded because {attribute} was not established"
+                )
+        semantic_meta[attribute] = {
+            "established": established,
+            "specialist": specialist,
+            "cap_applied": applied,
+        }
+
     relation_rating, relation_evidence, relation_facts = relationship
     guarded["company_relationship"] = relation_rating
     grounded["company_relationship"] = relation_evidence
@@ -231,6 +280,7 @@ def apply_rating_guardrails(
             "youth_audience_established": youth_audience_established,
             "cap_applied": youth_cap_applied,
         },
+        "semantic_guardrails": semantic_meta,
     }
 
 

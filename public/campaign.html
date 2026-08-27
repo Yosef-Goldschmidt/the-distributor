@@ -342,9 +342,19 @@ function renderCampaign(data) {
   primaryStrong.textContent = view.primary ? view.primary.festival_name : "No ready route";
   const primaryMeta = document.createElement("span");
   primaryMeta.className = "muted";
-  primaryMeta.textContent = view.primary ? `Score ${view.primary.score} · ${present(view.primary.decision_grade)}` : "Planning is stale or failed.";
+  const primaryNeedsVerification = view.primary && (view.verification_gates || []).some((gate) =>
+    gate.affected_decision === `primary_launch:${view.primary.festival_id}`
+    || gate.affected_decision === "budget:primary_launch"
+  );
+  primaryMeta.textContent = view.primary
+    ? `Score ${view.primary.score} · ${primaryNeedsVerification ? "Best provisional route — eligibility verification required" : "Active primary"}`
+    : "Planning is stale or failed.";
   byId("primary").append(primaryStrong, primaryMeta);
-  text("why", data.active_plan ? "Highest-ranked eligible launch route in the current grounded plan. Confirm the important premiere requirements below before committing." : "No selected plan is currently active.");
+  text("why", data.active_plan
+    ? primaryNeedsVerification
+      ? "Best available launch route in the current grounded plan, but eligibility is not yet confirmed. Resolve the verification items below before committing."
+      : "Highest-ranked launch route in the current grounded plan. Review the important premiere requirements below before committing."
+    : "No selected plan is currently active.");
 
   byId("alternatives").replaceChildren();
   (view.alternatives || []).forEach((item) => {
@@ -353,7 +363,7 @@ function renderCampaign(data) {
     const small = document.createElement("div"); small.className = "muted"; small.textContent = `Score ${item.score} · ${present(item.decision_grade)} · next route if the primary is unavailable`;
     card.append(strong, small); byId("alternatives").append(card);
   });
-  if (!(view.alternatives || []).length) text("alternatives", "No grounded alternatives.");
+  if (!(view.alternatives || []).length) text("alternatives", "No alternative is currently on the grounded planning frontier. If the primary becomes unavailable, the remaining routes will be recomputed from current state.");
 
   const option = data.active_plan && data.active_plan.option_preservation;
   text("preservation", option ? `${present(option.mode)} policy · ${pct(option.known_preserved_pct)} known preserved, with ${pct(option.possible_additional_pct)} more possible after verification.` : "Not available while strategy is stale.");
@@ -361,8 +371,10 @@ function renderCampaign(data) {
   text("destroyed", option ? `Confirmed lost options: ${option.destroyed_ids.map(routeName).join(", ") || "none"}. Needs verification: ${option.verify_ids.map(routeName).join(", ") || "none"}.` : "");
   const worldPremiere = (data.snapshot.premiere_ledger.scopes || []).find((scope) => scope.scope === "world");
   text("premiere-note", worldPremiere && worldPremiere.availability === "consumed"
-    ? "A confirmed public screening has consumed world-premiere availability."
-    : "No confirmed public screening has consumed world-premiere availability.");
+    ? "Film history: a confirmed public exhibition has consumed world-premiere availability."
+    : worldPremiere && worldPremiere.availability === "available"
+      ? "Film history: the recorded no-public-screening fact confirms world-premiere availability."
+      : "Film history is unresolved; world-premiere availability remains unknown.");
 
   const gates = byId("gates"); gates.replaceChildren();
   const visibleGateTexts = [...(view.verification_gates || [])].sort((left, right) => {
@@ -411,7 +423,7 @@ function renderDiff(diff, reuse) {
     const rejected = current.snapshot.opportunities.filter((item) => item.submission_state === "rejected").map((item) => routeName(item.festival_id));
     const detail = document.createElement("p");
     detail.textContent = rejected.length
-      ? `${rejected.join(", ")} recorded as rejected. The strategy moved to the best remaining eligible route.`
+      ? `${rejected.join(", ")} recorded as rejected. The strategy moved to the best remaining grounded route; any listed verification items still apply.`
       : `Added: ${diff.added_route_ids.map(routeName).join(", ") || "none"}. Removed: ${diff.removed_route_ids.map(routeName).join(", ") || "none"}.`;
     node.append(strong, detail);
   }
@@ -505,7 +517,41 @@ function scenarioChangeText(kind, result) {
   const premiereChange = worldPremiere && worldPremiere.availability === "consumed"
     ? "The hypothetical public screening consumes world-premiere availability."
     : "Premiere-sensitive routes would be re-evaluated.";
-  return `${routeChange} ${premiereChange}`;
+  if (changed) {
+    const previousId = diff.primary_before;
+    const previousCandidate = (result.hypothetical_snapshot.candidates || []).find((item) => item.festival_id === previousId)
+      || (current.snapshot.candidates || []).find((item) => item.festival_id === previousId);
+    const previousRule = previousCandidate && previousCandidate.retrieved && previousCandidate.retrieved.premiere_rule && previousCandidate.retrieved.premiere_rule.value;
+    const diagnostic = (result.hypothetical_plan && result.hypothetical_plan.selection_diagnostics || []).find((item) => item.festival_id === previousId);
+    const becameIneligible = diagnostic && diagnostic.hard_filter && !diagnostic.hard_filter.feasible
+      && (diagnostic.hard_filter.reason_codes || []).some((reason) => String(reason).includes("premiere"));
+    return becameIneligible
+      ? `${routeChange} ${premiereChange} ${routeName(previousId)} becomes ineligible under its recorded premiere rule${previousRule ? ` (“${previousRule}”)` : ""}, so the route changes.`
+      : `${routeChange} ${premiereChange} The route changes after the planner re-evaluates current premiere evidence${previousRule ? ` against “${previousRule}”` : ""}.`;
+  }
+
+  const primaryId = result.hypothetical_plan && result.hypothetical_plan.primary_launch.festival_id;
+  const candidate = (result.hypothetical_snapshot.candidates || []).find((item) => item.festival_id === primaryId)
+    || (current.snapshot.candidates || []).find((item) => item.festival_id === primaryId);
+  const constraint = candidate && candidate.risk && candidate.risk.premiere_constraint;
+  const rule = candidate && candidate.retrieved && candidate.retrieved.premiere_rule && candidate.retrieved.premiere_rule.value;
+  const gates = (result.hypothetical_plan && result.hypothetical_plan.verification_gates) || [];
+  const needsRuleVerification = !constraint
+    || ["unknown", "contradicted", "inferred"].includes(constraint.rule_status)
+    || gates.some((gate) => gate.fact_key === "premiere.rule" && gate.affected_decision === `primary_launch:${primaryId}`);
+  if (needsRuleVerification) {
+    return `${routeChange} ${premiereChange} Eligibility is unresolved: verify ${routeName(primaryId)}'s current premiere rule${rule ? ` (“${rule}”)` : ""} and whether it permits this public screening.`;
+  }
+  if (constraint.scope === "none") {
+    return `${routeChange} ${premiereChange} These facts are compatible because current festival evidence records no premiere requirement${rule ? ` (“${rule}”)` : ""}.`;
+  }
+  const scopeState = (result.hypothetical_snapshot.premiere_ledger.scopes || []).find((scope) =>
+    scope.scope === constraint.scope && (!constraint.territory || scope.territory === constraint.territory)
+  );
+  if (scopeState && scopeState.availability === "available") {
+    return `${routeChange} ${premiereChange} The primary remains viable because its recorded ${present(constraint.scope)} premiere remains available under the current evidence${rule ? ` (“${rule}”)` : ""}.`;
+  }
+  return `${routeChange} ${premiereChange} Eligibility is unresolved: verify how ${routeName(primaryId)}'s recorded ${present(constraint.scope)} premiere rule${rule ? ` (“${rule}”)` : ""} applies to this public screening.`;
 }
 
 async function simulate(kind, button) {

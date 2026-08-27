@@ -240,6 +240,19 @@ class LegacyEvidenceAdapter:
                     status=FactStatus.ASSERTED,
                 )
             )
+        elif status == "international_premiere_available" and bool(
+            (raw.get("_film_history_evidence") or {}).get(
+                "single_home_country_screening"
+            )
+        ):
+            premiere_assertions.append(
+                _fact(
+                    "The only prior public screening occurred in the film's home country",
+                    observed_at=observed_at,
+                    source_ref="legacy:FilmAnalyzer:premiere_status",
+                    status=FactStatus.ASSERTED,
+                )
+            )
         elif "premiere_status" in contradictions:
             premiere_assertions.append(
                 Fact[str](
@@ -311,8 +324,15 @@ class LegacyEvidenceAdapter:
             if not isinstance(row, Mapping):
                 continue
             occurred = _date(row.get("date") or row.get("occurred_at"))
-            if occurred is None:
-                continue
+            source_refs = [f"legacy:FilmAnalyzer:premiere_history:{index}"]
+            if row.get("home_country") is True:
+                source_refs.append(
+                    f"legacy:FilmAnalyzer:premiere_history:{index}:home-country"
+                )
+            if str(row.get("event_kind") or "").casefold() == "online_availability":
+                source_refs.append(
+                    f"legacy:FilmAnalyzer:premiere_history:{index}:online-availability"
+                )
             results.append(
                 ScreeningSnapshot(
                     screening_id=f"legacy-screening-{index}",
@@ -320,10 +340,12 @@ class LegacyEvidenceAdapter:
                     access=ScreeningAccess.PUBLIC,
                     country=_as_text(row.get("country")),
                     region=_as_text(row.get("region")),
-                    occurred_at=datetime.combine(
-                        occurred, time.min, tzinfo=timezone.utc
+                    occurred_at=(
+                        datetime.combine(occurred, time.min, tzinfo=timezone.utc)
+                        if occurred
+                        else None
                     ),
-                    source_refs=(f"legacy:FilmAnalyzer:premiere_history:{index}",),
+                    source_refs=tuple(source_refs),
                 )
             )
         return tuple(results)
@@ -751,9 +773,16 @@ class LegacyEvidenceAdapter:
             VerificationItem(
                 item_id=f"risk-{retrieved.festival_id}-{index}-{canonical_hash(text)[:8]}",
                 fact_key=(
-                    "deadline.current"
-                    if "deadline" in text.casefold() or "submission" in text.casefold()
-                    else "premiere.rule"
+                    "premiere.rule"
+                    if any(
+                        marker in text.casefold()
+                        for marker in ("premiere", "online availability", "streaming")
+                    )
+                    or not any(
+                        marker in text.casefold()
+                        for marker in ("deadline", "submission")
+                    )
+                    else "deadline.current"
                 ),
                 status=FactStatus.UNKNOWN,
                 blocking=not bool(raw.get("eligible", True)),
@@ -851,6 +880,14 @@ class LegacyEvidenceAdapter:
                 {
                     "country": item.country,
                     "region": item.region,
+                    "event_kind": (
+                        "online_availability"
+                        if any(
+                            "online-availability" in ref.casefold()
+                            for ref in item.source_refs
+                        )
+                        else "screening"
+                    ),
                     "occurred_at": (
                         item.occurred_at.isoformat() if item.occurred_at else None
                     ),

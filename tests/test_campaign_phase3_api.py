@@ -528,6 +528,12 @@ def test_campaign_page_targets_the_authoritative_primary_and_names_confirmations
     assert "values.indexOf(value) === index" in html
     assert "Primary remains ${routeName" in html
     assert "The hypothetical public screening consumes world-premiere availability." in html
+    assert "becomes ineligible under its recorded premiere rule" in html
+    assert "eligibility verification required" in html
+    assert "No alternative is currently on the grounded planning frontier." in html
+    assert "Eligibility is unresolved: verify" in html
+    assert "current festival evidence records no premiere requirement" in html
+    assert "${present(view.primary.decision_grade)}" not in html
     assert "Scenario safety check failed: the real campaign changed." in html
     assert 'byId("setup").classList.add("has-active")' in html
     assert 'byId("setup").classList.remove("has-active")' in html

@@ -141,6 +141,18 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
                 return
         missing_info.append(value)
 
+    def clear_premiere_missing() -> None:
+        before = len(missing_info)
+        missing_info[:] = [
+            item
+            for item in missing_info
+            if not re.search(r"\b(?:premiere|screening)\b", str(item), flags=re.I)
+        ]
+        if len(missing_info) != before:
+            adjustments.append(
+                "premiere clarification removed because the request supplied explicit film-history evidence"
+            )
+
     runtime_evidence = input_evidence["runtime"]
     if runtime_evidence["contradictory"]:
         profile["runtime_minutes"] = None
@@ -180,6 +192,19 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         adjustments.append("conflicting completion/release statements surfaced")
 
     premiere_evidence = input_evidence["premiere"]
+    film_country_text = str(profile.get("country") or "").strip()
+    if (
+        premiere_evidence["positive_screening"]
+        and not premiere_evidence["home_country_screening"]
+        and film_country_text
+        and re.search(
+            rf"\b(?:public(?:ly)?\s+)?screen(?:ed|ing)\b.{{0,50}}\bin\s+{re.escape(film_country_text)}\b"
+            rf"|\bin\s+{re.escape(film_country_text)}\b.{{0,50}}\bpublic\s+screen(?:ed|ing)\b",
+            user_prompt,
+            flags=re.I,
+        )
+    ):
+        premiere_evidence["home_country_screening"] = True
     if premiere_evidence["contradictory"]:
         profile["premiere_status"] = "unknown"
         add_missing(
@@ -214,12 +239,75 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
             adjustments.append(
                 "explicit international-premiere evidence established international_premiere_available"
             )
+        clear_premiere_missing()
     elif premiere_evidence["positive_screening"]:
-        if profile.get("premiere_status") != "already_premiered":
-            profile["premiere_status"] = "already_premiered"
+        derived_status = (
+            "international_premiere_available"
+            if premiere_evidence["home_country_screening"]
+            and premiere_evidence["single_public_screening"]
+            else "already_premiered"
+        )
+        if profile.get("premiere_status") != derived_status:
+            profile["premiere_status"] = derived_status
             adjustments.append(
-                "explicit screening/premiere evidence forced premiere_status to already_premiered"
+                f"explicit screening/premiere evidence forced premiere_status to {derived_status}"
             )
+        history_row = {
+            "festival": (
+                "Public online availability"
+                if premiere_evidence["public_online_availability"]
+                else "User-reported public screening"
+            ),
+            "country": (
+                profile.get("country")
+                if premiere_evidence["home_country_screening"]
+                else None
+            ),
+            "date": premiere_evidence["screening_date"],
+            "access": "public",
+            "event_kind": (
+                "online_availability"
+                if premiere_evidence["public_online_availability"]
+                else "screening"
+            ),
+            "source": "explicit_user_brief",
+            "home_country": premiere_evidence["home_country_screening"],
+        }
+        if (
+            premiere_evidence["home_country_screening"]
+            and premiere_evidence["single_public_screening"]
+        ):
+            existing = profile["premiere_history"][0] if profile["premiere_history"] else {}
+            profile["premiere_history"] = [
+                {
+                    **existing,
+                    **history_row,
+                    "date": premiere_evidence["screening_date"] or existing.get("date"),
+                }
+            ]
+            adjustments.append(
+                "explicit single home-country screening normalized in premiere_history"
+            )
+        elif premiere_evidence["public_online_availability"]:
+            if not any(
+                str(row.get("event_kind") or "").casefold()
+                == "online_availability"
+                for row in profile["premiere_history"]
+            ):
+                profile["premiere_history"].append(history_row)
+                adjustments.append(
+                    "explicit public online availability added to premiere_history"
+                )
+        elif not profile["premiere_history"]:
+            profile["premiere_history"] = [history_row]
+            adjustments.append(
+                "explicit public exhibition evidence added to premiere_history"
+            )
+        if (
+            premiere_evidence["public_online_availability"]
+            or premiere_evidence["home_country_screening"]
+        ):
+            clear_premiere_missing()
     elif premiere_evidence["explicitly_unscreened"]:
         if profile.get("premiere_status") != "world_premiere_available":
             profile["premiere_status"] = "world_premiere_available"
@@ -231,8 +319,20 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
             adjustments.append(
                 "premiere_history removed because the request explicitly says the film is unscreened"
             )
+        clear_premiere_missing()
+
+    profile["_film_history_evidence"] = {
+        "explicit_no_public_screenings": premiere_evidence["explicitly_unscreened"],
+        "single_home_country_screening": bool(
+            premiere_evidence["positive_screening"]
+            and premiere_evidence["home_country_screening"]
+            and premiere_evidence["single_public_screening"]
+        ),
+        "public_online_availability": premiere_evidence["public_online_availability"],
+    }
 
     profile["_audience_evidence"] = input_evidence["youth_audience"]
+    profile["_semantic_evidence"] = input_evidence["semantic_attributes"]
     if (
         not input_evidence["youth_audience"]["established"]
         and re.search(
@@ -245,6 +345,31 @@ def film_analyzer(llm: LLMClient, trace: Trace, user_prompt: str) -> dict[str, A
         adjustments.append(
             "unsupported youth target-audience inference removed; protagonist age and family theme are insufficient"
         )
+    unsupported_authorship = {
+        "women_authorship": re.compile(
+            r"\b(?:women|woman|female)[- ]?(?:directed|authored|led|filmmakers?|directors?|authorship)\b",
+            re.I,
+        ),
+        "indigenous_authorship": re.compile(
+            r"\bindigenous[- ]?(?:directed|authored|led|filmmakers?|directors?|authorship)\b",
+            re.I,
+        ),
+    }
+    for attribute, pattern in unsupported_authorship.items():
+        if input_evidence["semantic_attributes"][attribute]["established"]:
+            continue
+        for field in ("themes", "festival_angles"):
+            kept = [item for item in profile[field] if not pattern.search(str(item))]
+            if len(kept) != len(profile[field]):
+                profile[field] = kept
+                adjustments.append(
+                    f"unsupported {attribute} inference removed from {field}"
+                )
+        if pattern.search(str(profile.get("director_profile") or "")):
+            profile["director_profile"] = "Not established from the supplied information."
+            adjustments.append(
+                f"unsupported {attribute} inference removed from director_profile"
+            )
     profile["missing_info"] = missing_info
     profile["_validation"] = {"valid": not adjustments, "adjustments": adjustments}
     if contradictions:

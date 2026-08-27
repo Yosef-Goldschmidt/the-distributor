@@ -58,6 +58,20 @@ YOUTH_AUDIENCE_PATTERNS = [
     r"\b(?:for\s+)?ages?\s+\d{1,2}(?:\s*(?:-|–|—|to)\s*\d{1,2})\b",
 ]
 
+WOMEN_AUTHORSHIP_PATTERNS = [
+    r"\b(?:directed|written|created|made|produced)\s+by\s+(?:a\s+)?(?:woman|women|female\s+filmmakers?)\b",
+    r"\b(?:woman|women|female)\s+(?:director|directors|filmmaker|filmmakers|writer|writers|producer|producers)\b",
+    r"\b(?:women|woman|female)[- ](?:directed|authored|led)\b",
+    r"\b(?:the\s+)?(?:director|filmmaker|writer|producer)\s+(?:is|identifies\s+as)\s+(?:a\s+)?woman\b",
+]
+
+INDIGENOUS_AUTHORSHIP_PATTERNS = [
+    r"\b(?:directed|written|created|made|produced)\s+by\s+(?:an?\s+)?indigenous\b",
+    r"\bindigenous\s+(?:director|directors|filmmaker|filmmakers|writer|writers|producer|producers|authorship)\b",
+    r"\bindigenous[- ](?:directed|authored|led)\b",
+    r"\b(?:the\s+)?(?:director|filmmaker|writer|producer)\s+(?:is|identifies\s+as)\s+indigenous\b",
+]
+
 
 def analyse_critical_input(text: str) -> dict[str, Any]:
     """Extract only evidence needed to stop critical LLM over-inference.
@@ -85,12 +99,20 @@ def analyse_critical_input(text: str) -> dict[str, Any]:
         r"\bpublic\s+(?:festival\s+)?screening\s+(?:at|in|occurred|took\s+place)\b",
         r"\breleased\s+(?:theatrically|online|publicly|on\s+(?:television|tv|streaming))\b",
     ]
+    public_online_patterns = [
+        r"\bunrestricted\s+(?:public\s+)?online\s+availability\b",
+        r"\b(?:publicly|freely)\s+available\s+online\b",
+        r"\bavailable\s+online\s+(?:to\s+(?:the\s+)?public|to\s+anyone|without\s+restriction|without\s+restrictions|unrestricted)\b",
+        r"\bavailable\s+to\s+(?:the\s+)?public\s+online\b",
+    ]
     premiere_negative_patterns = [
         r"\bnever\s+(?:publicly\s+)?(?:screened|premiered|shown|released)\b",
         r"\b(?:has|have|had)\s+never\s+been\s+(?:publicly\s+)?(?:screened|premiered|shown|released)\b",
         r"\b(?:has|have|had)\s+not\s+(?:been\s+)?(?:screened|premiered|shown|released)\b",
         r"\bnot\s+(?:yet\s+)?(?:been\s+)?(?:screened|premiered|shown|released)\b",
         r"\bno\s+(?:public\s+)?(?:screening|screenings|premiere)\s+(?:yet|to\s+date)\b",
+        r"\b(?:has|have|had)\s+(?:had\s+)?no\s+public\s+(?:screening|screenings|premiere|premieres)\b",
+        r"\bno\s+public\s+(?:screening|screenings)\b(?!\s+(?:information|details?|records?|history)\b)",
         r"\b(?:world[- ]premiere(?:\s+(?:status|rights))?\s+(?:(?:is|remains?)\s+)?available|unpremiered|unscreened)\b",
     ]
     premiere_unknown_patterns = [
@@ -99,6 +121,7 @@ def analyse_critical_input(text: str) -> dict[str, Any]:
         r"\bnot\s+sure\s+(?:whether|if).{0,40}\b(?:screened|premiered)\b",
     ]
     premiere_negative = any(re.search(pattern, normalized) for pattern in premiere_negative_patterns)
+    public_online = any(re.search(pattern, normalized) for pattern in public_online_patterns)
     premiere_international = bool(
         re.search(
             r"\binternational\s+premiere(?:\s+(?:status|rights))?\s+"
@@ -111,7 +134,7 @@ def analyse_critical_input(text: str) -> dict[str, Any]:
         positive_source = re.sub(pattern, "", positive_source)
     premiere_positive = any(
         re.search(pattern, positive_source) for pattern in premiere_positive_patterns
-    )
+    ) or public_online
     premiere_unknown = any(re.search(pattern, normalized) for pattern in premiere_unknown_patterns)
 
     format_labels: list[str] = []
@@ -169,6 +192,30 @@ def analyse_critical_input(text: str) -> dict[str, Any]:
     youth_matches = [
         pattern for pattern in YOUTH_AUDIENCE_PATTERNS if re.search(pattern, normalized)
     ]
+    women_authorship = any(
+        re.search(pattern, normalized) for pattern in WOMEN_AUTHORSHIP_PATTERNS
+    )
+    indigenous_authorship = any(
+        re.search(pattern, normalized) for pattern in INDIGENOUS_AUTHORSHIP_PATTERNS
+    )
+    home_country_screening = bool(
+        re.search(
+            r"\b(?:public(?:ly)?\s+)?screen(?:ed|ing)\b.{0,50}\b(?:home\s+country|domestically)\b"
+            r"|\b(?:domestic|home-country)\s+public\s+screening\b",
+            normalized,
+        )
+    )
+    single_public_screening = bool(
+        re.search(
+            r"\b(?:one|single|only)\s+(?:prior\s+|occurred\s+)?public\s+(?:screening|premiere)\b"
+            r"|\bonly\s+(?:prior\s+)?public\s+(?:screening|premiere)\b",
+            normalized,
+        )
+    )
+    screening_date_match = re.search(
+        r"\b(20\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01]))\b",
+        normalized,
+    )
     return {
         "runtime": {"values": runtimes, "contradictory": len(runtimes) > 1},
         "premiere": {
@@ -176,6 +223,10 @@ def analyse_critical_input(text: str) -> dict[str, Any]:
             "explicitly_unscreened": premiere_negative,
             "international_premiere_available": premiere_international,
             "explicitly_unknown": premiere_unknown,
+            "public_online_availability": public_online,
+            "home_country_screening": home_country_screening,
+            "single_public_screening": single_public_screening,
+            "screening_date": screening_date_match.group(1) if screening_date_match else None,
             "evidence_present": (
                 premiere_positive
                 or premiere_negative
@@ -201,6 +252,16 @@ def analyse_critical_input(text: str) -> dict[str, Any]:
         "youth_audience": {
             "established": bool(youth_matches),
             "basis": "explicit youth-audience language" if youth_matches else "not established",
+        },
+        "semantic_attributes": {
+            "women_authorship": {
+                "established": women_authorship,
+                "basis": "explicit authorship language" if women_authorship else "not established",
+            },
+            "indigenous_authorship": {
+                "established": indigenous_authorship,
+                "basis": "explicit authorship language" if indigenous_authorship else "not established",
+            },
         },
     }
 
@@ -513,6 +574,10 @@ def assess_premiere(profile: dict[str, Any], festival: dict[str, Any]) -> dict[s
     accepts = festival.get("accepts") or []
     status = profile.get("premiere_status") or "unknown"
     history = [row for row in (profile.get("premiere_history") or []) if isinstance(row, dict)]
+    public_online = any(
+        str(row.get("event_kind") or "").casefold() == "online_availability"
+        for row in history
+    )
     film_country = _normalise(profile.get("country"))
     screened_countries = {
         _normalise(row.get("country")) for row in history if _normalise(row.get("country"))
@@ -552,13 +617,58 @@ def assess_premiere(profile: dict[str, Any], festival: dict[str, Any]) -> dict[s
     if scope == "none":
         risk, opportunity, eligible = "none", False, True
         reason = "No premiere restriction is recorded."
+        verification_required = False
+    elif public_online:
+        raw_rule = str(constraint.get("raw") or "")
+        online_disqualifies = bool(
+            re.search(
+                r"\b(?:online|streaming|internet|digital)\b.{0,50}"
+                r"\b(?:disqualif|not\s+permitted|not\s+allowed|ineligible|prohibited)\w*\b"
+                r"|\bno\s+prior\s+(?:public\s+)?(?:online|streaming|internet|digital)\b",
+                raw_rule,
+                flags=re.I,
+            )
+        )
+        online_allowed = bool(
+            re.search(
+                r"\b(?:online|streaming|internet|digital)\b.{0,50}"
+                r"\b(?:allowed|permitted|accepted|does\s+not\s+affect)\b",
+                raw_rule,
+                flags=re.I,
+            )
+        )
+        if online_disqualifies:
+            risk, opportunity, eligible = "high", False, False
+            verification_required = False
+            reason = (
+                "Unrestricted public online availability is recorded, and the festival's "
+                "retrieved rule explicitly treats that availability as disqualifying."
+            )
+        elif online_allowed:
+            risk, opportunity, eligible = "low", False, True
+            verification_required = False
+            reason = (
+                "Unrestricted public online availability is recorded, and the festival's "
+                "retrieved rule explicitly permits it."
+            )
+        else:
+            risk, opportunity, eligible = "medium", False, True
+            verification_required = True
+            reason = (
+                "Unrestricted public online availability is recorded, but the current "
+                f"festival evidence does not establish how it affects the {scope} premiere "
+                "requirement; verify the official rule before submission."
+            )
     elif scope == "unknown":
         risk, opportunity, eligible = "medium", False, True
+        verification_required = True
         reason = "Premiere eligibility is unknown and must be confirmed before submission."
     elif status == "world_premiere_available":
         risk, opportunity, eligible = "none", True, True
+        verification_required = False
         reason = f"The film still holds its world premiere, so the {scope} premiere constraint is currently satisfiable."
     elif status == "international_premiere_available":
+        verification_required = False
         if scope == "world":
             risk, opportunity, eligible = "high", False, False
             reason = "The world premiere is no longer available, so a strict world-premiere requirement cannot be met."
@@ -570,8 +680,10 @@ def assess_premiere(profile: dict[str, Any], festival: dict[str, Any]) -> dict[s
             reason = "A domestic screening has already occurred, so the festival's territorial premiere is no longer available."
         else:
             risk, opportunity, eligible = "medium", False, True
+            verification_required = True
             reason = f"The international premiere remains available, but the {scope} rule needs a territory-specific check."
     elif status == "already_premiered":
+        verification_required = False
         if scope == "world":
             risk, opportunity, eligible = "high", False, False
             reason = "The film has already premiered, so a strict world-premiere requirement cannot be met."
@@ -589,12 +701,15 @@ def assess_premiere(profile: dict[str, Any], festival: dict[str, Any]) -> dict[s
                 reason = "The recorded screening history already consumes this territorial premiere."
             else:
                 risk, opportunity, eligible = "medium", False, True
+                verification_required = True
                 reason = "The film has premiered elsewhere; this territorial premiere may remain, subject to official verification."
         else:
             risk, opportunity, eligible = "medium", False, True
+            verification_required = True
             reason = f"The film has premiered; the remaining {scope} premiere must be verified from screening history."
     else:
         risk, opportunity, eligible = "medium", False, True
+        verification_required = True
         reason = "The film's premiere status is unknown, so eligibility cannot yet be confirmed."
 
     if runtime_warning:
@@ -608,6 +723,7 @@ def assess_premiere(profile: dict[str, Any], festival: dict[str, Any]) -> dict[s
         "constraint": constraint,
         "runtime_constraint": runtime_rule,
         "runtime_warning": runtime_warning,
+        "verification_required": verification_required,
         "eligibility_issue": None,
     }
 
@@ -620,6 +736,8 @@ def assess_candidate(profile: dict[str, Any], festival: dict[str, Any], today: d
         uncertainties.append(deadline["reason"])
     if premiere["constraint"]["confidence"] != "high":
         uncertainties.append(premiere["constraint"]["reason"])
+    if premiere.get("verification_required") and premiere["reason"] not in uncertainties:
+        uncertainties.append(premiere["reason"])
     if premiere.get("runtime_warning"):
         uncertainties.append(premiere["runtime_warning"])
     return {

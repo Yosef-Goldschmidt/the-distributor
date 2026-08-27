@@ -304,6 +304,22 @@ def test_public_screening_consumes_world_and_only_supported_international_scope(
     assert international.reason_code == "domestic_public_only"
 
 
+def test_sourced_public_occurrence_consumes_world_without_an_exact_date() -> None:
+    ledger = PremiereLedger().derive(
+        _profile_without_assertion(),
+        (_screening("undated-public", country=None, occurred_at=None),),
+    )
+
+    assert (
+        _scope(ledger, PremiereScope.WORLD).availability
+        == PremiereAvailability.CONSUMED
+    )
+    assert (
+        _scope(ledger, PremiereScope.INTERNATIONAL).availability
+        == PremiereAvailability.UNKNOWN
+    )
+
+
 def test_unknown_access_film_country_and_screening_country_remain_unknown() -> None:
     engine = PremiereLedger()
     unknown_access = engine.derive(

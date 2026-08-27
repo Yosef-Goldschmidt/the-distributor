@@ -415,6 +415,144 @@ class PremiereSemanticsTest(unittest.TestCase):
         self.assertFalse(evidence["positive_screening"])
         self.assertFalse(evidence["contradictory"])
 
+    def test_film_history_facts_are_deterministic_across_five_critical_briefs(self) -> None:
+        class EmptyHistoryLLM:
+            def complete_json(self, *args, **kwargs):  # noqa: ANN002, ANN003, ANN201
+                return {
+                    "title": "History Test",
+                    "format": "feature_doc",
+                    "country": "Israel",
+                    "genres": [],
+                    "themes": [],
+                    "festival_angles": [],
+                    "premiere_status": "unknown",
+                    "premiere_history": [],
+                    "missing_info": ["premiere status"],
+                }
+
+        cases = (
+            (
+                "The film has had no public screenings.",
+                "world_premiere_available",
+                0,
+                False,
+            ),
+            (
+                "The film had one public screening in Israel on 2026-01-10.",
+                "international_premiere_available",
+                1,
+                False,
+            ),
+            (
+                "The film has unrestricted public online availability.",
+                "already_premiered",
+                1,
+                False,
+            ),
+            (
+                "The film is a feature documentary from Israel.",
+                "unknown",
+                0,
+                True,
+            ),
+            (
+                "The film has never screened publicly, but premiered publicly last month.",
+                "unknown",
+                0,
+                True,
+            ),
+        )
+        for prompt, expected_status, history_count, needs_question in cases:
+            with self.subTest(prompt=prompt):
+                profile = modules.film_analyzer(
+                    EmptyHistoryLLM(), modules.Trace(), prompt
+                )
+                self.assertEqual(profile["premiere_status"], expected_status)
+                self.assertEqual(len(profile["premiere_history"]), history_count)
+                has_premiere_question = any(
+                    "premiere" in str(item).lower()
+                    or "screening" in str(item).lower()
+                    for item in profile["missing_info"]
+                )
+                self.assertEqual(has_premiere_question, needs_question)
+
+        online = modules.film_analyzer(
+            EmptyHistoryLLM(),
+            modules.Trace(),
+            "The film has unrestricted public online availability.",
+        )
+        self.assertEqual(
+            online["premiere_history"][0]["event_kind"], "online_availability"
+        )
+        self.assertIsNone(online["premiere_history"][0]["country"])
+
+    def test_online_availability_requires_festival_specific_rule_evidence(self) -> None:
+        profile = {
+            "format": "feature_doc",
+            "country": "Israel",
+            "premiere_status": "already_premiered",
+            "premiere_history": [
+                {"event_kind": "online_availability", "country": None}
+            ],
+        }
+        unresolved = domain.assess_candidate(
+            profile,
+            {
+                "id": "fixture-world",
+                "accepts": ["feature_doc"],
+                "premiere_requirement_raw": "World",
+                "final_deadline": "2026-10-01",
+            },
+            date(2026, 8, 27),
+        )
+        disqualified = domain.assess_premiere(
+            profile,
+            {
+                "accepts": ["feature_doc"],
+                "premiere_requirement_raw": (
+                    "World premiere required; prior public online availability is "
+                    "not allowed and makes the film ineligible."
+                ),
+            },
+        )
+
+        self.assertTrue(unresolved["eligible"])
+        self.assertEqual(unresolved["premiere_risk"], "medium")
+        self.assertTrue(any("online availability" in item for item in unresolved["uncertainties"]))
+        self.assertFalse(disqualified["eligible"])
+        self.assertEqual(disqualified["premiere_risk"], "high")
+
+    def test_explicit_history_normalizes_conflicting_model_detail(self) -> None:
+        class InventingLLM:
+            def complete_json(self, *args, **kwargs):  # noqa: ANN002, ANN003, ANN201
+                return {
+                    "format": "feature_doc",
+                    "country": "Israel",
+                    "genres": [],
+                    "themes": [],
+                    "festival_angles": [],
+                    "premiere_status": "already_premiered",
+                    "premiere_history": [
+                        {
+                            "festival": "Invented foreign festival",
+                            "country": "Canada",
+                            "date": "2025-01-01",
+                        }
+                    ],
+                    "missing_info": [],
+                }
+
+        profile = modules.film_analyzer(
+            InventingLLM(),
+            modules.Trace(),
+            "The film had one public screening in its home country on 2026-01-10.",
+        )
+
+        self.assertEqual(len(profile["premiere_history"]), 1)
+        self.assertEqual(profile["premiere_history"][0]["country"], "Israel")
+        self.assertEqual(profile["premiere_history"][0]["date"], "2026-01-10")
+        self.assertTrue(profile["premiere_history"][0]["home_country"])
+
     def test_explicit_international_premiere_status_is_preserved(self) -> None:
         class ResolvingLLM:
             def complete_json(self, *args, **kwargs):  # noqa: ANN002, ANN003, ANN201
@@ -567,6 +705,48 @@ class ExplainableScoringTest(unittest.TestCase):
         self.assertIn("young protagonist", grounded["thematic_fit"])
         ratings["deadline_urgency"] = 5
         self.assertLessEqual(scoring.compute_score(ratings, "none")["score"], 55)
+
+    def test_womens_authorship_claim_is_guarded_without_explicit_evidence(self) -> None:
+        ratings, evidence, meta = scoring.apply_rating_guardrails(
+            {dimension: 5 for dimension in scoring.LLM_DIMENSIONS},
+            {
+                dimension: "Direct match for a festival supporting women directors."
+                for dimension in scoring.LLM_DIMENSIONS
+            },
+            {
+                "name": "Fixture Women's Film Festival",
+                "focus": "Films directed by women filmmakers.",
+                "identity_confidence": "high",
+                "tier": "B+",
+            },
+            (0.0, "No prior company relationship is recorded.", {}),
+            {
+                "_semantic_evidence": {
+                    "women_authorship": {
+                        "established": False,
+                        "basis": "not established",
+                    }
+                }
+            },
+        )
+
+        self.assertTrue(
+            meta["semantic_guardrails"]["women_authorship"]["cap_applied"]
+        )
+        self.assertTrue(
+            all(ratings[dimension] <= 2 for dimension in scoring.LLM_DIMENSIONS)
+        )
+        self.assertTrue(
+            all(
+                "does not establish women's authorship" in evidence[dimension]
+                for dimension in scoring.LLM_DIMENSIONS
+            )
+        )
+        self.assertTrue(
+            domain.analyse_critical_input(
+                "The director is a woman, and the film is explicitly women-directed."
+            )["semantic_attributes"]["women_authorship"]["established"]
+        )
 
     def test_explicit_youth_audience_preserves_strong_youth_specialist_fit(self) -> None:
         high = {dimension: 5 for dimension in scoring.LLM_DIMENSIONS}
