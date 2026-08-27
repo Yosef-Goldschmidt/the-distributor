@@ -3,6 +3,12 @@
 An AI agent that builds **film festival submission strategies** for independent film
 distribution companies.
 
+## Submission
+
+- **Production:** [the-distributor-deploy.vercel.app](https://the-distributor-deploy.vercel.app/)
+- **Public GitHub:** [Yosef-Goldschmidt/the-distributor](https://github.com/Yosef-Goldschmidt/the-distributor)
+- **Submission branch:** `main`
+
 Give it a film — synopsis, genre, themes, country, director profile, premiere status —
 and it returns a ranked festival roadmap: what to submit first, what to prioritise next,
 where to leverage the company's existing relationships, and what to avoid because of
@@ -167,14 +173,13 @@ as Pinecone or Supabase evidence.
 `/api/health` reports exactly which integrations are live.
 
 Campaign Workspace persistence deliberately fails closed unless both `SUPABASE_URL` and
-the server-only `SUPABASE_SERVICE_ROLE_KEY` are configured. Before enabling it, review and
-apply `scripts/migrations/20260825_campaign_workspace_phase_1a.sql` to the intended
-Supabase project. The migration is additive, creates no browser policies, and has not been
-applied by the implementation workflow. Set `CAMPAIGN_ALLOWED_ORIGINS` to an exact
-comma-separated list such as `http://localhost:8000,https://your-app.vercel.app`; wildcard,
-missing and `null` origins are rejected for JSON mutations. The raw 256-bit workspace
-capability is sent only in a `Secure`, `HttpOnly`, `SameSite=Lax` cookie; only its SHA-256
-digest is stored.
+the server-only `SUPABASE_SERVICE_ROLE_KEY` are configured. New deployments must apply the
+additive `scripts/migrations/20260825_campaign_workspace_phase_1a.sql` migration to the
+intended Supabase project. It creates no browser policies. Set `CAMPAIGN_ALLOWED_ORIGINS`
+to an exact comma-separated list such as
+`http://localhost:8000,https://your-app.vercel.app`; wildcard, missing and `null` origins
+are rejected for JSON mutations. The raw 256-bit workspace capability is sent only in a
+`Secure`, `HttpOnly`, `SameSite=Lax` cookie; only its SHA-256 digest is stored.
 
 ### Offline test (spends nothing)
 
@@ -271,7 +276,7 @@ bounded and cannot change a successful agent result into an application error.
 ## Before submitting
 
 - [x] Fill in `data/team_info.json` (`group_batch_order_number`, real emails).
-- [ ] Set the LLMod.ai project key (not the RAG assignment key) in Vercel.
+- [x] LLMod.ai runtime connectivity — verified through successful production agent runs.
 - [x] Confirm the current Pinecone and Supabase integrations without re-seeding them.
 - [x] Run `scripts/generate_example.py` so `/api/agent_info` returns real examples.
-- [ ] Deploy the current revision and rerun the production smoke checks.
+- [x] Deploy the submission commit and verify Production health, `/`, and `/campaign`.
